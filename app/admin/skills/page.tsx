@@ -89,7 +89,7 @@ const skillLevels = [
   { value: 1, label: 'Beginner', color: 'bg-red-100 text-red-700' },
   { value: 2, label: 'Novice', color: 'bg-orange-100 text-orange-700' },
   { value: 3, label: 'Intermediate', color: 'bg-yellow-100 text-yellow-700' },
-  { value: 4, label: 'Advanced', color: 'bg-blue-100 text-blue-700' },
+  { value: 4, label: 'Advanced', color: 'bg-royal-100 text-royal-700' },
   { value: 5, label: 'Expert', color: 'bg-green-100 text-green-700' }
 ];
 
@@ -362,7 +362,7 @@ export default function SkillsManagement() {
                   <div className="flex gap-1">
                     <button
                       onClick={() => openModal(skill)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-royal-600 hover:text-royal-800"
                     >
                       <Edit3 size={16} />
                     </button>

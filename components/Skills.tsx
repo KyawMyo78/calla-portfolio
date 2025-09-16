@@ -77,9 +77,9 @@ const getSkillIcon = (iconKey: string) => {
 };
 
 const categoryColors: { [key: string]: string } = {
-  'programming': 'from-blue-500 to-blue-600',
+  'programming': 'from-royal-500 to-royal-600',
   'frameworks': 'from-green-500 to-green-600',
-  'databases': 'from-purple-500 to-purple-600',
+  'databases': 'from-navy-500 to-navy-600',
   'tools': 'from-orange-500 to-orange-600',
   'embedded': 'from-red-500 to-red-600',
   'other': 'from-gray-500 to-gray-600',

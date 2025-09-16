@@ -111,14 +111,14 @@ export default function FileUpload({
           className={`
             flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer
             transition-all duration-200 hover:bg-gray-50
-            ${uploading ? 'border-blue-400 bg-blue-50' : 'border-gray-300'}
+            ${uploading ? 'border-royal-400 bg-royal-50' : 'border-gray-300'}
             ${error ? 'border-red-400 bg-red-50' : ''}
             ${uploadSuccess ? 'border-green-400 bg-green-50' : ''}
           `}
         >
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             {uploading ? (
-              <Loader className="w-8 h-8 mb-2 text-blue-500 animate-spin" />
+              <Loader className="w-8 h-8 mb-2 text-royal-500 animate-spin" />
             ) : uploadSuccess ? (
               <Check className="w-8 h-8 mb-2 text-green-500" />
             ) : (

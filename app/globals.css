@@ -56,7 +56,7 @@
   }
 
   .bg-gradient-primary {
-  @apply bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400;
+  @apply bg-gradient-to-r from-royal-600 via-royal-500 to-royal-400;
   }
 
   /* Rich Text Content Styles */

@@ -39,9 +39,9 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       accent: 'text-yellow-600'
     },
     info: {
-      icon: 'text-blue-600',
-      button: 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500',
-      accent: 'text-blue-600'
+      icon: 'text-royal-600',
+      button: 'bg-royal-600 hover:bg-royal-700 focus:ring-royal-500',
+      accent: 'text-royal-600'
     }
   };
 

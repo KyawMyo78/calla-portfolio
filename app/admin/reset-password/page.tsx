@@ -116,7 +116,7 @@ export default function ResetPassword() {
 
   if (validToken === false) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-royal-700 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -147,7 +147,7 @@ export default function ResetPassword() {
 
   if (validToken === null) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-royal-700 flex items-center justify-center p-4">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
           <p className="text-white mt-4">Verifying reset link...</p>
@@ -158,7 +158,7 @@ export default function ResetPassword() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-royal-700 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -194,7 +194,7 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-royal-700 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
