@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
+import { callRevalidate } from '@/lib/revalidate';
 
 export async function GET() {
   try {
@@ -119,6 +120,8 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date().toISOString()
     }, { merge: true });
 
+    // revalidate home and experience list
+    try { callRevalidate(['/','/experience']); } catch (e) { console.warn(e); }
     return NextResponse.json({
       success: true,
       data: newExperience

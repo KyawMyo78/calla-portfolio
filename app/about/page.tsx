@@ -1,4 +1,6 @@
-'use server';
+// Force dynamic rendering so pages are fresh on each request
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 import Navigation from '@/components/Navigation'
 import About from '@/components/About'

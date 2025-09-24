@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
+import { callRevalidate } from '@/lib/revalidate';
 
 interface Experience {
   id: string;
@@ -157,6 +158,9 @@ export async function PUT(
       updatedAt: new Date().toISOString()
     }, { merge: true });
 
+    // Trigger on-demand revalidation for pages that depend on portfolio data
+    await callRevalidate(['/', '/about']);
+
     return NextResponse.json({
       success: true,
       data: updatedExperience
@@ -209,6 +213,9 @@ export async function DELETE(
       experience: updatedExperiences,
       updatedAt: new Date().toISOString()
     }, { merge: true });
+
+    // Trigger on-demand revalidation for pages that depend on portfolio data
+    await callRevalidate(['/', '/about']);
 
     return NextResponse.json({
       success: true,

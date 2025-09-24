@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
+import { callRevalidate } from '@/lib/revalidate';
 
 // GET all projects
 export async function GET() {
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
     };
 
     const docRef = await adminDb.collection('projects').add(newProject);
-
+  await callRevalidate(['/','/projects']);
     return NextResponse.json({
       success: true,
       message: 'Project created successfully',

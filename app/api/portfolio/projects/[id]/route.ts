@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
+import { callRevalidate } from '@/lib/revalidate';
 
 // GET single project
 export async function GET(
@@ -51,6 +52,9 @@ export async function PUT(
       message: 'Project updated successfully'
     });
 
+    // fire-and-forget revalidation
+    try { callRevalidate(['/','/projects']); } catch (e) { console.warn(e); }
+
   } catch (error) {
     console.error('Project update error:', error);
     return NextResponse.json(
@@ -72,6 +76,8 @@ export async function DELETE(
       success: true,
       message: 'Project deleted successfully'
     });
+
+    try { callRevalidate(['/','/projects']); } catch (e) { console.warn(e); }
 
   } catch (error) {
     console.error('Project deletion error:', error);

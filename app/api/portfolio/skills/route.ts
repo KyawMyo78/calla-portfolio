@@ -47,6 +47,16 @@ export async function POST(request: NextRequest) {
 
     const docRef = await adminDb.collection('skills').add(newSkill);
 
+    // Trigger on-demand revalidation for important pages
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/revalidate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ secret: process.env.REVALIDATE_SECRET, paths: ['/', '/about'] })
+      });
+    } catch (e) {
+      console.warn('Revalidation call failed', e);
+    }
     return NextResponse.json({
       success: true,
       message: 'Skill created successfully',
