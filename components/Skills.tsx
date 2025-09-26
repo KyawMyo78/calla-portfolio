@@ -85,6 +85,8 @@ const categoryColors: { [key: string]: string } = {
   'other': 'from-gray-500 to-gray-600',
   'default': 'from-primary-500 to-primary-600'
 };
+// Replace default with clover gradient
+categoryColors['default'] = 'from-clover-500 to-clover-700';
 
 // Helper function to convert level string to proficiency percentage
 const levelToProficiency = (level?: string | number | any): number => {
@@ -177,8 +179,8 @@ export default function Skills() {
     return (
       <section id="skills" className="section-padding">
         <div className="container-width">
-          <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="flex items-center justify-center py-12">
+            <div className="w-8 h-8 border-2 border-clover-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
       </section>
@@ -199,8 +201,8 @@ export default function Skills() {
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               My <span className="text-gradient">Skills</span>
             </h2>
-            <div className="w-24 h-1 bg-gradient-primary mx-auto mb-6"></div>
-            <p className="text-xl text-primary-600 max-w-3xl mx-auto mb-8 text-center">
+            <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
+            <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-center">
               Constantly learning and evolving.
             </p>
             <div className="text-center py-24">
@@ -228,14 +230,14 @@ export default function Skills() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             My <span className="text-gradient">Skills</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-primary mx-auto mb-6"></div>
-          <p className="text-xl text-primary-600 max-w-3xl mx-auto">
+            <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
+          <p className="text-xl text-clover-700 max-w-3xl mx-auto">
             A comprehensive toolkit built through years of hands-on experience and continuous learning.
           </p>
         </motion.div>
 
         {/* Skills Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedCategories.map((categoryName, categoryIndex) => {
             const categorySkills = skillsByCategory[categoryName];
             const IconComponent = categoryIcons[categoryName] || categoryIcons['default'];
@@ -248,11 +250,11 @@ export default function Skills() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
-                className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-100"
+                className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-clover-100"
               >
                 {/* Category Header */}
                 <div className="flex items-center mb-6">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${colorClass} flex items-center justify-center mr-4`}>
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${colorClass} flex items-center justify-center mr-4`}>
                     <IconComponent className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -280,7 +282,7 @@ export default function Skills() {
                             <span className="mr-2">
                               {(() => {
                                 const SkillIconComponent = getSkillIcon(skill.icon);
-                                return <SkillIconComponent className="w-4 h-4 text-primary-600" />;
+                                return <SkillIconComponent className="w-4 h-4 text-clover-700" />;
                               })()}
                             </span>
                           )}
@@ -330,26 +332,26 @@ export default function Skills() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 bg-gradient-to-r from-primary-50 to-primary-100 rounded-3xl p-8"
+          className="mt-16 bg-gradient-to-r from-clover-100 to-clover-100 rounded-3xl p-8"
         >
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
-              <h4 className="text-3xl font-bold text-primary-800 mb-2">
+              <h4 className="text-3xl font-bold text-clover-900 mb-2">
                 {skills.length}
               </h4>
-              <p className="text-primary-600 font-medium">Technical Skills</p>
+              <p className="text-clover-700 font-medium">Technical Skills</p>
             </div>
             <div>
-              <h4 className="text-3xl font-bold text-primary-800 mb-2">
+              <h4 className="text-3xl font-bold text-clover-900 mb-2">
                 {Math.round(skills.reduce((sum, skill) => sum + getProficiency(skill), 0) / skills.length) || 0}%
               </h4>
-              <p className="text-primary-600 font-medium">Average Proficiency</p>
+              <p className="text-clover-700 font-medium">Average Proficiency</p>
             </div>
             <div>
-              <h4 className="text-3xl font-bold text-primary-800 mb-2">
+              <h4 className="text-3xl font-bold text-clover-900 mb-2">
                 {Math.round(skills.reduce((sum, skill) => sum + getYearsOfExperience(skill), 0) / skills.length * 10) / 10 || 0}
               </h4>
-              <p className="text-primary-600 font-medium">Avg Years Experience</p>
+              <p className="text-clover-700 font-medium">Avg Years Experience</p>
             </div>
           </div>
         </motion.div>

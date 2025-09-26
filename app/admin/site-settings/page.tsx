@@ -5,140 +5,145 @@ import { Save, Settings, Home, User, Code, Briefcase, FolderOpen, Mail, AlertCir
 import toast from 'react-hot-toast';
 
 interface SiteSettings {
-  general?: {
-    siteTitle?: string;
-    siteDescription?: string;
-    siteKeywords?: string[];
-    authorName?: string;
-  };
-  // Hero Section
   hero: {
     greetingText: string;
     contactButtonText: string;
     cvButtonText: string;
     cvNotAvailableText: string;
-    scrollIndicatorText?: string;
+    scrollIndicatorText: string;
   };
-  // Navigation
   navigation: {
-  siteName?: string;
+    siteName: string;
     homeText: string;
     aboutText: string;
+    blogText?: string;
     skillsText: string;
     experienceText: string;
     projectsText: string;
     contactText: string;
   };
-  // About Section
+  general: {
+    siteTitle: string;
+    siteDescription: string;
+    siteKeywords: string[];
+    authorName: string;
+  };
   about: {
     sectionTitle: string;
     sectionSubtitle?: string;
+    visible?: boolean;
   };
-  // Skills Section
   skills: {
     sectionTitle: string;
     sectionSubtitle?: string;
+    visible?: boolean;
   };
-  // Experience Section
   experience: {
     sectionTitle: string;
     sectionSubtitle?: string;
+    visible?: boolean;
   };
-  // Projects Section
   projects: {
     sectionTitle: string;
     sectionSubtitle?: string;
-    viewProjectText: string;
-    githubLinkText: string;
-    liveDemoText: string;
+    viewProjectText?: string;
+    githubLinkText?: string;
+    liveDemoText?: string;
+    visible?: boolean;
   };
-  // Contact Section
   contact: {
-    sectionTitle: string;
+    sectionTitle?: string;
     sectionSubtitle?: string;
-    submitButtonText: string;
-    nameFieldLabel: string;
-    emailFieldLabel: string;
-    messageFieldLabel: string;
+    submitButtonText?: string;
+    nameFieldLabel?: string;
+    emailFieldLabel?: string;
+    messageFieldLabel?: string;
     phoneFieldLabel?: string;
     subjectFieldLabel?: string;
-  // New contact content
-  connectTitle?: string;
-  connectIntro?: string;
-  primaryEmail?: string;
-  primaryPhone?: string;
-  location?: string;
-  responseTime?: string;
-  whyWorkWithMe?: string[];
-  findMeOnlineText?: string;
-  quickContactEmail?: string;
-  quickContactPhone?: string;
-  readyToStartTitle?: string;
-  readyToStartEmailText?: string;
-  readyToStartCallText?: string;
+    visible?: boolean;
+    connectTitle?: string;
+    connectIntro?: string;
+    primaryEmail?: string;
+    primaryPhone?: string;
+    location?: string;
+    responseTime?: string;
+    whyWorkWithMe?: string[];
+    findMeOnlineText?: string;
+    quickContactEmail?: string;
+    quickContactPhone?: string;
+    readyToStartTitle?: string;
+    readyToStartEmailText?: string;
+    readyToStartCallText?: string;
   };
-  // Footer
   footer: {
-    copyrightText: string;
+    copyrightText?: string;
     madeWithText?: string;
+  };
+  blog: {
+    visible?: boolean;
   };
 }
 
 const defaultSettings: SiteSettings = {
   hero: {
-    greetingText: 'Hello, I\'m',
+    greetingText: "Hello, I'm",
     contactButtonText: 'Get In Touch',
     cvButtonText: 'Download CV',
     cvNotAvailableText: 'CV Not Available',
-    scrollIndicatorText: 'Scroll to explore'
+    scrollIndicatorText: 'Scroll to explore',
   },
   navigation: {
-  siteName: 'Your Name',
+    siteName: 'Your Name',
     homeText: 'Home',
     aboutText: 'About',
+    blogText: 'Blog',
     skillsText: 'Skills',
     experienceText: 'Experience',
     projectsText: 'Projects',
-    contactText: 'Contact'
+    contactText: 'Contact',
   },
   general: {
-  siteTitle: 'Your Name - Portfolio',
-  siteDescription: 'Portfolio website showcasing projects, skills, and contact information.',
-  siteKeywords: ['portfolio','developer','web'],
-  authorName: 'Your Name'
+    siteTitle: 'Your Name - Portfolio',
+    siteDescription: 'Portfolio website showcasing projects, skills, and contact information.',
+    siteKeywords: ['portfolio', 'developer', 'web'],
+    authorName: 'Your Name',
   },
   about: {
     sectionTitle: 'About Me',
-    sectionSubtitle: 'Get to know me better'
+    sectionSubtitle: 'Get to know me better',
+    visible: true,
   },
   skills: {
     sectionTitle: 'Skills & Technologies',
-    sectionSubtitle: 'Technologies I work with'
+    sectionSubtitle: 'Technologies I work with',
+    visible: true,
   },
   experience: {
     sectionTitle: 'Experience',
-    sectionSubtitle: 'My professional journey'
+    sectionSubtitle: 'My professional journey',
+    visible: true,
   },
   projects: {
     sectionTitle: 'Featured Projects',
     sectionSubtitle: 'Some of my recent work',
     viewProjectText: 'View Project',
     githubLinkText: 'GitHub',
-    liveDemoText: 'Live Demo'
+    liveDemoText: 'Live Demo',
+    visible: true,
   },
   contact: {
     sectionTitle: 'Get In Touch',
-    sectionSubtitle: 'Let\'s work together',
+    sectionSubtitle: "Let's work together",
     submitButtonText: 'Send Message',
     nameFieldLabel: 'Full Name',
     emailFieldLabel: 'Email Address',
     messageFieldLabel: 'Message',
     phoneFieldLabel: 'Phone Number',
-    subjectFieldLabel: 'Subject'
-  ,
-  // New default contact content
-    connectTitle: 'Let\'s Connect',
-    connectIntro: 'I\'m always excited to discuss new opportunities, innovative projects, or just chat about technology. Whether you have a specific project in mind or want to explore possibilities, I\'d love to hear from you.',
+    subjectFieldLabel: 'Subject',
+    visible: true,
+    connectTitle: "Let's Connect",
+    connectIntro:
+      "I'm always excited to discuss new opportunities, innovative projects, or just chat about technology. Whether you have a specific project in mind or want to explore possibilities, I'd love to hear from you.",
     primaryEmail: 'your.email@example.com (hint)',
     primaryPhone: '+[country-code][number] (hint)',
     location: 'City • Country or time zone (hint)',
@@ -147,19 +152,20 @@ const defaultSettings: SiteSettings = {
       'Dedicated to delivering high-quality solutions',
       'Strong communication throughout the project',
       'Experienced in both hardware and software development',
-      'Passionate about turning ideas into reality'
+      'Passionate about turning ideas into reality',
     ],
     findMeOnlineText: 'Short note about where to find you online (social links, profiles, etc.)',
     quickContactEmail: 'contact@example.com (hint)',
     quickContactPhone: '+[country-code][number] (hint)',
     readyToStartTitle: 'Ready to Start Your Project?',
     readyToStartEmailText: 'Email Me',
-    readyToStartCallText: 'Call Now'
+    readyToStartCallText: 'Call Now',
   },
   footer: {
     copyrightText: '© 2024 Portfolio. All rights reserved.',
-    madeWithText: 'Made with ❤️ using Next.js'
+    madeWithText: 'Made with ❤️ using Next.js',
   },
+  blog: { visible: true },
 };
 
 export default function SiteSettings() {
@@ -505,9 +511,20 @@ export default function SiteSettings() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* About Section */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center space-x-2 mb-6">
-            <User className="h-5 w-5 text-gray-600" />
-            <h2 className="text-lg font-semibold text-gray-900">About Section</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <User className="h-5 w-5 text-gray-600" />
+              <h2 className="text-lg font-semibold text-gray-900">About Section</h2>
+            </div>
+            <div className="flex items-center space-x-2">
+              <label className="text-sm text-gray-600">Visible</label>
+              <input
+                type="checkbox"
+                checked={Boolean(settings.about?.visible)}
+                onChange={(e) => handleSectionChange('about', 'visible', e.target.checked)}
+                className="h-4 w-4"
+              />
+            </div>
           </div>
           <div className="space-y-4">
             <div>
@@ -539,9 +556,20 @@ export default function SiteSettings() {
 
         {/* Skills Section */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center space-x-2 mb-6">
-            <Code className="h-5 w-5 text-gray-600" />
-            <h2 className="text-lg font-semibold text-gray-900">Skills Section</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <Code className="h-5 w-5 text-gray-600" />
+              <h2 className="text-lg font-semibold text-gray-900">Skills Section</h2>
+            </div>
+            <div className="flex items-center space-x-2">
+              <label className="text-sm text-gray-600">Visible</label>
+              <input
+                type="checkbox"
+                checked={Boolean(settings.skills?.visible)}
+                onChange={(e) => handleSectionChange('skills', 'visible', e.target.checked)}
+                className="h-4 w-4"
+              />
+            </div>
           </div>
           <div className="space-y-4">
             <div>
@@ -573,9 +601,20 @@ export default function SiteSettings() {
 
         {/* Experience Section */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center space-x-2 mb-6">
-            <Briefcase className="h-5 w-5 text-gray-600" />
-            <h2 className="text-lg font-semibold text-gray-900">Experience Section</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <Briefcase className="h-5 w-5 text-gray-600" />
+              <h2 className="text-lg font-semibold text-gray-900">Experience Section</h2>
+            </div>
+            <div className="flex items-center space-x-2">
+              <label className="text-sm text-gray-600">Visible</label>
+              <input
+                type="checkbox"
+                checked={Boolean(settings.experience?.visible)}
+                onChange={(e) => handleSectionChange('experience', 'visible', e.target.checked)}
+                className="h-4 w-4"
+              />
+            </div>
           </div>
           <div className="space-y-4">
             <div>
@@ -607,9 +646,20 @@ export default function SiteSettings() {
 
         {/* Projects Section */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center space-x-2 mb-6">
-            <FolderOpen className="h-5 w-5 text-gray-600" />
-            <h2 className="text-lg font-semibold text-gray-900">Projects Section</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <FolderOpen className="h-5 w-5 text-gray-600" />
+              <h2 className="text-lg font-semibold text-gray-900">Projects Section</h2>
+            </div>
+            <div className="flex items-center space-x-2">
+              <label className="text-sm text-gray-600">Visible</label>
+              <input
+                type="checkbox"
+                checked={Boolean(settings.projects?.visible)}
+                onChange={(e) => handleSectionChange('projects', 'visible', e.target.checked)}
+                className="h-4 w-4"
+              />
+            </div>
           </div>
           <div className="space-y-4">
             <div>

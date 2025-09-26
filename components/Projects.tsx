@@ -82,12 +82,12 @@ export default function Projects() {
   const featuredProjects = filteredProjects.filter(p => p.featured);
   const otherProjects = filteredProjects.filter(p => !p.featured);
 
-  if (isLoading) {
+    if (isLoading) {
     return (
-      <section id="projects" className="section-padding bg-primary-50">
+    <section id="projects" className="section-padding bg-clover-100">
         <div className="container-width">
           <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-2 border-clover-700 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
       </section>
@@ -96,7 +96,7 @@ export default function Projects() {
 
   if (projects.length === 0) {
     return (
-      <section id="projects" className="section-padding bg-primary-50">
+  <section id="projects" className="section-padding bg-clover-100">
         <div className="container-width">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -108,13 +108,13 @@ export default function Projects() {
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               My <span className="text-gradient">Projects</span>
             </h2>
-            <div className="w-24 h-1 bg-gradient-primary mx-auto mb-6"></div>
-            <p className="text-xl text-primary-600 max-w-3xl mx-auto mb-8 text-justify">
+            <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
+            <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-center">
               Exploring innovative solutions across web development, mobile apps, embedded systems, and AI technologies.
             </p>
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🚀</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Projects Coming Soon</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">Projects Coming Soon</h3>
               <p className="text-gray-600">Check back later to see my latest work and innovations.</p>
             </div>
           </motion.div>
@@ -124,7 +124,7 @@ export default function Projects() {
   }
 
   return (
-    <section id="projects" className="section-padding bg-primary-50">
+  <section id="projects" className="section-padding bg-clover-100">
       <div className="container-width">
         {/* Section Header */}
         <motion.div
@@ -137,8 +137,8 @@ export default function Projects() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             My <span className="text-gradient">Projects</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-primary mx-auto mb-6"></div>
-          <p className="text-xl text-primary-600 max-w-3xl mx-auto">
+            <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
+          <p className="text-xl text-clover-700 max-w-3xl mx-auto text-center">
             Exploring innovative solutions across web development, mobile apps, embedded systems, and AI technologies.
           </p>
         </motion.div>
@@ -153,13 +153,13 @@ export default function Projects() {
         >
           {/* Search */}
           <div className="relative max-w-md mx-auto mb-8">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-clover-300 w-5 h-5" />
             <input
               type="text"
               placeholder="Search projects..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-primary-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
+              className="w-full pl-10 pr-4 py-3 border border-clover-300 rounded-full focus:outline-none focus:ring-2 focus:ring-clover-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
             />
           </div>
 
@@ -171,8 +171,8 @@ export default function Projects() {
                 onClick={() => setActiveCategory(category.id)}
                 className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
                   activeCategory === category.id
-                    ? 'bg-gradient-primary text-white shadow-lg'
-                    : 'bg-white/60 backdrop-blur-sm text-primary-600 hover:bg-white hover:shadow-md'
+          ? 'bg-gradient-clover text-white shadow-lg'
+  : 'bg-white/60 backdrop-blur-sm text-clover-500 hover:bg-white hover:shadow-md'
                 }`}
               >
                 {category.name} ({category.count})
@@ -190,7 +190,7 @@ export default function Projects() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mb-16"
           >
-            <h3 className="text-2xl font-bold text-center mb-8 text-primary-800">Featured Projects</h3>
+              <h3 className="text-2xl font-bold text-center mb-8 text-clover-700">Featured Projects</h3>
             <div className="grid lg:grid-cols-2 gap-8">
               {featuredProjects.map((project, index) => (
                 <ProjectCard 
@@ -213,7 +213,7 @@ export default function Projects() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <h3 className="text-2xl font-bold text-center mb-8 text-primary-800">All Projects</h3>
+            <h3 className="text-2xl font-bold text-center mb-8 text-clover-900">All Projects</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherProjects.map((project, index) => (
                 <ProjectCard 
@@ -236,7 +236,7 @@ export default function Projects() {
             className="text-center py-12"
           >
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No projects found</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">No projects found</h3>
             <p className="text-gray-600">Try adjusting your search or category filter.</p>
           </motion.div>
         )}
@@ -291,15 +291,15 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-primary flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-clover flex items-center justify-center">
             <div className="text-white text-6xl opacity-20">📁</div>
           </div>
         )}
         
         {/* Click to view overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg">
-            <span className="text-primary-600 font-medium">Click to view details</span>
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg">
+            <span className="text-clover-700 font-medium">Click to view details</span>
           </div>
         </div>
         
@@ -321,7 +321,7 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
                 e.stopPropagation();
                 analytics.projectLinkClick(project.title, 'github');
               }}
-              className="action-button w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary-600 hover:bg-white transition-colors"
+              className="action-button w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-clover-700 hover:bg-white transition-colors"
             >
               <Github size={18} />
             </a>
@@ -335,7 +335,7 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
                 e.stopPropagation();
                 analytics.projectLinkClick(project.title, 'live');
               }}
-              className="action-button w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary-600 hover:bg-white transition-colors"
+              className="action-button w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-clover-700 hover:bg-white transition-colors"
             >
               <ExternalLink size={18} />
             </a>
@@ -349,7 +349,7 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
                 e.stopPropagation();
                 analytics.projectLinkClick(project.title, 'demo');
               }}
-              className="action-button w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary-600 hover:bg-white transition-colors"
+              className="action-button w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-clover-700 hover:bg-white transition-colors"
             >
               <Play size={18} />
             </a>
@@ -358,9 +358,9 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
       </div>
 
       {/* Project Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-primary-800 mb-2">{project.title}</h3>
-        <p className="text-primary-600 mb-4 leading-relaxed text-justify">
+          <div className="p-6">
+        <h3 className="text-xl font-bold text-clover-900 mb-2">{project.title}</h3>
+        <p className="text-clover-700 mb-4 leading-relaxed">
           {isExpanded ? project.longDescription || project.description : project.description}
         </p>
 
@@ -369,7 +369,7 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
           {project.technologies.slice(0, featured ? 6 : 4).map((tech: string, i: number) => (
             <span
               key={i}
-              className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium"
+              className="px-3 py-1 bg-clover-100 text-clover-700 rounded-full text-sm font-medium"
             >
               {tech}
             </span>
@@ -384,11 +384,11 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
         {/* Highlights (for featured projects) */}
         {featured && project.highlights && project.highlights.length > 0 && (
           <div className="mb-4">
-            <h4 className="text-sm font-semibold text-primary-700 mb-2">Key Highlights:</h4>
+            <h4 className="text-sm font-semibold text-clover-700 mb-2">Key Highlights:</h4>
             <ul className="space-y-1">
               {project.highlights.slice(0, 3).map((highlight: string, i: number) => (
-                <li key={i} className="text-sm text-primary-600 flex items-start">
-                  <span className="text-primary-400 mr-2">•</span>
+                <li key={i} className="text-sm text-clover-700 flex items-start">
+                  <span className="text-clover-300 mr-2">•</span>
                   {highlight}
                 </li>
               ))}
@@ -397,7 +397,7 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
         )}
 
         {/* Project Dates */}
-        <div className="text-sm text-primary-500 mb-4">
+  <div className="text-sm text-clover-500 mb-4">
           {new Date(project.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
           {project.endDate && ` - ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
           {project.status === 'in-progress' && !project.endDate && ' - Present'}
@@ -407,7 +407,7 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
         {!featured && project.longDescription && project.longDescription !== project.description && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-primary-600 hover:text-primary-800 text-sm font-medium transition-colors"
+            className="text-clover-700 hover:text-clover-900 text-sm font-medium transition-colors"
           >
             {isExpanded ? 'Show Less' : 'Read More'}
           </button>

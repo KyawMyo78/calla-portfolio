@@ -39,13 +39,13 @@ export default function Navigation({ siteSettings: serverSettings }: { siteSetti
 
   // Dynamic navigation items based on site settings
   const navItems = [
-    { name: siteSettings?.navigation?.homeText || 'Home', href: '/', icon: Home },
-    { name: siteSettings?.navigation?.aboutText || 'About', href: '/about', icon: User },
-    { name: siteSettings?.navigation?.skillsText || 'Skills', href: '/skills', icon: Code },
-    { name: siteSettings?.navigation?.experienceText || 'Experience', href: '/experience', icon: Briefcase },
-    { name: siteSettings?.navigation?.projectsText || 'Projects', href: '/projects', icon: FolderOpen },
-    { name: siteSettings?.navigation?.blogText || 'Blog', href: '/blog', icon: BookOpen },
-    { name: siteSettings?.navigation?.contactText || 'Contact', href: '/contact', icon: Mail },
+    { name: siteSettings?.navigation?.homeText || 'Home', href: '/', icon: Home, visible: true },
+    { name: siteSettings?.navigation?.aboutText || 'About', href: '/about', icon: User, visible: siteSettings?.about?.visible ?? true },
+    { name: siteSettings?.navigation?.skillsText || 'Skills', href: '/skills', icon: Code, visible: siteSettings?.skills?.visible ?? true },
+    { name: siteSettings?.navigation?.experienceText || 'Experience', href: '/experience', icon: Briefcase, visible: siteSettings?.experience?.visible ?? true },
+    { name: siteSettings?.navigation?.projectsText || 'Projects', href: '/projects', icon: FolderOpen, visible: siteSettings?.projects?.visible ?? true },
+    { name: siteSettings?.navigation?.blogText || 'Blog', href: '/blog', icon: BookOpen, visible: siteSettings?.blog?.visible ?? true },
+    { name: siteSettings?.navigation?.contactText || 'Contact', href: '/contact', icon: Mail, visible: siteSettings?.contact?.visible ?? true },
   ];
 
   const handleNavClick = () => {
@@ -57,8 +57,8 @@ export default function Navigation({ siteSettings: serverSettings }: { siteSetti
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-sm shadow-lg'
+          isScrolled
+            ? 'bg-gradient-to-br from-clover-100/95 to-white/95 backdrop-blur-sm shadow-lg'
           : 'bg-transparent'
       }`}
     >
@@ -81,7 +81,7 @@ export default function Navigation({ siteSettings: serverSettings }: { siteSetti
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item, index) => (
+            {navItems.filter(i => i.visible).map((item, index) => (
               <motion.div
                 key={item.name}
                 initial={{ opacity: 0, y: -20 }}
@@ -93,8 +93,8 @@ export default function Navigation({ siteSettings: serverSettings }: { siteSetti
                   onClick={handleNavClick}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
                     pathname === item.href
-                      ? 'text-primary-900 bg-primary-100'
-                      : 'text-primary-600 hover:text-primary-900 hover:bg-primary-50'
+                      ? 'text-clover-900 bg-clover-100'
+                      : 'text-clover-700 hover:text-clover-900'
                   }`}
                 >
                   <item.icon size={18} />
@@ -110,7 +110,7 @@ export default function Navigation({ siteSettings: serverSettings }: { siteSetti
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-primary-600 hover:text-primary-900 hover:bg-primary-100 transition-colors"
+            className="md:hidden p-2 rounded-lg text-clover-700 hover:text-clover-900 hover:bg-clover-100 transition-colors"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </motion.button>
@@ -118,25 +118,25 @@ export default function Navigation({ siteSettings: serverSettings }: { siteSetti
       </div>
 
       {/* Mobile Navigation */}
-      <AnimatePresence>
+          <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-primary-200"
+            className="md:hidden bg-white border-t border-clover-100"
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <div className="flex flex-col space-y-2">
-                {navItems.map((item) => (
+                {navItems.filter(i => i.visible).map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={handleNavClick}
                     className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
                       pathname === item.href
-                        ? 'text-primary-900 bg-primary-100'
-                        : 'text-primary-600 hover:text-primary-900 hover:bg-primary-50'
+                        ? 'text-clover-900 bg-clover-100'
+                        : 'text-clover-700 hover:text-clover-900'
                     }`}
                   >
                     <item.icon size={20} />

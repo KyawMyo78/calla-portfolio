@@ -16,7 +16,8 @@ import {
   Home,
   ChevronLeft,
   Settings,
-  BookOpen
+  BookOpen,
+  MessageSquare
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -43,6 +44,7 @@ export default function AdminLayout({
     { id: 'experience', label: 'Experience', icon: Briefcase, path: '/admin/experience' },
     { id: 'skills', label: 'Skills', icon: Code, path: '/admin/skills' },
     { id: 'blog', label: 'Blog', icon: BookOpen, path: '/admin/blog' },
+    { id: 'chat', label: 'AI Chat', icon: MessageSquare, path: '/admin/chat' },
     { id: 'contacts', label: 'Messages', icon: Mail, path: '/admin/contacts' },
     { id: 'achievements', label: 'Achievements', icon: Award, path: '/admin/achievements' },
     { id: 'settings', label: 'Site Settings', icon: Settings, path: '/admin/site-settings' },
@@ -183,6 +185,56 @@ export default function AdminLayout({
               >
                 View Portfolio
               </a>
+              {/* Visibility toggle for current page (quick admin control) */}
+              {(() => {
+                // Map pathname to settings key
+                const pageKeyMap: Record<string, string> = {
+                  '/admin/about': 'about',
+                  '/admin/skills': 'skills',
+                  '/admin/experience': 'experience',
+                  '/admin/projects': 'projects',
+                  '/admin/blog': 'blog',
+                  '/admin/contact': 'contact',
+                };
+                const matching = Object.keys(pageKeyMap).find(p => pathname.startsWith(p));
+                const settingsKey = matching ? pageKeyMap[matching] : null;
+
+                if (!settingsKey) return null;
+
+                const isVisible = siteSettings?.[settingsKey]?.visible ?? true;
+
+                const toggleVisibility = async () => {
+                  try {
+                    const next = { ...(siteSettings || {}), [settingsKey]: { ...(siteSettings?.[settingsKey] || {}), visible: !isVisible } };
+                    const res = await fetch('/api/site-settings', {
+                      method: 'PUT',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(next),
+                    });
+                    const body = await res.json();
+                    if (res.ok && body.success) {
+                      setSiteSettings(next);
+                      toast.success('Visibility updated');
+                    } else {
+                      toast.error('Failed to update visibility');
+                    }
+                  } catch (e) {
+                    console.error('Error toggling visibility', e);
+                    toast.error('Error toggling visibility');
+                  }
+                };
+
+                return (
+                  <button
+                    onClick={toggleVisibility}
+                    title={isVisible ? 'Hide from public site' : 'Show on public site'}
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm ${isVisible ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}
+                  >
+                    {isVisible ? 'Visible' : 'Hidden'}
+                  </button>
+                );
+              })()}
+
               <button
                 onClick={handleLogout}
                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"

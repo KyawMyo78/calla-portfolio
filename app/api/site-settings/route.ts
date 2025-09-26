@@ -36,14 +36,20 @@ const defaultSettings = {
   about: {
     sectionTitle: 'About Me',
     sectionSubtitle: 'Get to know me better'
+    ,
+    visible: true
   },
   skills: {
     sectionTitle: 'Skills & Technologies',
     sectionSubtitle: 'Technologies I work with'
+    ,
+    visible: true
   },
   experience: {
     sectionTitle: 'Experience',
     sectionSubtitle: 'My professional journey'
+    ,
+    visible: true
   },
   projects: {
     sectionTitle: 'Featured Projects',
@@ -51,6 +57,8 @@ const defaultSettings = {
     viewProjectText: 'View Project',
     githubLinkText: 'GitHub',
     liveDemoText: 'Live Demo'
+    ,
+    visible: true
   },
   contact: {
     sectionTitle: 'Get In Touch',
@@ -66,12 +74,18 @@ const defaultSettings = {
     copyrightText: '© 2024 Portfolio. All rights reserved.',
     madeWithText: 'Made with ❤️ using Next.js'
   }
+  ,
+  // Blog visibility (top-level, not a section with many fields)
+  blog: {
+    visible: true
+  }
 };
 
 async function getSettings() {
   try {
     const cacheKey = 'siteSettings:main';
     const cached = getCached(cacheKey);
+    if (cached) return cached;
     if (cached) return cached;
 
     const docRef = db.collection('siteSettings').doc('main');

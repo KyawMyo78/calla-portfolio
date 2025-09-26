@@ -161,8 +161,8 @@ export default function Contact() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             {siteSettings?.contact?.connectTitle?.split(' ')[0] ?? "Let's"} <span className="text-gradient">{siteSettings?.contact?.connectTitle?.split(' ').slice(1).join(' ') ?? 'Connect'}</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-primary mx-auto mb-6"></div>
-          <p className="text-xl text-primary-600 max-w-3xl mx-auto">
+              <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
+          <p className="text-xl text-clover-700 max-w-3xl mx-auto">
             {siteSettings?.contact?.connectIntro ?? 'Ready to bring your ideas to life? Let\'s discuss your next project and explore how we can work together.'}
           </p>
         </motion.div>
@@ -194,7 +194,7 @@ export default function Contact() {
                     required: 'Name is required',
                     minLength: { value: 2, message: 'Name must be at least 2 characters' }
                   })}
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-clover-500 transition-colors ${
                     errors.name ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Your full name"
@@ -215,7 +215,7 @@ export default function Contact() {
                       message: 'Invalid email address'
                     }
                   })}
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-clover-500 transition-colors ${
                     errors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="example@example.com"
@@ -235,7 +235,7 @@ export default function Contact() {
                     type="tel"
                     id="phone"
                     {...register('phone')}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-clover-500 transition-colors"
                     placeholder="+123456789"
                   />
                 </div>
@@ -251,7 +251,7 @@ export default function Contact() {
                       required: 'Subject is required',
                       minLength: { value: 5, message: 'Subject must be at least 5 characters' }
                     })}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-clover-500 transition-colors ${
                       errors.subject ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="What's this about?"
@@ -274,7 +274,7 @@ export default function Contact() {
                     required: 'Message is required',
                     minLength: { value: 20, message: 'Message must be at least 20 characters' }
                   })}
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors resize-none ${
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-clover-500 transition-colors resize-none ${
                     errors.message ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Tell me about your project, ideas, or just say hello!"
@@ -290,7 +290,7 @@ export default function Contact() {
                 disabled={isSubmitting}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-gradient-primary text-white font-semibold py-4 rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-clover text-white font-semibold py-4 rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
@@ -324,7 +324,7 @@ export default function Contact() {
             </p>
 
             {/* Primary Contact Info */}
-            <div className="space-y-4 mb-8">
+              <div className="space-y-4 mb-8">
               {contactInfo.map((info, index) => (
                 <motion.div
                   key={index}
@@ -332,18 +332,18 @@ export default function Contact() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: 0.1 * index }}
-                  className="flex items-center p-4 bg-primary-50 rounded-xl hover:bg-primary-100 transition-colors"
+                  className="flex items-center p-4 bg-clover-100 rounded-xl hover:bg-clover-100 transition-colors"
                 >
-                  <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mr-4">
+                    <div className="w-12 h-12 bg-gradient-clover rounded-lg flex items-center justify-center mr-4">
                     <info.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">{info.title}</h4>
                     {info.link ? (
                       <a
-                        href={info.link}
-                        className="text-primary-600 hover:text-primary-800 transition-colors"
-                      >
+                          href={info.link}
+                          className="text-clover-700 hover:text-clover-900 transition-colors"
+                        >
                         {info.value}
                       </a>
                     ) : (
@@ -360,9 +360,9 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="p-6 bg-gradient-to-r from-primary-50 to-primary-100 rounded-xl"
+              className="p-6 bg-gradient-to-r from-clover-100 to-clover-100 rounded-xl"
             >
-              <h4 className="font-bold text-primary-800 mb-4">Why Work With Me?</h4>
+              <h4 className="font-bold text-clover-900 mb-4">Why Work With Me?</h4>
               <div className="space-y-2">
                 {(siteSettings?.contact?.whyWorkWithMe && Array.isArray(siteSettings.contact.whyWorkWithMe) ? siteSettings.contact.whyWorkWithMe : [
                   'Dedicated to delivering high-quality solutions',
@@ -371,8 +371,8 @@ export default function Contact() {
                   'Passionate about turning ideas into reality'
                 ]).map((point: string, index: number) => (
                   <div key={index} className="flex items-start">
-                    <CheckCircle className="w-5 h-5 text-primary-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-primary-700">{point}</span>
+                    <CheckCircle className="w-5 h-5 text-clover-700 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-clover-700">{point}</span>
                   </div>
                 ))}
               </div>
@@ -411,12 +411,12 @@ export default function Contact() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: 0.1 * index }}
                         whileHover={{ scale: 1.05 }}
-                        className="flex flex-col items-center p-4 bg-white rounded-xl border border-primary-200 hover:border-primary-400 hover:shadow-lg transition-all duration-300 group"
+                        className="flex flex-col items-center p-4 bg-white rounded-xl border border-clover-300 hover:border-clover-500 hover:shadow-lg transition-all duration-300 group"
                       >
-                        <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                <div className="w-10 h-10 bg-gradient-clover rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                           <iconConfig.icon className="w-5 h-5 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-gray-700 group-hover:text-primary-600 transition-colors">
+                        <span className="text-sm font-medium text-gray-700 group-hover:text-clover-700 transition-colors">
                           {socialLink.name}
                         </span>
                       </motion.a>
@@ -427,27 +427,27 @@ export default function Contact() {
             )}
 
             {/* Quick Contact Options */}
-            <div className="bg-white rounded-xl border border-primary-200 p-6">
+            <div className="bg-white rounded-xl border border-clover-300 p-6">
               <h4 className="text-lg font-semibold text-gray-900 mb-4">Quick Contact</h4>
               <div className="space-y-3">
                 <a
                   href={`mailto:${siteSettings?.contact?.quickContactEmail ?? profile.email}`}
-                  className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all group"
+                  className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-clover-300 hover:bg-clover-100 transition-all group"
                 >
-                  <Mail className="w-5 h-5 text-primary-600 mr-3" />
+                  <Mail className="w-5 h-5 text-clover-700 mr-3" />
                   <div>
-                    <span className="font-medium text-gray-900 group-hover:text-primary-600">{siteSettings?.contact?.readyToStartEmailText ?? 'Email Me'}</span>
+                    <span className="font-medium text-gray-900 group-hover:text-clover-700">{siteSettings?.contact?.readyToStartEmailText ?? 'Email Me'}</span>
                     <p className="text-sm text-gray-600">{siteSettings?.contact?.quickContactEmail ?? profile.email}</p>
                   </div>
                 </a>
                 
                 <a
                   href={`tel:${siteSettings?.contact?.quickContactPhone ?? profile.phone}`}
-                  className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all group"
+                  className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-clover-500 hover:bg-clover-100 transition-all group"
                 >
-                  <Phone className="w-5 h-5 text-primary-600 mr-3" />
+                  <Phone className="w-5 h-5 text-clover-700 mr-3" />
                   <div>
-                    <span className="font-medium text-gray-900 group-hover:text-primary-600">{siteSettings?.contact?.readyToStartCallText ?? 'Call Me'}</span>
+                    <span className="font-medium text-gray-900 group-hover:text-clover-700">{siteSettings?.contact?.readyToStartCallText ?? 'Call Me'}</span>
                     <p className="text-sm text-gray-600">{siteSettings?.contact?.quickContactPhone ?? profile.phone}</p>
                   </div>
                 </a>
@@ -462,22 +462,22 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-center mt-16 p-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-3xl text-white"
+          className="text-center mt-16 p-8 bg-gradient-to-r from-clover-500 to-clover-700 rounded-3xl text-white"
         >
           <h3 className="text-2xl font-bold mb-4">Ready to Start Your Project?</h3>
-          <p className="text-primary-100 mb-6 max-w-2xl mx-auto text-justify">
+          <p className="text-clover-100 mb-6 max-w-2xl mx-auto text-justify">
             From concept to completion, I'm here to help bring your vision to life with innovative solutions and expert craftsmanship.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href={`mailto:${siteSettings?.contact?.primaryEmail ?? profile.email}`}
-              className="bg-white text-primary-600 px-6 py-3 rounded-xl font-semibold hover:bg-primary-50 transition-colors"
+              className="bg-white text-clover-700 px-6 py-3 rounded-xl font-semibold hover:bg-clover-100 transition-colors"
             >
               Email Me Directly
             </a>
             <a
               href="tel:+66628602714"
-              className="bg-primary-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-800 transition-colors"
+              className="bg-clover-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-clover-900 transition-colors"
             >
               Call Now
             </a>

@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { 
-  User, 
-  Briefcase, 
-  Code, 
-  FolderOpen, 
+import {
+  User,
+  Briefcase,
+  Code,
+  FolderOpen,
   Mail,
   Plus,
-  BookOpen
+  BookOpen,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -34,32 +34,20 @@ export default function AdminDashboard() {
   const loadData = async () => {
     try {
       setIsLoading(true);
-      const [
-        projectsRes,
-        skillsRes,
-        experienceRes,
-        contactsRes,
-        blogsRes
-      ] = await Promise.all([
+      const [projectsRes, skillsRes, experienceRes, contactsRes, blogsRes] = await Promise.all([
         fetch('/api/portfolio/projects'),
         fetch('/api/portfolio/skills'),
         fetch('/api/portfolio/experience'),
         fetch('/api/portfolio/contacts'),
-        fetch('/api/admin/blog')
+        fetch('/api/admin/blog'),
       ]);
 
-      const [
-        projectsData,
-        skillsData,
-        experienceData,
-        contactsData,
-        blogsData
-      ] = await Promise.all([
+      const [projectsData, skillsData, experienceData, contactsData, blogsData] = await Promise.all([
         projectsRes.json(),
         skillsRes.json(),
         experienceRes.json(),
         contactsRes.json(),
-        blogsRes.json()
+        blogsRes.json(),
       ]);
 
       setData({
@@ -67,10 +55,11 @@ export default function AdminDashboard() {
         skills: skillsData.data || [],
         experience: experienceData.data || [],
         contacts: contactsData.data || [],
-        blogs: blogsData.data || []
+        blogs: blogsData.data || [],
       });
     } catch (error) {
-      toast.error('Failed to load data');
+      console.error(error);
+      toast.error('Failed to load dashboard data');
     } finally {
       setIsLoading(false);
     }
@@ -103,8 +92,8 @@ export default function AdminDashboard() {
       className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 text-left w-full hover:shadow-xl transition-all"
     >
       <div className="flex items-start space-x-4">
-        <div className="p-2 bg-primary-100 rounded-lg">
-          <Icon className="w-6 h-6 text-primary-600" />
+        <div className="p-2 bg-clover-100 rounded-lg">
+          <Icon className="w-6 h-6 text-clover-700" />
         </div>
         <div>
           <h3 className="font-semibold text-gray-900">{title}</h3>
@@ -118,7 +107,7 @@ export default function AdminDashboard() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 border-4 border-clover-700 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Loading dashboard...</p>
         </div>
       </div>
@@ -128,91 +117,31 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl text-white p-6">
+  <div className="bg-gradient-to-r from-clover-700 to-clover-700 rounded-xl text-white p-6">
         <h1 className="text-2xl font-bold mb-2">Welcome back! 👋</h1>
-        <p className="text-primary-100">Manage your portfolio content and track your progress.</p>
+        <p className="text-clover-100">Manage your portfolio content and track your progress.</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <StatCard
-          title="Total Projects"
-          value={data.projects?.length || 0}
-          icon={FolderOpen}
-          color="bg-blue-500"
-        />
-        <StatCard
-          title="Work Experience"
-          value={data.experience?.length || 0}
-          icon={Briefcase}
-          color="bg-green-500"
-        />
-        <StatCard
-          title="Skills"
-          value={data.skills?.length || 0}
-          icon={Code}
-          color="bg-purple-500"
-        />
-        <StatCard
-          title="Blog Posts"
-          value={data.blogs?.length || 0}
-          icon={BookOpen}
-          color="bg-indigo-500"
-        />
-        <StatCard
-          title="Messages"
-          value={data.contacts?.length || 0}
-          icon={Mail}
-          color="bg-orange-500"
-        />
+  <StatCard title="Total Projects" value={data.projects?.length || 0} icon={FolderOpen} color="bg-clover-700" />
+  <StatCard title="Work Experience" value={data.experience?.length || 0} icon={Briefcase} color="bg-clover-500" />
+  <StatCard title="Skills" value={data.skills?.length || 0} icon={Code} color="bg-clover-900" />
+  <StatCard title="Blog Posts" value={data.blogs?.length || 0} icon={BookOpen} color="bg-clover-500" />
+  <StatCard title="Messages" value={data.contacts?.length || 0} icon={Mail} color="bg-clover-300" />
       </div>
 
       {/* Quick Actions */}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <QuickActionCard
-            title="Manage Projects"
-            description="Add, edit, or delete projects"
-            icon={FolderOpen}
-            onClick={() => router.push('/admin/projects')}
-          />
-          <QuickActionCard
-            title="Manage Experience"
-            description="Update work history and career"
-            icon={Briefcase}
-            onClick={() => router.push('/admin/experience')}
-          />
-          <QuickActionCard
-            title="Manage Skills"
-            description="Update your skill set"
-            icon={Code}
-            onClick={() => router.push('/admin/skills')}
-          />
-          <QuickActionCard
-            title="Manage Blog"
-            description="Create and edit blog posts"
-            icon={BookOpen}
-            onClick={() => router.push('/admin/blog')}
-          />
-          <QuickActionCard
-            title="View Messages"
-            description="Review contact form submissions"
-            icon={Mail}
-            onClick={() => router.push('/admin/contacts')}
-          />
-          <QuickActionCard
-            title="Add New Project"
-            description="Quickly add a new project"
-            icon={Plus}
-            onClick={() => router.push('/admin/projects')}
-          />
-          <QuickActionCard
-            title="Portfolio Overview"
-            description="View your live portfolio"
-            icon={User}
-            onClick={() => window.open('/', '_blank')}
-          />
+          <QuickActionCard title="Manage Projects" description="Add, edit, or delete projects" icon={FolderOpen} onClick={() => router.push('/admin/projects')} />
+          <QuickActionCard title="Manage Experience" description="Update work history and career" icon={Briefcase} onClick={() => router.push('/admin/experience')} />
+          <QuickActionCard title="Manage Skills" description="Update your skill set" icon={Code} onClick={() => router.push('/admin/skills')} />
+          <QuickActionCard title="Manage Blog" description="Create and edit blog posts" icon={BookOpen} onClick={() => router.push('/admin/blog')} />
+          <QuickActionCard title="View Messages" description="Review contact form submissions" icon={Mail} onClick={() => router.push('/admin/contacts')} />
+          <QuickActionCard title="Add New Project" description="Quickly add a new project" icon={Plus} onClick={() => router.push('/admin/projects')} />
+          <QuickActionCard title="Portfolio Overview" description="View your live portfolio" icon={User} onClick={() => window.open('/', '_blank')} />
         </div>
       </div>
 
@@ -229,18 +158,13 @@ export default function AdminDashboard() {
                     <p className="text-sm text-gray-600">{contact.email}</p>
                     <p className="text-sm text-gray-700 mt-1 line-clamp-2">{contact.message}</p>
                   </div>
-                  <span className="text-xs text-gray-500">
-                    {new Date(contact.createdAt).toLocaleDateString()}
-                  </span>
+                  <span className="text-xs text-gray-500">{new Date(contact.createdAt).toLocaleDateString()}</span>
                 </div>
               </div>
             ))}
             {data.contacts.length > 5 && (
               <div className="p-4 text-center">
-                <button
-                  onClick={() => router.push('/admin/contacts')}
-                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
-                >
+                <button onClick={() => router.push('/admin/contacts')} className="text-clover-600 hover:text-clover-700 text-sm font-medium">
                   View all messages ({data.contacts.length})
                 </button>
               </div>
@@ -260,9 +184,7 @@ export default function AdminDashboard() {
                 <p className="text-sm text-gray-600 mb-3 line-clamp-2">{project.description}</p>
                 <div className="flex flex-wrap gap-1">
                   {project.technologies?.slice(0, 3).map((tech: string, i: number) => (
-                    <span key={i} className="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs">
-                      {tech}
-                    </span>
+                    <span key={i} className="px-2 py-1 bg-clover-100 text-clover-700 rounded text-xs">{tech}</span>
                   ))}
                 </div>
               </div>

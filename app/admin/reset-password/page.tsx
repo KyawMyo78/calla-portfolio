@@ -129,13 +129,13 @@ export default function ResetPassword() {
             </div>
             
             <h1 className="text-2xl font-bold text-white mb-4">Invalid Reset Link</h1>
-            <p className="text-primary-100 mb-6">
+            <p className="text-clover-100 mb-6">
               This password reset link is invalid or has expired. Please request a new one.
             </p>
             
             <Link
               href="/admin/forgot-password"
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-2 bg-clover-600 hover:bg-clover-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               Request New Link
             </Link>
@@ -176,13 +176,13 @@ export default function ResetPassword() {
             </motion.div>
             
             <h1 className="text-2xl font-bold text-white mb-4">Password Reset!</h1>
-            <p className="text-primary-100 mb-6">
+            <p className="text-clover-100 mb-6">
               Your password has been successfully reset. You can now log in with your new password.
             </p>
             
             <Link
               href="/admin/login"
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-2 bg-clover-700 hover:bg-clover-900 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               <ArrowLeft size={20} />
               Go to Login
@@ -206,13 +206,13 @@ export default function ResetPassword() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="w-16 h-16 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-6"
+            className="w-16 h-16 bg-clover-600/20 rounded-full flex items-center justify-center mx-auto mb-6"
           >
-            <Key className="w-8 h-8 text-primary-300" />
+            <Key className="w-8 h-8 text-clover-300" />
           </motion.div>
           
           <h1 className="text-2xl font-bold text-white mb-2">Reset Password</h1>
-          <p className="text-primary-100">
+          <p className="text-clover-100">
             Enter your new password below.
           </p>
         </div>
@@ -223,12 +223,12 @@ export default function ResetPassword() {
               New Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-300" size={20} />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-clover-300" size={20} />
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 placeholder="Enter new password"
-                className="w-full pl-10 pr-12 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-primary-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400/20 transition-colors"
+                className="w-full pl-10 pr-12 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-clover-300 focus:border-clover-400 focus:outline-none focus:ring-2 focus:ring-clover-400/20 transition-colors"
                 {...register('password', {
                   required: 'Password is required',
                   minLength: {
@@ -240,7 +240,7 @@ export default function ResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary-300 hover:text-white transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-clover-300 hover:text-white transition-colors"
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -251,16 +251,16 @@ export default function ResetPassword() {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-primary-100 mb-2">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-clover-100 mb-2">
               Confirm Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-300" size={20} />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-clover-300" size={20} />
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
                 id="confirmPassword"
                 placeholder="Confirm new password"
-                className="w-full pl-10 pr-12 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-primary-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400/20 transition-colors"
+                className="w-full pl-10 pr-12 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-clover-300 focus:border-clover-400 focus:outline-none focus:ring-2 focus:ring-clover-400/20 transition-colors"
                 {...register('confirmPassword', {
                   required: 'Please confirm your password',
                   validate: value => value === password || 'Passwords do not match'
@@ -269,7 +269,7 @@ export default function ResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary-300 hover:text-white transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-clover-300 hover:text-white transition-colors"
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -279,11 +279,11 @@ export default function ResetPassword() {
             )}
           </div>
 
-          <button
+            <button
             type="submit"
             disabled={isLoading}
-            className={`w-full bg-primary-600 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
-              isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-700 hover:shadow-lg'
+            className={`w-full bg-clover-600 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
+              isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-clover-700 hover:shadow-lg'
             }`}
           >
             {isLoading ? (
@@ -303,7 +303,7 @@ export default function ResetPassword() {
         <div className="text-center mt-6">
           <Link
             href="/admin/login"
-            className="inline-flex items-center gap-2 text-primary-200 hover:text-white transition-colors text-sm"
+            className="inline-flex items-center gap-2 text-clover-300 hover:text-white transition-colors text-sm"
           >
             <ArrowLeft size={16} />
             Back to Login

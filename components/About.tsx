@@ -47,7 +47,7 @@ export default function About({ profile }: Props) {
               ))}
 
               <div className="mt-6 flex flex-wrap gap-4 items-center">
-                <a href={profile?.cvUrl || '#'} target="_blank" rel="noreferrer" className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md">
+                <a href={profile?.cvUrl || '#'} target="_blank" rel="noreferrer" className="inline-flex items-center px-4 py-2 bg-clover-700 hover:bg-clover-900 text-white rounded-md transition-colors">
                   <Download className="w-4 h-4 mr-2" />
                   Resume
                 </a>
@@ -76,7 +76,7 @@ export default function About({ profile }: Props) {
                       </div>
                       <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                         <motion.div
-                          className="h-full bg-primary-500 rounded-full"
+                          className="h-full bg-gradient-to-r from-clover-500 to-clover-700 rounded-full"
                           initial={{ width: 0 }}
                           animate={{ width: `${s.level}%` }}
                           transition={{ duration: 0.8, delay: idx * 0.08 }}
@@ -98,9 +98,9 @@ export default function About({ profile }: Props) {
                         whileHover={{ y: -6 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       >
-                        <div className="transition-colors duration-200 text-primary group-hover:text-primary-600">
+                        <div className="transition-colors duration-200 text-clover-700 group-hover:text-clover-900">
                           {typeof it.icon === 'string' ? (
-                            <IconPreview name={it.icon} className="w-6 h-6 text-primary" />
+                            <IconPreview name={it.icon} className="w-6 h-6 text-clover-700" />
                           ) : (
                             // if icon is already a component
                             React.isValidElement(it.icon) ? it.icon : <div className="w-6 h-6" />

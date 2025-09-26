@@ -4,6 +4,7 @@ export const fetchCache = 'force-no-store';
 
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/Hero'
+import IconScroller from '../components/IconScroller'
 import Footer from '@/components/Footer'
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
@@ -68,7 +69,8 @@ export default async function HomePage() {
     <main className="min-h-screen">
       <Navigation siteSettings={siteSettings} />
       <Hero profile={profile} siteSettings={siteSettings} />
-      <Footer profile={profile} />
+  <IconScroller profile={profile} siteSettings={siteSettings} />
+      <Footer profile={profile} siteSettings={siteSettings} />
     </main>
   )
 }

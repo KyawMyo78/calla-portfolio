@@ -91,6 +91,8 @@ export interface Achievement {
   type: 'award' | 'certification' | 'competition' | 'scholarship' | 'other';
   level: 'local' | 'national' | 'international';
   image?: string;
+  featured?: boolean;
+  featuredOrder?: number;
   certificateUrl?: string;
   order: number;
   createdAt?: Date;

@@ -1,6 +1,8 @@
-'use client';
+ 'use client';
 
 import { motion } from 'framer-motion';
+import Achievements from './Achievements';
+import FeaturedAchievements from './FeaturedAchievements';
 import { useState, useEffect } from 'react';
 import { Calendar, MapPin, Building, ExternalLink, Briefcase } from 'lucide-react';
 
@@ -93,14 +95,14 @@ export default function Experience() {
         </div>
         
         <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-3">
-          <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
             <Building className="w-4 h-4" />
             {experience.companyUrl ? (
               <a 
                 href={experience.companyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary-600 hover:text-primary-800 font-medium flex items-center gap-1 transition-colors"
+                className="text-clover-700 hover:text-clover-900 font-medium flex items-center gap-1 transition-colors"
               >
                 {experience.company}
                 <ExternalLink className="w-3 h-3" />
@@ -117,8 +119,8 @@ export default function Experience() {
             </div>
           )}
           
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4" />
+                <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
             <span>
               {formatDate(experience.startDate)} - {experience.current ? 'Present' : (experience.endDate ? formatDate(experience.endDate) : 'Present')}
             </span>
@@ -138,8 +140,8 @@ export default function Experience() {
           <h4 className="font-medium text-gray-900 mb-2">Key Responsibilities:</h4>
           <ul className="space-y-1">
             {experience.responsibilities.map((responsibility, i) => (
-              <li key={i} className="text-gray-600 flex items-start gap-2 text-sm">
-                <span className="text-primary-600 mt-1.5 w-1 h-1 bg-current rounded-full flex-shrink-0"></span>
+                <li key={i} className="text-gray-600 flex items-start gap-2 text-sm">
+                <span className="text-clover-700 mt-1.5 w-1 h-1 bg-current rounded-full flex-shrink-0"></span>
                 <span>{responsibility}</span>
               </li>
             ))}
@@ -170,7 +172,7 @@ export default function Experience() {
             {experience.technologies.map((tech, i) => (
               <span
                 key={i}
-                className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium"
+                className="px-3 py-1 bg-clover-100 text-clover-700 rounded-full text-sm font-medium"
               >
                 {tech}
               </span>
@@ -183,11 +185,15 @@ export default function Experience() {
 
   if (isLoading) {
     return (
-      <section id="experience" className="section-padding bg-gray-50">
+  <section id="experience" className="section-padding bg-gray-50">
         <div className="container-width">
           <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-clover-700 border-t-transparent rounded-full animate-spin"></div>
           </div>
+        </div>
+        {/* Always show global achievements below the loading state */}
+        <div className="container-width">
+          <Achievements />
         </div>
       </section>
     );
@@ -207,8 +213,8 @@ export default function Experience() {
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Work <span className="text-gradient">Experience</span>
             </h2>
-            <div className="w-24 h-1 bg-gradient-primary mx-auto mb-6"></div>
-            <p className="text-xl text-primary-600 max-w-3xl mx-auto mb-8 text-justify">
+            <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
+            <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-justify">
               Building expertise through hands-on experience and continuous learning.
             </p>
             <div className="text-center py-12">
@@ -217,6 +223,10 @@ export default function Experience() {
               <p className="text-gray-600">Check back to see my professional journey and career milestones.</p>
             </div>
           </motion.div>
+        </div>
+        {/* Show global achievements even when no experiences exist */}
+        <div className="container-width">
+          <Achievements />
         </div>
       </section>
     );
@@ -236,8 +246,8 @@ export default function Experience() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Work <span className="text-gradient">Experience</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-primary mx-auto mb-6"></div>
-          <p className="text-xl text-primary-600 max-w-3xl mx-auto">
+            <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
+          <p className="text-xl text-clover-700 max-w-3xl mx-auto">
             My professional journey showcasing growth, achievements, and the impact I've made across different roles.
           </p>
         </motion.div>
@@ -245,7 +255,7 @@ export default function Experience() {
         {/* Timeline */}
         <div className="relative">
           {/* Timeline Line - Only show on large screens */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 top-8 bottom-8 w-0.5 bg-gradient-to-b from-primary-500 to-primary-300 hidden xl:block"></div>
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-8 bottom-8 w-0.5 bg-gradient-to-b from-clover-500 to-clover-300 hidden xl:block"></div>
 
           {/* Experience Items */}
           <div className="space-y-8">
@@ -260,8 +270,8 @@ export default function Experience() {
               >
                 {/* Mobile/Tablet Layout (up to xl) - Simple left-aligned */}
                 <div className="xl:hidden flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full border-4 border-primary-500 flex items-center justify-center shadow-lg">
-                    <Briefcase className="w-4 h-4 text-primary-600" />
+                  <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full border-4 border-clover-500 flex items-center justify-center shadow-lg">
+                    <Briefcase className="w-4 h-4 text-clover-700" />
                     {experience.current && (
                       <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                     )}
@@ -274,8 +284,8 @@ export default function Experience() {
                 {/* Desktop Layout (xl and above) - Alternating timeline */}
                 <div className="hidden xl:flex items-start gap-8">
                   {/* Timeline Dot */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 flex-shrink-0 w-16 h-16 bg-white rounded-full border-4 border-primary-500 flex items-center justify-center shadow-lg z-10">
-                    <Briefcase className="w-6 h-6 text-primary-600" />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 flex-shrink-0 w-16 h-16 bg-white rounded-full border-4 border-clover-500 flex items-center justify-center shadow-lg z-10">
+                    <Briefcase className="w-6 h-6 text-clover-700" />
                     {experience.current && (
                       <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
                     )}
@@ -301,34 +311,43 @@ export default function Experience() {
         </div>
 
         {/* Experience Summary */}
-        <motion.div
+          <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 bg-gradient-to-r from-primary-50 to-primary-100 rounded-3xl p-8"
+         className="mt-16 bg-gradient-to-r from-clover-100 to-clover-100 rounded-3xl p-8"
         >
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
-              <h4 className="text-3xl font-bold text-primary-800 mb-2">
+              <h4 className="text-3xl font-bold text-clover-900 mb-2">
                 {experiences.length}
               </h4>
-              <p className="text-primary-600 font-medium">Professional Roles</p>
+              <p className="text-clover-700 font-medium">Professional Roles</p>
             </div>
             <div>
-              <h4 className="text-3xl font-bold text-primary-800 mb-2">
+              <h4 className="text-3xl font-bold text-clover-900 mb-2">
                 {experiences.filter(exp => exp.current).length}
               </h4>
-              <p className="text-primary-600 font-medium">Current Positions</p>
+              <p className="text-clover-700 font-medium">Current Positions</p>
             </div>
             <div>
-              <h4 className="text-3xl font-bold text-primary-800 mb-2">
+              <h4 className="text-3xl font-bold text-clover-900 mb-2">
                 {new Set(experiences.flatMap(exp => exp.technologies || [])).size}
               </h4>
-              <p className="text-primary-600 font-medium">Technologies Used</p>
+              <p className="text-clover-700 font-medium">Technologies Used</p>
             </div>
           </div>
         </motion.div>
+        {/* Featured Achievements (top) */}
+        <div className="mt-4">
+          <FeaturedAchievements maxItems={3} />
+        </div>
+
+        {/* Global Achievements Section (exclude featured) */}
+        <div className="mt-8">
+          <Achievements excludeFeatured />
+        </div>
       </div>
     </section>
   );

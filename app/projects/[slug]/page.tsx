@@ -80,9 +80,9 @@ export default function ProjectPage({ params }: PageProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+  <div className="min-h-screen bg-gradient-to-br from-clover-100 via-white to-secondary-50">
         <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-2 border-clover-700 border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
     );
@@ -99,14 +99,14 @@ export default function ProjectPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+  <div className="min-h-screen bg-gradient-to-br from-clover-100 via-white to-secondary-50">
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-sm border-b border-primary-100 sticky top-0 z-40">
+  <nav className="bg-white/80 backdrop-blur-sm border-b border-clover-100 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <Link 
               href="/#projects"
-              className="flex items-center gap-2 text-primary-600 hover:text-primary-800 transition-colors"
+              className="flex items-center gap-2 text-clover-700 hover:text-clover-900 transition-colors"
             >
               <ArrowLeft size={20} />
               <span className="font-medium">Back to Projects</span>
@@ -131,7 +131,7 @@ export default function ProjectPage({ params }: PageProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => analytics.projectLinkClick(project.title, 'live')}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-clover-700 text-white rounded-lg hover:bg-clover-700 transition-colors"
                 >
                   <ExternalLink size={18} />
                   <span className="hidden sm:inline">Live Demo</span>
@@ -185,15 +185,15 @@ export default function ProjectPage({ params }: PageProps) {
 
           {/* Project Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary-800 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-clover-900 mb-4">
               {project.title}
             </h1>
-            <p className="text-xl text-primary-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-clover-700 max-w-3xl mx-auto leading-relaxed">
               {project.description}
             </p>
             
             {/* Project Meta */}
-            <div className="flex items-center justify-center gap-6 mt-6 text-primary-600">
+            <div className="flex items-center justify-center gap-6 mt-6 text-clover-700">
               <div className="flex items-center gap-2">
                 <Calendar size={18} />
                 <span>
@@ -220,7 +220,7 @@ export default function ProjectPage({ params }: PageProps) {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-12"
             >
-              <h2 className="text-2xl font-bold text-primary-800 mb-6">About This Project</h2>
+              <h2 className="text-2xl font-bold text-clover-900 mb-6">About This Project</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed">
                   {project.longDescription || project.description}
@@ -236,11 +236,11 @@ export default function ProjectPage({ params }: PageProps) {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="mb-12"
               >
-                <h2 className="text-2xl font-bold text-primary-800 mb-6">Key Highlights</h2>
+                <h2 className="text-2xl font-bold text-clover-900 mb-6">Key Highlights</h2>
                 <div className="grid gap-4">
                   {project.highlights.map((highlight, index) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-white/60 backdrop-blur-sm rounded-lg border border-primary-100">
-                      <Star size={20} className="text-primary-500 mt-1 flex-shrink-0" />
+                    <div key={index} className="flex items-start gap-3 p-4 bg-white/60 backdrop-blur-sm rounded-lg border border-clover-100">
+                      <Star size={20} className="text-clover-500 mt-1 flex-shrink-0" />
                       <p className="text-gray-700">{highlight}</p>
                     </div>
                   ))}
@@ -256,7 +256,7 @@ export default function ProjectPage({ params }: PageProps) {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="mb-12"
               >
-                <h2 className="text-2xl font-bold text-primary-800 mb-6">Project Gallery</h2>
+                <h2 className="text-2xl font-bold text-clover-900 mb-6">Project Gallery</h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   {project.images.slice(1).map((image, index) => (
                     <div key={index} className="rounded-lg overflow-hidden bg-gray-50">
@@ -281,14 +281,14 @@ export default function ProjectPage({ params }: PageProps) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-primary-100 mb-8"
-            >
-              <h3 className="text-xl font-bold text-primary-800 mb-4">Technologies Used</h3>
+              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-clover-100 mb-8"
+              >
+                <h3 className="text-xl font-bold text-clover-900 mb-4">Technologies Used</h3>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium"
+                      className="px-3 py-1 bg-clover-100 text-clover-700 rounded-full text-sm font-medium"
                   >
                     {tech}
                   </span>
@@ -301,9 +301,9 @@ export default function ProjectPage({ params }: PageProps) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-primary-100 mb-8"
-            >
-              <h3 className="text-xl font-bold text-primary-800 mb-4">Project Links</h3>
+              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-clover-100 mb-8"
+              >
+                <h3 className="text-xl font-bold text-clover-900 mb-4">Project Links</h3>
               <div className="space-y-3">
                 {project.githubUrl && (
                   <a
@@ -326,12 +326,12 @@ export default function ProjectPage({ params }: PageProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => analytics.projectLinkClick(project.title, 'live')}
-                    className="flex items-center gap-3 p-3 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors"
-                  >
-                    <ExternalLink size={20} className="text-primary-600" />
+                    className="flex items-center gap-3 p-3 bg-clover-100 hover:bg-clover-100 rounded-lg transition-colors"
+                    >
+                    <ExternalLink size={20} className="text-clover-700" />
                     <div>
-                      <div className="font-medium text-primary-900">Live Demo</div>
-                      <div className="text-sm text-primary-600">Try it online</div>
+                      <div className="font-medium text-clover-900">Live Demo</div>
+                      <div className="text-sm text-clover-700">Try it online</div>
                     </div>
                   </a>
                 )}
@@ -358,9 +358,9 @@ export default function ProjectPage({ params }: PageProps) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
-              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-primary-100"
-            >
-              <h3 className="text-xl font-bold text-primary-800 mb-4">Share This Project</h3>
+              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-clover-100"
+              >
+                <h3 className="text-xl font-bold text-clover-900 mb-4">Share This Project</h3>
               <div className="space-y-3">
                 <button
                   onClick={async () => {
@@ -376,16 +376,16 @@ export default function ProjectPage({ params }: PageProps) {
                   className={`w-full p-3 rounded-lg transition-all duration-200 text-left ${
                     isCopied 
                       ? 'bg-green-50 hover:bg-green-100 border-2 border-green-200' 
-                      : 'bg-primary-50 hover:bg-primary-100'
+                      : 'bg-clover-100'
                   }`}
                 >
                   <div className={`font-medium transition-colors ${
-                    isCopied ? 'text-green-900' : 'text-primary-900'
+                    isCopied ? 'text-green-900' : 'text-clover-900'
                   }`}>
                     {isCopied ? '✓ Copied!' : 'Copy Link'}
                   </div>
                   <div className={`text-sm transition-colors ${
-                    isCopied ? 'text-green-600' : 'text-primary-600'
+                    isCopied ? 'text-green-600' : 'text-clover-700'
                   }`}>
                     {isCopied ? 'Link copied to clipboard' : 'Share this project'}
                   </div>

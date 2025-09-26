@@ -7,6 +7,7 @@ import IconPickerModal from '../../../components/IconPickerModal';
 import IconPreview from '../../../components/IconPreview';
 import FileUpload from '../../../components/FileUpload';
 import { socialIcons, getSocialIcon, SocialLink } from '../../../lib/socialIcons';
+import IconScroller from '../../../components/IconScroller';
 
 interface ProfileData {
   name: string;
@@ -26,6 +27,7 @@ interface ProfileData {
   aboutDescription?: string;
   skills?: Array<{ name: string; level: number }>;
   interests?: Array<{ label: string; description: string; icon?: string }>;
+  iconScroller?: Array<{ id: string; type: 'library' | 'svg'; key?: string; svgData?: string; title?: string }>;
 }
 
 export default function ProfileManager() {
@@ -82,6 +84,10 @@ export default function ProfileManager() {
   // new inputs for skills and interests
   const [newSkill, setNewSkill] = useState({ name: '', level: 50 });
   const [newInterest, setNewInterest] = useState({ label: '', description: '', icon: 'heart' });
+  // Icon scroller management
+  const [newScrollerItemType, setNewScrollerItemType] = useState<'library' | 'svg'>('library');
+  const [newScrollerLibraryKey, setNewScrollerLibraryKey] = useState('external');
+  const [newScrollerSvgData, setNewScrollerSvgData] = useState('');
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -165,6 +171,23 @@ export default function ProfileManager() {
       ...prev,
       socialLinks: prev.socialLinks?.filter(link => link.id !== id) || []
     }));
+  };
+
+  type ScrollerItem = { id: string; type: 'library' | 'svg'; key?: string; svgData?: string; title?: string };
+  const handleAddScrollerItem = () => {
+    const id = Date.now().toString();
+    const item: ScrollerItem = newScrollerItemType === 'library'
+      ? { id, type: 'library', key: newScrollerLibraryKey, title: newScrollerLibraryKey }
+      : { id, type: 'svg', svgData: newScrollerSvgData, title: 'Custom SVG' };
+    setProfile(prev => ({ ...prev, iconScroller: ([...(prev.iconScroller || [])] as ScrollerItem[]).concat(item) }));
+    // reset
+    setNewScrollerSvgData('');
+    setNewScrollerLibraryKey('external');
+    setNewScrollerItemType('library');
+  };
+
+  const handleRemoveScrollerItem = (id: string) => {
+    setProfile(prev => ({ ...prev, iconScroller: (prev.iconScroller || []).filter((it: any) => it.id !== id) }));
   };
 
   const handleSocialLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -705,6 +728,85 @@ export default function ProfileManager() {
               <li>For Google Drive: Right-click → Share → Copy link (make sure "Anyone with link" can view)</li>
             </ul>
           </div>
+        </div>
+      </div>
+
+      {/* Icon Scroller Management */}
+      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md lg:col-span-2">
+        <div className="flex items-center space-x-2 mb-4">
+          <ExternalLink className="h-5 w-5 text-gray-600" />
+          <h2 className="text-lg font-semibold text-gray-900">Homepage Icon Scroller</h2>
+        </div>
+
+        <p className="text-sm text-gray-600 mb-4">Add icons to the homepage scroller. You can upload an SVG or choose from the icon library.</p>
+
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+              <select value={newScrollerItemType} onChange={(e) => setNewScrollerItemType(e.target.value as any)} className="w-full p-3 border rounded">
+                <option value="library">Icon Library</option>
+                <option value="svg">Upload SVG</option>
+              </select>
+            </div>
+
+            <div>
+              {newScrollerItemType === 'library' ? (
+                <>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Library Icon</label>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center">
+                      <IconPreview name={newScrollerLibraryKey} className="w-5 h-5 text-gray-700" />
+                    </div>
+                    <div className="flex-1">
+                      <IconPickerModal value={newScrollerLibraryKey} onChange={(key: string) => setNewScrollerLibraryKey(key)} />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">SVG File</label>
+                  <FileUpload uploadType="general" acceptedTypes="image/svg+xml" onUploadComplete={(url, fileName) => {
+                    // Fetch the uploaded svg and store its content as data URL
+                    (async () => {
+                      try {
+                        const res = await fetch(url);
+                        const text = await res.text();
+                        // sanitize minimally by ensuring it starts with <svg
+                        const svg = text.trim().startsWith('<svg') ? text : `<svg>${text}</svg>`;
+                        setNewScrollerSvgData(svg);
+                      } catch (e) {
+                        console.error('Failed to fetch uploaded svg', e);
+                      }
+                    })();
+                  }} />
+                </>
+              )}
+            </div>
+
+            <div className="flex items-end">
+              <button onClick={handleAddScrollerItem} className="w-full bg-royal-600 text-white px-4 py-3 rounded">Add to Scroller</button>
+            </div>
+          </div>
+
+          {/* Current scroller items */}
+          {(profile.iconScroller || []).length > 0 && (
+            <div className="space-y-3">
+              <h3 className="text-md font-medium text-gray-800">Current Scroller Items</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                {(profile.iconScroller || []).map((it: any) => (
+                  <div key={it.id} className="p-2 border rounded flex flex-col items-center gap-2">
+                    <div className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded">
+                      {it.type === 'library' ? <IconPreview name={it.key} className="w-5 h-5" /> : <div className="w-5 h-5" dangerouslySetInnerHTML={{ __html: it.svgData || '' }} />}
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => handleRemoveScrollerItem(it.id)} className="text-red-600 text-sm">Remove</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

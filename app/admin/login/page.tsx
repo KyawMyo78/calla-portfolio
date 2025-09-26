@@ -76,7 +76,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 flex items-center justify-center p-4">
+  <div className="min-h-screen bg-gradient-to-br from-clover-900 via-clover-700 to-clover-700 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -91,10 +91,10 @@ export default function AdminLogin() {
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
             className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4"
           >
-            <LogIn className="w-10 h-10 text-primary-600" />
+            <LogIn className="w-10 h-10 text-clover-700" />
           </motion.div>
           <h1 className="text-3xl font-bold text-white mb-2">Admin Portal</h1>
-          <p className="text-primary-200">Access portfolio management dashboard</p>
+          <p className="text-clover-300">Access portfolio management dashboard</p>
         </div>
 
         {/* Login Form */}
@@ -220,7 +220,7 @@ export default function AdminLogin() {
         >
           <a
             href="/"
-            className="text-primary-200 hover:text-white transition-colors text-sm"
+            className="text-clover-300 hover:text-white transition-colors text-sm"
           >
             ← Back to Portfolio
           </a>

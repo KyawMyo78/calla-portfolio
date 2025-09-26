@@ -25,7 +25,7 @@ const quickLinks = [
   { name: 'Contact', path: '/contact' }
 ];
 
-export default function Footer({ profile: serverProfile }: { profile?: any }) {
+export default function Footer({ profile: serverProfile, siteSettings: serverSettings }: { profile?: any; siteSettings?: any }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -37,7 +37,8 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
   nickname: 'Your Nickname',
   description: 'A brief description about you, your skills, and what you build.'
   });
-  const [siteSettings, setSiteSettings] = useState<any | null>(null);
+  // Allow server-provided siteSettings to be passed in (avoids extra fetch when available)
+  const [siteSettings, setSiteSettings] = useState<any | null>(serverSettings || null);
 
   useEffect(() => {
     // If server provided profile, use it immediately and skip fetch
@@ -53,7 +54,6 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
       });
       return;
     }
-
     const fetchProfile = async () => {
       try {
         // Add cache busting parameter
@@ -73,21 +73,22 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
-        // Fetch site settings for footer text
-        const fetchSettings = async () => {
-          try {
-            const res = await fetch('/api/site-settings');
-            const body = await res.json();
-            if (body?.success && body.data) setSiteSettings(body.data);
-          } catch (e) {
-            // ignore
-          }
-        };
-        fetchSettings();
+        // ignore profile error; site settings fetch happens below
       }
     };
 
     fetchProfile();
+    // Always fetch site settings for quick links and footer text
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/site-settings');
+        const body = await res.json();
+        if (body?.success && body.data) setSiteSettings(body.data);
+      } catch (e) {
+        // ignore
+      }
+    };
+    fetchSettings();
   }, []);
 
   // Build social links array from profile data
@@ -179,7 +180,7 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
   };
 
   return (
-    <footer className="bg-primary-900 text-white relative overflow-hidden">
+    <footer className="bg-clover-900 text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -187,7 +188,7 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
         }}></div>
       </div>
 
-      <div className="relative z-10">
+  <div className="relative z-10">
         {/* Main Footer Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -199,8 +200,8 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
               transition={{ duration: 0.6 }}
               className="lg:col-span-2"
             >
-              <h3 className="text-2xl font-bold mb-4">{profile.name || 'Your Name'}{profile.nickname ? ` (${profile.nickname})` : ''}</h3>
-              <p className="text-primary-200 mb-6 leading-relaxed max-w-md text-justify">
+              <h3 className="text-2xl font-bold mb-4 text-clover-100">{profile.name || 'Your Name'}{profile.nickname ? ` (${profile.nickname})` : ''}</h3>
+              <p className="text-clover-100 mb-6 leading-relaxed max-w-md text-justify">
                 {profile.description || 'A brief description about you, your skills, and what you build.'}
               </p>
               <div className="flex space-x-4">
@@ -214,7 +215,7 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
                       rel="noopener noreferrer"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
-                      className="w-10 h-10 bg-primary-800 rounded-lg flex items-center justify-center hover:bg-primary-700 transition-colors"
+                      className="w-10 h-10 bg-clover-700 rounded-lg flex items-center justify-center hover:bg-clover-500 transition-colors text-white"
                       title={link.name}
                     >
                       <IconComponent size={20} />
@@ -231,22 +232,49 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
+              <h4 className="text-lg font-semibold mb-6 text-clover-100">Quick Links</h4>
               <ul className="space-y-3">
-                {quickLinks.map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.path}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        router.push(link.path);
-                      }}
-                      className="text-primary-200 hover:text-white transition-colors"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
+                {quickLinks
+                  .filter(link => {
+                    // Map link name to settings visibility (default to true to match Navigation behavior)
+                    const mapping: Record<string, boolean> = {
+                      About: siteSettings?.about?.visible ?? true,
+                      Skills: siteSettings?.skills?.visible ?? true,
+                      Experience: siteSettings?.experience?.visible ?? true,
+                      Projects: siteSettings?.projects?.visible ?? true,
+                      Blog: siteSettings?.blog?.visible ?? true,
+                      Contact: siteSettings?.contact?.visible ?? true,
+                    };
+                    return mapping[link.name] ?? true;
+                  })
+                  .map((link) => {
+                    // Prefer labels from siteSettings.navigation when available
+                    const labelMap: Record<string, string> = {
+                      About: siteSettings?.navigation?.aboutText || 'About',
+                      Skills: siteSettings?.navigation?.skillsText || 'Skills',
+                      Experience: siteSettings?.navigation?.experienceText || 'Experience',
+                      Projects: siteSettings?.navigation?.projectsText || 'Projects',
+                      Blog: siteSettings?.navigation?.blogText || 'Blog',
+                      Contact: siteSettings?.navigation?.contactText || 'Contact',
+                    };
+
+                    const label = labelMap[link.name] || link.name;
+
+                    return (
+                      <li key={link.name}>
+                        <a
+                          href={link.path}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            router.push(link.path);
+                          }}
+                          className="text-clover-300 hover:text-white transition-colors"
+                        >
+                          {label}
+                        </a>
+                      </li>
+                    );
+                  })}
               </ul>
             </motion.div>
 
@@ -257,8 +285,8 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h4 className="text-lg font-semibold mb-6">Get In Touch</h4>
-              <div className="space-y-3 text-primary-200">
+              <h4 className="text-lg font-semibold mb-6 text-clover-100">Get In Touch</h4>
+              <div className="space-y-3 text-clover-300">
                 <p>Thailand</p>
                 <a 
                   href={`mailto:${profile.email || 'you@example.com'}`}
@@ -275,7 +303,7 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-primary-800">
+  <div className="border-t border-clover-700">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <motion.div
@@ -283,7 +311,7 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="flex items-center space-x-2 text-primary-200"
+                className="flex items-center space-x-2 text-clover-300"
               >
                 <span>{(siteSettings?.footer?.copyrightText) || `© 2025 ${profile.name || 'Your Name'}  All Rights Reserved`}</span>
               </motion.div>
@@ -293,11 +321,11 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-primary-200 text-sm"
+                className="text-clover-300 text-sm"
               >
                 Built with Next.js, TypeScript & Tailwind CSS
                 <div className="mt-1">
-                  <a href="https://www.kyawmyokhant.com" target="_blank" rel="noopener noreferrer" className="text-primary-200 hover:text-white underline text-sm">
+                  <a href="https://www.kyawmyokhant.com" target="_blank" rel="noopener noreferrer" className="text-clover-300 hover:text-white underline text-sm">
                     Contact the developer
                   </a>
                 </div>
@@ -315,7 +343,7 @@ export default function Footer({ profile: serverProfile }: { profile?: any }) {
           scale: showScrollTop ? 1 : 0 
         }}
         onClick={scrollToTop}
-        className="fixed bottom-6 right-4 sm:bottom-8 sm:right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 text-white rounded-full flex items-center justify-center shadow-lg transition-colors z-50"
+  className="fixed bottom-6 right-4 sm:bottom-8 sm:right-8 w-12 h-12 bg-clover-700 hover:bg-clover-700 text-white rounded-full flex items-center justify-center shadow-lg transition-colors z-50"
       >
         <ArrowUp size={20} />
       </motion.button>

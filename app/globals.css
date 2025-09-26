@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap');
 
 @layer base {
   html {
@@ -10,21 +10,25 @@
   }
   
   body {
-  @apply bg-white text-primary-800 antialiased;
+  @apply bg-clover-100 text-neutral-700 antialiased;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   }
 
-  * {
-    @apply border-primary-200;
+  h1,h2,h3,h4,h5 {
+    font-family: 'Playfair Display', 'Inter', serif;
+    color: #064e3b; /* clover-900 */
   }
+
+  /* (removed global universal border apply) */
 }
 
 @layer components {
   .btn-primary {
-  @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-all duration-200 ease-in-out transform hover:scale-105;
+  @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-clover-500 hover:bg-clover-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-clover-300 transition-all duration-200 ease-in-out transform hover:-translate-y-0.5;
   }
 
   .btn-secondary {
-  @apply inline-flex items-center justify-center px-6 py-3 border border-primary-200 text-base font-medium rounded-lg text-primary-600 bg-white hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-all duration-200 ease-in-out;
+  @apply inline-flex items-center justify-center px-6 py-3 border border-clover-100 text-base font-medium rounded-lg text-clover-700 bg-white hover:bg-clover-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-clover-300 transition-all duration-200 ease-in-out;
   }
 
   .section-padding {
@@ -36,27 +40,35 @@
   }
 
   .glass-effect {
-  @apply bg-white/90 backdrop-blur-sm border border-primary-100/30;
+  @apply bg-white/90 backdrop-blur-sm border border-clover-100/30;
   }
 
   .skill-card {
-    @apply p-6 rounded-xl border border-primary-200 hover:border-primary-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    @apply p-6 rounded-xl border border-clover-100 hover:border-clover-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
   }
 
   .project-card {
-    @apply bg-white rounded-xl border border-primary-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2;
+    @apply bg-white rounded-xl border border-clover-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2;
   }
 }
 
 @layer utilities {
   /* Legacy name kept for compatibility but now uses a solid brand color */
   .text-gradient, .text-brand {
-  @apply text-primary-800;
+  @apply text-clover-900;
   text-shadow: none;
   }
 
   .bg-gradient-primary {
-  @apply bg-gradient-to-r from-royal-600 via-royal-500 to-royal-400;
+  @apply bg-gradient-to-r from-clover-700 via-clover-500 to-clover-300;
+  }
+
+  .clover-hero {
+    background: radial-gradient(800px 400px at 10% 20%, rgba(16,185,129,0.12), transparent 12%), linear-gradient(180deg, rgba(15,118,110,0.08), rgba(236,253,245,0));
+  }
+
+  .badge-featured {
+    @apply inline-flex items-center px-2 py-1 rounded-full bg-gold-500/10 text-gold-500 text-xs font-medium;
   }
 
   /* Rich Text Content Styles */
@@ -114,7 +126,7 @@
   }
 
   .rich-text-content blockquote {
-    @apply border-l-4 border-primary-400 pl-4 py-2 my-6 bg-primary-50 italic text-gray-600 rounded-r-lg;
+    @apply border-l-4 border-clover-300 pl-4 py-2 my-6 bg-clover-100 italic text-gray-600 rounded-r-lg;
   }
 
   .rich-text-content pre {
@@ -144,7 +156,8 @@
   }
 
   .rich-text-content a {
-    @apply text-primary-600 hover:text-primary-700 underline transition-colors;
+    /* use available clover stops: 500 (brand), 700 (darker) */
+  @apply text-clover-500 hover:text-clover-700 underline transition-colors;
   }
 
   .rich-text-content img {

@@ -8,6 +8,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        clover: {
+          900: '#064e3b',
+          700: '#0f766e',
+          500: '#10b981',
+          300: '#6ee7b7',
+          100: '#ecfdf5',
+        },
+        gold: {
+          500: '#f59e0b'
+        },
         primary: {
           50: '#f0f4ff',
           100: '#e0e7ff',

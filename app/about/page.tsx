@@ -41,8 +41,26 @@ async function getProfileServer() {
   return null;
 }
 
+async function getSiteSettingsServer() {
+  try {
+    const cacheKey = 'siteSettings:main';
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
+    const doc = await db.collection('siteSettings').doc('main').get();
+    if (doc.exists) {
+      const data = doc.data();
+      setCached(cacheKey, data, 30 * 1000);
+      return data;
+    }
+  } catch (e) {
+    console.error('Server getSiteSettings error', e);
+  }
+  return null;
+}
+
 export default async function AboutPage() {
-  let profile = await getProfileServer();
+  let [profile, siteSettings] = await Promise.all([getProfileServer(), getSiteSettingsServer()]);
 
   // Fallback: if server SDK fetch failed (null), call the internal API route
   if (!profile) {
@@ -59,11 +77,11 @@ export default async function AboutPage() {
 
   return (
     <main className="min-h-screen">
-      <Navigation siteSettings={null} />
+      <Navigation siteSettings={siteSettings} />
       <div className="pt-20">
         <About profile={profile} />
       </div>
-      <Footer profile={profile} />
+      <Footer profile={profile} siteSettings={siteSettings} />
     </main>
   )
 }

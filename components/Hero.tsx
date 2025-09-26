@@ -58,10 +58,11 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
   const cursorRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 }); // x,y = current, tx,ty = target
   const rafRef = useRef<number | null>(null);
   const paramsRef = useRef<Array<{ amp: number; speed: number }>>([]);
+  const PARTICLE_COUNT = 60;
 
   useEffect(() => {
-    // initialize per-firefly params
-    paramsRef.current = Array.from({ length: 30 }).map(() => ({ amp: 8 + Math.random() * 22, speed: 0.05 + Math.random() * 0.06 }));
+    // initialize per-firefly params (reduced count for performance)
+  paramsRef.current = Array.from({ length: PARTICLE_COUNT }).map(() => ({ amp: 8 + Math.random() * 22, speed: 0.05 + Math.random() * 0.06 }));
 
     const onPointerMove = (e: PointerEvent) => {
       const el = containerRef.current;
@@ -74,7 +75,15 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
       cursorRef.current.ty = (ny - 0.5) * 2;
     };
 
-    const tick = () => {
+    // Throttle updates to ~30fps to avoid jank
+    let lastTick = 0;
+    const tick = (now?: number) => {
+      const tNow = now || Date.now();
+      if (tNow - lastTick < 33) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
+      lastTick = tNow;
       // lerp current towards target
       cursorRef.current.x += (cursorRef.current.tx - cursorRef.current.x) * 0.12;
       cursorRef.current.y += (cursorRef.current.ty - cursorRef.current.y) * 0.12;
@@ -129,58 +138,87 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-primary-50 to-white">
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-clover-100">
       {/* Background Animation - firefly style */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -inset-10 opacity-95 pointer-events-none" ref={containerRef}>
+      <div className="absolute -inset-10 opacity-95 pointer-events-none z-0" ref={containerRef}>
           {/* Cursor-reactive fireflies */}
-          {[...Array(60)].map((_, i) => {
-            // slow snowfall visual properties
-            const size = Math.floor(Math.random() * 14) + 6; // 6-20px snow flakes
-            const left = Math.random() * 100; // start x position (percent)
-            // start slightly above visible area so flakes drift in
-            const top = -10 - Math.random() * 30; // -10% to -40%
-            const fallDistance = 600 + Math.random() * 900; // px distance to travel
-            // much slower, snow-like fall
-            const baseDuration = 16 + Math.random() * 14; // very slow: 16 - 30s
-            const opacity = 0.45 + Math.random() * 0.35;
-            const delay = Math.random() * 10; // staggered start
+          {[...Array(PARTICLE_COUNT)].map((_, i) => {
+            // leaf-on-wind / firefly hybrid: smaller vertical range so they stay in the lower hero
+            const size = Math.floor(Math.random() * 20) + 14; // 14-34px leaves
+            const baseDuration = 18 + Math.random() * 18; // travel duration
+            // start across the whole hero section so particles can appear anywhere vertically
+            const startTop = 5 + Math.random() * 90; // 5% - 95%
+            // gentle upward drift (px) so they move up but remain in lower area
+            const verticalDrift = -20 - Math.random() * 40; // -20 .. -60 px
+            const flickerDelay = Math.random() * 2;
+            const baseOpacity = 0.45 + Math.random() * 0.45;
+            const baseScale = 0.6 + Math.random() * 0.8;
 
             return (
-              <div key={`snow-${i}`} data-firefly-index={i} className="absolute" style={{ left: `${left}%`, top: `${top}%`, width: `${size}px`, height: `${size}px`, pointerEvents: 'none' }}>
+              <div
+                key={`leaf-${i}`}
+                data-firefly-index={i}
+                className="absolute"
+                // keep horizontal placement fairly wide, but vertical starts low
+                style={{ left: `${10 + Math.random() * 80}%`, top: `${startTop}%`, width: `${size}px`, height: `${size}px`, pointerEvents: 'none' }}
+              >
                 <motion.div
                   key={i}
-                  className="rounded-full bg-primary-400/80 absolute inset-0"
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
                   style={{
                     width: '100%',
                     height: '100%',
-                    borderRadius: '50%',
-                    boxShadow: `0 0 ${8 + size}px rgba(99,102,241,0.12)`,
+                    fontSize: `${size}px`,
+                    lineHeight: 1,
                     transformOrigin: 'center',
-                    opacity,
-                    
+                    color: 'rgba(7,89,60,0.98)',
+                    willChange: 'transform, opacity',
                   }}
+                  aria-hidden="true"
+                  initial={{ y: 0, opacity: 0, scale: baseScale }}
                   animate={{
-                    // very gentle fall and subtle horizontal sway
-                    y: [-160, fallDistance],
-                    x: [-(Math.random() * 14), Math.random() * 14],
-                    rotate: [-(Math.random() * 8), Math.random() * 8],
-                    scale: [0.95 + Math.random() * 0.15, 0.95 + Math.random() * 0.15],
+                    // vertical upward drift only (negative y moves up)
+                    y: [0, verticalDrift],
+                    // fade in, gently flicker, then fade out to 0 so reset isn't visually abrupt
+                    opacity: [0, baseOpacity, baseOpacity * 0.65, 0],
+                    // subtle scale pulse
+                    scale: [baseScale, baseScale * 1.08, baseScale * 0.94, baseScale],
                   }}
                   transition={{
-                    y: { duration: baseDuration, repeat: Infinity, ease: 'linear', repeatDelay: 8 + Math.random() * 12, delay },
-                    x: { duration: baseDuration * (1.2 + Math.random() * 1.4), repeat: Infinity, ease: 'linear', repeatDelay: 8 + Math.random() * 12, delay },
-                    rotate: { duration: baseDuration * (1 + Math.random() * 1.0), repeat: Infinity, ease: 'linear', repeatDelay: 8 + Math.random() * 12, delay },
-                    scale: { duration: baseDuration * (1 + Math.random() * 0.4), repeat: Infinity, ease: 'linear', repeatDelay: 8 + Math.random() * 12, delay },
+                    y: { duration: baseDuration * (0.95 + Math.random() * 0.1), repeat: Infinity, ease: 'easeOut', delay: 0 },
+                    // opacity lasts a shorter portion of the travel so particles fade faster
+                    opacity: { duration: Math.max(1.2, baseDuration * 0.22), repeat: Infinity, ease: 'easeOut', delay: flickerDelay },
+                    scale: { duration: Math.max(2, baseDuration * 0.15), repeat: Infinity, ease: 'easeInOut', delay: flickerDelay },
                   }}
-                />
+                >
+                  {/* clover emoji particle */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none select-none"
+                    style={{
+                      width: '60%',
+                      height: '60%',
+                      fontSize: 'inherit',
+                      lineHeight: 1,
+                      transform: 'translateZ(0)',
+                      filter: 'drop-shadow(0 6px 18px rgba(16,185,129,0.12))',
+                      textShadow: '0 4px 18px rgba(34,197,94,0.25), 0 1px 2px rgba(0,0,0,0.05)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    🍀
+                  </span>
+                </motion.div>
               </div>
             );
           })}
         </div>
       </div>
 
-      <div className="container-width section-padding relative z-10">
+  <div className="container-width section-padding pb-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Image first in DOM for stacking on small screens; moves to right on lg */}
           <motion.div
@@ -191,14 +229,21 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
           >
             <div className="relative z-10 w-44 h-44 sm:w-56 sm:h-56 md:w-80 md:h-80 lg:w-[420px] lg:h-[420px] rounded-full overflow-hidden border-4 border-white shadow-2xl">
               <Image
-                src={profile?.profileImage || "/profile.jpg"}
+                src={profile?.profileImage || '/profile-placeholder.svg'}
                 alt={`${profile?.name || 'Your Name'} (${profile?.nickname || 'Your Nickname'})`}
                 width={320}
                 height={320}
                 className="w-full h-full object-cover rounded-full"
                 priority
                 onError={(e) => {
-                  e.currentTarget.src = "/profile-placeholder.svg";
+                  // Next/Image uses an <img> under the hood on client; fallback to the placeholder
+                  // Ensure we don't loop if placeholder also errors
+                  try {
+                    if ((e.currentTarget as HTMLImageElement).src?.includes('profile-placeholder.svg')) return;
+                    (e.currentTarget as HTMLImageElement).src = '/profile-placeholder.svg';
+                  } catch (err) {
+                    // ignore
+                  }
                 }}
               />
             </div>
@@ -218,8 +263,8 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               transition={{ delay: 0.2 }}
               className="flex items-center justify-center lg:justify-start space-x-2 mb-4"
             >
-              <div className="w-12 h-0.5 bg-primary-600"></div>
-              <span className="text-primary-600 font-medium">
+              
+              <span className="text-clover-700 font-medium">
                 {siteSettings?.hero?.greetingText || profile?.greetingText || 'Hello, I\'m'}
               </span>
             </motion.div>
@@ -229,16 +274,16 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 font-playfair"
             >
-              <span className="text-gradient">{profile?.name || 'Your Name'}</span>
+              <span className="text-gradient text-clover-900">{profile?.name || 'Your Name'}</span>
             </motion.h1>
 
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-2xl md:text-3xl font-semibold text-primary-700 mb-6"
+              className="text-2xl md:text-3xl font-semibold text-clover-700 mb-6"
             >
               ({profile?.nickname || 'Your Nickname'})
             </motion.h2>
@@ -250,10 +295,10 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               transition={{ delay: 0.5 }}
               className="mb-6"
             >
-              <h3 className="text-xl md:text-2xl text-primary-600 font-medium mb-2">
+              <h3 className="text-xl md:text-2xl text-clover-700 font-medium mb-2">
                 {profile?.title || 'Yor Position/Title'}
               </h3>
-              <div className="flex items-center justify-center lg:justify-start space-x-2 text-primary-500">
+              <div className="flex items-center justify-center lg:justify-start space-x-2 text-clover-500">
                 
                 <span>{profile?.specialization || 'Your Specialization'}</span>
               </div>
@@ -264,7 +309,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="text-lg text-primary-600 mb-8 max-w-2xl text-justify"
+              className="text-lg text-clover-700 mb-8 max-w-2xl text-justify"
             >
               {profile?.description || 'A passionate 23-year-old Myanmar student studying IT in Thailand. I love creating innovative solutions through programming, embedded systems, and mobile development while mentoring others in their coding journey.'}
             </motion.p>
@@ -274,10 +319,10 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="flex items-center justify-center lg:justify-start space-x-2 mb-8 text-primary-500"
+              className="flex items-center justify-center lg:justify-start space-x-2 mb-8 text-clover-700"
             >
               <MapPin size={18} />
-              <span>{profile?.location || 'Thailand • Myanmar Native'}</span>
+              <span>{profile?.location || 'Thailand'}</span>
             </motion.div>
 
             {/* CTA Buttons */}
@@ -329,7 +374,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
                     href={profile?.github || "https://github.com/"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 rounded-full bg-primary-100 text-primary-700 hover:bg-primary-200 hover:text-primary-900 transition-all duration-200 hover:scale-110"
+                    className="p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110"
                   >
                     <Github size={20} />
                   </a>
@@ -337,7 +382,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
                     href={profile?.linkedin || "https://linkedin.com"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 rounded-full bg-primary-100 text-primary-700 hover:bg-primary-200 hover:text-primary-900 transition-all duration-200 hover:scale-110"
+                    className="p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110"
                   >
                     <Linkedin size={20} />
                   </a>
@@ -357,7 +402,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`p-3 rounded-full bg-primary-100 text-primary-700 hover:bg-primary-200 hover:text-primary-900 transition-all duration-200 hover:scale-110 ${iconConfig?.color || ''}`}
+                        className={`p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110 ${iconConfig?.color || ''}`}
                         title={link.name}
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -374,7 +419,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
                       href={profile.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 rounded-full bg-primary-100 text-primary-700 hover:bg-primary-200 hover:text-primary-900 transition-all duration-200 hover:scale-110"
+                      className="p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110"
                       title="GitHub"
                     >
                       <Github size={20} />
@@ -385,7 +430,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
                       href={profile.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 rounded-full bg-primary-100 text-primary-700 hover:bg-primary-200 hover:text-primary-900 transition-all duration-200 hover:scale-110"
+                      className="p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110"
                       title="LinkedIn"
                     >
                       <Linkedin size={20} />
