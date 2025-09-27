@@ -35,6 +35,12 @@ A modern, fully-featured portfolio website with an intelligent AI assistant. Bui
 - Real-time form validation
 - Contact submission management in admin panel
 
+### 📊 **Analytics & Insights**
+- Google Analytics 4 integration with custom event tracking
+- User behavior analytics (scroll depth, time on site, section views)
+- Portfolio interaction tracking (project views, contact form submissions)
+- Admin dashboard usage analytics
+
 ## 🛠️ Tech Stack
 
 | Category | Technology |
@@ -134,6 +140,12 @@ EMAIL_FROM="Your Name <your_email@gmail.com>"
 ```env
 SITE_URL=http://localhost:3000
 SITE_NAME="Calla Portfolio"
+```
+
+### Analytics Configuration (Optional)
+```env
+# Google Analytics tracking ID
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 ```
 
 ## 🎯 Admin Panel Features
