@@ -65,7 +65,7 @@ A modern, fully-featured portfolio website with an intelligent AI assistant. Bui
 
 1. **Clone and setup**
    ```bash
-   git clone https://github.com/KyawMyo78/portfolio-template.git
+   git clone https://github.com/KyawMyo78/calla-portfolio.git
    cd calla-portfolio
    npm install
    ```
