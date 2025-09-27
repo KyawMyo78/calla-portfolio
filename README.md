@@ -1,42 +1,39 @@
-# 🚀 Modern Portfolio Template
+# Calla Portfolio
 
-A stunning, feature-rich portfolio website built with cutting-edge technologies. Perfect for developers, designers, and creative professionals who want to showcase their work with style.
+A modern, fully-featured portfolio website with an intelligent AI assistant. Built with Next.js 14, TypeScript, Tailwind CSS, Firebase, and powered by Google's Gemini AI.
 
-![Portfolio Preview](https://via.placeholder.com/800x400/6366f1/ffffff?text=Your+Portfolio+Preview)
+## ✨ Key Features
 
-## ✨ Features
+### 🎨 **Modern Design**
+- Clean, professional interface with custom theme colors
+- Fully responsive design optimized for all devices
+- Primary color: `#1c332f`, Secondary: `#e0d39f`, Text: `#ffffff`
+- Smooth animations and modern UI components
 
-### 🎨 **Beautiful Design**
-- Modern, clean interface with smooth animations
-- Responsive design that looks great on all devices
-- Dark/Light mode toggle with system preference detection
-- Customizable color schemes and themes
+### 🤖 **AI Assistant (AP's Clover)**
+- Intelligent AI assistant powered by Google Gemini
+- Floating AI button accessible from all admin pages
+- Personalized responses based on your portfolio data
+- Chat history and conversation memory
+- Markdown-rendered responses with modern chat interface
 
-### 🔧 **Powerful Admin Panel**
+### 🔧 **Comprehensive Admin Panel**
 - Secure authentication with password reset functionality
-- Real-time content management for all sections
-- Image upload with Firebase Storage integration
-- Drag-and-drop file uploads
-- Live preview of changes
+- Real-time content management for all portfolio sections
+- Firebase Storage integration for image uploads
+- Live content preview and editing
+- Dashboard with portfolio insights
 
-### 🚀 **Performance & SEO**
-- Built with Next.js 14 App Router for optimal performance
+### 🚀 **Performance Optimized**
+- Next.js 14 App Router with TypeScript
 - Server-side rendering and static generation
-- SEO optimized with meta tags and Open Graph
-- Core Web Vitals optimized
-- Automatic image optimization
+- Optimized images and bundle splitting
+- SEO-friendly with meta tags and Open Graph
 
-### 📧 **Contact & Communication**
+### 📧 **Contact Management**
 - Contact form with email notifications
-- Anti-spam protection
 - Real-time form validation
-- Email templates for professional communication
-
-### 📊 **Analytics & Insights**
-- Google Analytics integration
-- Performance monitoring
-- User interaction tracking
-- Admin dashboard with insights
+- Contact submission management in admin panel
 
 ## 🛠️ Tech Stack
 
@@ -47,11 +44,13 @@ A stunning, feature-rich portfolio website built with cutting-edge technologies.
 | **Styling** | Tailwind CSS |
 | **Database** | Firebase Firestore |
 | **Storage** | Firebase Storage |
-| **Authentication** | NextAuth.js |
+| **Authentication** | Custom JWT + NextAuth.js |
+| **AI Integration** | Google Gemini AI (@google/genai) |
 | **Animations** | Framer Motion |
 | **Icons** | Lucide React |
 | **Email** | Nodemailer |
-| **Analytics** | Google Analytics |
+| **Text Editor** | React Quill |
+| **Markdown** | React Markdown |
 | **Deployment** | Vercel |
 
 ## 🚀 Quick Start
@@ -59,6 +58,7 @@ A stunning, feature-rich portfolio website built with cutting-edge technologies.
 ### Prerequisites
 - Node.js 18+ installed
 - Firebase project set up
+- Google Gemini API key
 - Git installed
 
 ### Installation
@@ -66,33 +66,29 @@ A stunning, feature-rich portfolio website built with cutting-edge technologies.
 1. **Clone and setup**
    ```bash
    git clone https://github.com/KyawMyo78/portfolio-template.git
-   cd portfolio-template
+   cd calla-portfolio
    npm install
    ```
 
 2. **Environment configuration**
-   ```bash
-   cp .env.example .env.local
-   ```
-   
-3. **Configure your environment variables** (see [Environment Setup](#environment-setup))
+   Create a `.env.local` file with the required variables (see [Environment Setup](#environment-setup))
 
-4. **Generate admin credentials**
+3. **Generate admin credentials**
    ```bash
    node generate-admin-hash.js
    ```
 
-5. **Start development server**
+4. **Start development server**
    ```bash
    npm run dev
    ```
 
-6. **Visit your site**
+5. **Visit your site**
    Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## 🔧 Environment Setup
 
-Create a `.env.local` file with these configurations:
+Create a `.env.local` file with these essential configurations:
 
 ### Firebase Configuration
 ```env
@@ -103,12 +99,17 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
 NEXT_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abcdef
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
 
 # Server-side Firebase config
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxx@your_project.iam.gserviceaccount.com
 FIREBASE_PROJECT_ID=your_project_id
+```
+
+### AI Configuration
+```env
+# Google Gemini AI
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ### Authentication & Security
@@ -118,87 +119,74 @@ NEXTAUTH_SECRET=your_nextauth_secret
 ADMIN_EMAIL=your_admin_email@example.com
 ADMIN_PASSWORD_HASH=your_bcrypt_hashed_password
 ADMIN_SECRET=your_admin_secret_key
-NEXT_PUBLIC_ADMIN_SECRET=your_admin_secret_key
 ```
 
-### Email Configuration
+### Email Configuration (Optional)
 ```env
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
 EMAIL_FROM="Your Name <your_email@gmail.com>"
-SEND_EMAILS_IN_DEV=true
-DEV_EMAIL=your_dev_email@gmail.com
 ```
 
 ### Site Configuration
 ```env
 SITE_URL=http://localhost:3000
-SITE_NAME="Your Portfolio"
-NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+SITE_NAME="Calla Portfolio"
 ```
 
-## 🎯 Admin Panel
+## 🎯 Admin Panel Features
 
 Access your admin dashboard at `/admin/login`
 
-### Admin Features
-- **📊 Dashboard**: Overview and analytics
-- **👤 Profile**: Personal information management
+### Core Admin Features
+- **📊 Dashboard**: Portfolio overview and insights
+- **👤 Profile**: Personal information and bio management
 - **💼 Experience**: Work history and career timeline
-- **🚀 Projects**: Portfolio projects with rich media
-- **🛠️ Skills**: Technical and soft skills
+- **🚀 Projects**: Project showcase with rich media
+- **🛠️ Skills**: Technical and soft skills organization
 - **🏆 Achievements**: Awards and accomplishments
-- **📬 Contacts**: Contact form submissions
-- **🔒 Security**: Password management and security settings
+- **✍️ Blog**: Article creation and management
+- **📬 Contacts**: Contact form submission management
+- **🤖 AI Chat**: Intelligent assistant (AP's Clover) for portfolio help
+- **⚙️ Site Settings**: Global site configuration
 
-### Content Management
-- ✅ Real-time updates
-- ✅ Image upload and management
-- ✅ Rich text editing
-- ✅ Drag-and-drop interfaces
-- ✅ Preview before publishing
-- ✅ Bulk operations
+### AI Assistant (AP's Clover)
+- **Smart Assistance**: Understands your portfolio structure and content
+- **Personalized Responses**: Knows your skills, experience, and projects
+- **Chat History**: Remembers previous conversations
+- **Floating Access**: Available from all admin pages except chat
+- **Markdown Support**: Rich text formatting in responses
+- **Context Awareness**: Provides specific guidance for admin tasks
 
 ## 🌐 Deployment
 
 ### Deploy to Vercel (Recommended)
 
-1. **Automated Setup** (Windows)
-   ```bash
-   ./setup-vercel-env.bat
-   ```
+1. **Connect to Vercel**
+   - Push your code to GitHub
+   - Connect repository to Vercel
+   - Import project
 
-2. **Manual Setup**
-   ```bash
-   # Install Vercel CLI
-   npm i -g vercel
-   
-   # Login to Vercel
-   vercel login
-   
-   # Deploy
-   vercel --prod
-   ```
-
-3. **Environment Variables**
+2. **Environment Variables**
    - Add all environment variables in Vercel dashboard
-   - Use the `VERCEL_SETUP.md` guide for detailed instructions
+   - Update `SITE_URL` and `NEXTAUTH_URL` to your production domain
+   - Add `GEMINI_API_KEY` for AI functionality
 
-### Deploy to Other Platforms
+3. **Deploy**
+   - Automatic deployment on every push to main branch
 
-The portfolio works on any platform that supports Next.js:
-- **Netlify**: Use `npm run build && npm run start`
-- **AWS Amplify**: Connect your GitHub repository
-- **Railway**: Deploy with zero configuration
-- **DigitalOcean App Platform**: Use the App Spec
+### Other Deployment Options
+- **Netlify**: Compatible with Next.js hosting
+- **AWS Amplify**: Connect via GitHub repository
+- **Railway**: Zero-config deployment
+- **DigitalOcean App Platform**: Node.js app deployment
 
 ## 🎨 Customization
 
-### Theme Customization
-
-Edit `tailwind.config.js`:
+### Theme Colors
+The portfolio uses a custom color scheme defined in `tailwind.config.js`:
 
 ```js
 module.exports = {
@@ -206,71 +194,83 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#f0f9ff',
-          500: '#3b82f6',
-          900: '#1e3a8a',
+          DEFAULT: '#1c332f',
+          light: '#2d5a4f',
+          dark: '#0d1a17'
         },
-        // Add your brand colors
-      },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
-    },
-  },
+        secondary: {
+          DEFAULT: '#e0d39f',
+          light: '#f0e8c7',
+          dark: '#cbbf7a'
+        },
+        text: {
+          DEFAULT: '#ffffff',
+          light: '#f8f9fa',
+          dark: '#e9ecef'
+        }
+      }
+    }
+  }
 }
 ```
 
-### Component Customization
-
-```typescript
-// components/Hero.tsx
-export default function Hero() {
-  return (
-    <section className="min-h-screen flex items-center">
-      {/* Customize your hero section */}
-    </section>
-  )
-}
-```
-
-### Content Management
-
-Update content through:
-1. **Admin Panel** (recommended)
-2. **Direct JSON editing** in `data/` directory
-3. **API calls** for programmatic updates
+### Customizing Components
+Update components in the `/components` directory:
+- `Hero.tsx` - Landing page hero section
+- `About.tsx` - About me section
+- `Projects.tsx` - Projects showcase
+- `Skills.tsx` - Skills display
+- `Experience.tsx` - Work experience
+- `ChatUI.tsx` - AI chat interface
+- `FloatingAIButton.tsx` - Floating AI assistant button
 
 ## 📁 Project Structure
 
 ```
-portfolio-template/
-├── 📁 app/                     # Next.js App Router
-│   ├── 📁 admin/              # Admin panel pages
-│   │   ├── 📁 dashboard/      # Dashboard page
-│   │   ├── 📁 profile/        # Profile management
-│   │   ├── 📁 projects/       # Project management
-│   │   └── 📁 ...             # Other admin pages
-│   ├── 📁 api/                # API routes
-│   │   ├── 📁 auth/           # Authentication
-│   │   ├── 📁 portfolio/      # Portfolio data
-│   │   └── 📁 contact/        # Contact form
-│   └── 📄 layout.tsx          # Root layout
-├── 📁 components/             # Reusable components
-│   ├── 📄 Hero.tsx            # Hero section
-│   ├── 📄 About.tsx           # About section
-│   ├── 📄 Projects.tsx        # Projects showcase
-│   └── 📄 ...                 # Other components
-├── 📁 lib/                    # Utilities and configs
-│   ├── 📄 firebase.ts         # Firebase configuration
-│   ├── 📄 analytics.ts        # Analytics setup
-│   └── 📄 ...                 # Other utilities
-├── 📁 data/                   # Static data files
-├── 📁 public/                 # Static assets
-├── 📁 types/                  # TypeScript definitions
-└── 📄 package.json            # Dependencies
+calla-portfolio/
+├── app/                          # Next.js App Router
+│   ├── admin/                   # Admin panel pages
+│   │   ├── chat/               # AI chat interface
+│   │   ├── dashboard/          # Admin dashboard
+│   │   ├── profile/            # Profile management
+│   │   ├── projects/           # Project management
+│   │   ├── skills/             # Skills management
+│   │   ├── experience/         # Experience management
+│   │   ├── blog/               # Blog management
+│   │   └── ...                 # Other admin pages
+│   ├── api/                    # API routes
+│   │   ├── admin/              # Admin API routes
+│   │   │   └── chat/           # AI chat API
+│   │   ├── auth/               # Authentication
+│   │   ├── portfolio/          # Public portfolio data
+│   │   └── contact/            # Contact form
+│   ├── about/                  # Public about page
+│   ├── projects/               # Public projects page
+│   ├── skills/                 # Public skills page
+│   ├── experience/             # Public experience page
+│   ├── contact/                # Public contact page
+│   └── layout.tsx              # Root layout
+├── components/                  # Reusable components
+│   ├── Hero.tsx                # Hero section
+│   ├── About.tsx               # About section
+│   ├── Projects.tsx            # Projects showcase
+│   ├── Skills.tsx              # Skills display
+│   ├── Experience.tsx          # Experience timeline
+│   ├── ChatUI.tsx              # AI chat interface
+│   ├── FloatingAIButton.tsx    # Floating AI button
+│   └── ...                     # Other components
+├── lib/                        # Utilities and configs
+│   ├── firebase.ts             # Firebase client config
+│   ├── firebase-admin.ts       # Firebase admin config
+│   └── ...                     # Other utilities
+├── types/                      # TypeScript definitions
+├── public/                     # Static assets
+│   ├── apclover.jpg            # AI mascot image
+│   └── ...                     # Other static files
+└── package.json                # Dependencies
 ```
 
-## 🔧 Scripts
+## 🔧 Available Scripts
 
 | Command | Description |
 |---------|-------------|
@@ -279,84 +279,43 @@ portfolio-template/
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint |
 | `npm run type-check` | TypeScript type checking |
-| `npm run generate-hash` | Generate admin password hash |
+| `npm run analyze` | Bundle analysis |
 
-## 🚀 Advanced Features
+## 🚀 Key Features Implementation
 
-### Performance Optimization
-- ⚡ Image optimization with Next.js Image component
-- 🗜️ Automatic code splitting and lazy loading
-- 📦 Bundle analysis and optimization
-- 🔄 Service worker for offline functionality
+### AI Assistant Integration
+- Google Gemini AI integration with conversational context
+- Personalized responses based on portfolio data from Firestore
+- Floating AI button with mascot image and curved text design
+- Modern chat interface with Markdown rendering
 
-### SEO & Analytics
-- 🎯 Dynamic meta tags and Open Graph
-- 📊 Google Analytics with custom events
-- 🗺️ Automatic sitemap generation
-- 🔍 Structured data for search engines
+### Firebase Integration
+- Firestore for data storage (profile, projects, skills, etc.)
+- Firebase Storage for image uploads
+- Real-time data synchronization
+- Server-side Firebase Admin SDK for secure operations
 
-### Security
-- 🔒 CSRF protection
-- 🛡️ Input validation and sanitization
-- 🔐 Secure authentication with NextAuth.js
-- 🚨 Rate limiting on API routes
+### Authentication System
+- Custom JWT-based authentication
+- Secure admin panel access
+- Password reset functionality
+- Protected API routes
 
-## 📋 Best Practices
+### Modern UI/UX
+- Custom Tailwind theme with brand colors
+- Responsive design for all screen sizes
+- Smooth animations and transitions
+- Rich text editing capabilities
 
-### Development
-- Use TypeScript for type safety
-- Follow the component-driven development approach
-- Implement proper error handling
-- Write meaningful commit messages
-
-### Performance
-- Optimize images and assets
-- Use proper loading states
-- Implement progressive enhancement
-- Monitor Core Web Vitals
-
-### Security
-- Never commit sensitive data
-- Use environment variables for secrets
-- Implement proper authentication
-- Validate all inputs
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Make your changes**
-4. **Write tests** (if applicable)
-5. **Commit your changes**
-   ```bash
-   git commit -m 'feat: add amazing feature'
-   ```
-6. **Push to your branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-7. **Open a Pull Request**
-
-### Development Guidelines
-- Follow the existing code style
-- Write clear, descriptive commit messages
-- Update documentation for new features
-- Test your changes thoroughly
-
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 💬 Support & Community
+## 💬 Support
 
+For questions or issues:
 - 🐛 **Bug Reports**: [Open an issue](https://github.com/KyawMyo78/portfolio-template/issues)
 - 💡 **Feature Requests**: [Request a feature](https://github.com/KyawMyo78/portfolio-template/issues)
-- 💬 **Discussions**: [Join the discussion](https://github.com/KyawMyo78/portfolio-template/discussions)
 - 📧 **Email**: [kyawmk787@gmail.com](mailto:kyawmk787@gmail.com)
 
 ## 🙏 Acknowledgments
@@ -364,19 +323,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Next.js](https://nextjs.org/) - The React framework for production
 - [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
 - [Firebase](https://firebase.google.com/) - Backend as a Service
+- [Google Gemini AI](https://ai.google.dev/) - AI integration
 - [Vercel](https://vercel.com/) - Deployment platform
 - [Lucide](https://lucide.dev/) - Beautiful icons
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
 
-## ⭐ Show Your Support
-
-If this template helped you create an amazing portfolio, please give it a star on GitHub! It helps others discover this project.
-
-[![GitHub stars](https://img.shields.io/github/stars/KyawMyo78/portfolio-template?style=social)](https://github.com/KyawMyo78/portfolio-template)
-
 ---
 
 <div align="center">
-  <p>Made with ❤️ by <a href="https://github.com/KyawMyo78">Kyaw Myo</a></p>
-  <p>© 2024 Portfolio Template. All rights reserved.</p>
+  <p>Built with ❤️ by <a href="https://github.com/KyawMyo78">Kyaw Myo</a></p>
+  <p>© 2024 Calla Portfolio. All rights reserved.</p>
 </div>

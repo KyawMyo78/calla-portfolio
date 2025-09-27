@@ -156,19 +156,19 @@ export default function ChatUI({
   const [loading, setLoading] = React.useState(false);
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200">
+    <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-primary-200">
       {dotsStyle}
       
       {/* Enhanced Header with Gradient */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
+      <div className="bg-gradient-to-r from-primary-900 to-primary-800 text-white p-6">
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <img src={mascot} alt="AP Clover" className="w-16 h-16 rounded-full border-4 border-white/20 object-cover" />
-            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+            <img src={mascot} alt="AP Clover" className="w-16 h-16 rounded-full border-4 border-secondary-300/30 object-cover" />
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-secondary-500 rounded-full border-2 border-white"></div>
           </div>
           <div>
-            <h2 className="text-2xl font-bold">AP's Clover</h2>
-            <p className="text-blue-100">Online • Portfolio Assistant</p>
+            <h2 className="text-2xl font-bold text-white">AP's Clover</h2>
+            <p className="text-secondary-200">Portfolio Assistant</p>
           </div>
         </div>
       </div>
@@ -194,9 +194,9 @@ export default function ChatUI({
                   <button
                     key={i}
                     onClick={() => setText(action)}
-                    className="text-left p-3 bg-gray-50 hover:bg-blue-50 hover:border-blue-200 border border-gray-200 rounded-xl text-sm transition-all duration-200 hover:shadow-sm"
+                    className="text-left p-3 bg-secondary-50 hover:bg-primary-50 hover:border-primary-200 border border-primary-100 rounded-xl text-sm transition-all duration-200 hover:shadow-sm"
                   >
-                    <span className="text-blue-600 mr-2">💬</span>
+                    <span className="text-primary-700 mr-2">💬</span>
                     {action}
                   </button>
                 ))}
@@ -217,23 +217,23 @@ export default function ChatUI({
               {/* Message bubble */}
               <div className={`px-4 py-3 rounded-2xl ${
                 m.role === "user" 
-                  ? "bg-blue-500 text-white rounded-br-md shadow-lg" 
-                  : "bg-gray-100 text-gray-800 rounded-bl-md shadow-sm border"
+                  ? "bg-primary-800 text-white rounded-br-md shadow-lg" 
+                  : "bg-secondary-100 text-primary-900 rounded-bl-md shadow-sm border border-primary-100"
               }`}>
                 <div className="text-sm">
                   {m.loading ? (
                     <div className="flex items-center space-x-2 py-1">
                       <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                        <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                        <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                       </div>
-                      <span className="text-gray-500 text-xs">AP's Clover is thinking...</span>
+                      <span className="text-primary-600 text-xs">AP's Clover is thinking...</span>
                     </div>
                   ) : (
                     // Render assistant replies as Markdown for richer formatting
                     m.role === 'assistant' ? (
-                      <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-700 prose-strong:text-gray-800">
+                      <div className="prose prose-sm max-w-none prose-headings:text-primary-900 prose-p:text-primary-800 prose-strong:text-primary-900">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text}</ReactMarkdown>
                       </div>
                     ) : (
@@ -251,7 +251,7 @@ export default function ChatUI({
       </div>
 
       {/* Enhanced Input Area */}
-      <div className="border-t bg-gray-50 p-4">
+      <div className="border-t bg-secondary-50 p-4">
         <div className="flex items-end space-x-3">
           <div className="flex-1 relative">
             <textarea
@@ -262,7 +262,7 @@ export default function ChatUI({
                 autoResize();
               }}
               placeholder="Message AP's Clover..."
-              className="w-full resize-none border-2 border-gray-200 rounded-2xl px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors bg-white shadow-sm"
+              className="w-full resize-none border-2 border-primary-200 rounded-2xl px-4 py-3 focus:border-primary-600 focus:outline-none transition-colors bg-white shadow-sm"
               disabled={loading}
               rows={1}
               onInput={autoResize}
@@ -286,8 +286,8 @@ export default function ChatUI({
             onClick={send} 
             className={`p-3 rounded-full transition-all duration-200 shadow-lg ${
               loading || !text.trim() 
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed" 
-                : "bg-blue-500 hover:bg-blue-600 text-white hover:shadow-xl transform hover:-translate-y-0.5"
+                ? "bg-primary-200 text-primary-400 cursor-not-allowed" 
+                : "bg-primary-700 hover:bg-primary-800 text-white hover:shadow-xl transform hover:-translate-y-0.5"
             }`}
             disabled={loading || !text.trim()}
           >
@@ -306,7 +306,7 @@ export default function ChatUI({
         
         {/* Status indicator */}
         {loading && (
-          <div className="flex items-center mt-2 text-sm text-gray-500">
+          <div className="flex items-center mt-2 text-sm text-primary-600">
             <div className="flex items-center space-x-2">
               <img src={mascot} className="w-4 h-4 rounded-full" />
               <span>AP's Clover is crafting a response...</span>

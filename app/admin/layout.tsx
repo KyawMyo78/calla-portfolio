@@ -17,9 +17,11 @@ import {
   ChevronLeft,
   Settings,
   BookOpen,
-  MessageSquare
+  MessageSquare,
+  HelpCircle
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import FloatingAIButton from '../../components/FloatingAIButton';
 
 export default function AdminLayout({
   children,
@@ -47,6 +49,7 @@ export default function AdminLayout({
     { id: 'chat', label: 'AI Chat', icon: MessageSquare, path: '/admin/chat' },
     { id: 'contacts', label: 'Messages', icon: Mail, path: '/admin/contacts' },
     { id: 'achievements', label: 'Achievements', icon: Award, path: '/admin/achievements' },
+    { id: 'user-manual', label: 'User Manual', icon: HelpCircle, path: '/admin/user-manual' },
     { id: 'settings', label: 'Site Settings', icon: Settings, path: '/admin/site-settings' },
   ];
 
@@ -98,6 +101,7 @@ export default function AdminLayout({
     else if (pathname.includes('/blog')) pageType = 'Admin Blog';
     else if (pathname.includes('/contacts')) pageType = 'Admin Messages';
     else if (pathname.includes('/achievements')) pageType = 'Admin Achievements';
+    else if (pathname.includes('/user-manual')) pageType = 'Admin User Manual';
     else if (pathname.includes('/site-settings')) pageType = 'Admin Settings';
     
     const pageTitle = `${siteName} | ${pageType}`;
@@ -156,24 +160,24 @@ export default function AdminLayout({
   const currentPage = navigationItems.find(item => item.path === pathname);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-secondary-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+      <header className="bg-primary-900 shadow-lg border-b border-primary-800 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden text-gray-600 hover:text-gray-900"
+                className="lg:hidden text-white hover:text-secondary-300"
               >
                 {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
               
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-xl font-semibold text-white">
                 {currentPage?.label || 'Admin Panel'}
               </h1>
-              <span className="hidden sm:block text-sm text-gray-500">Welcome back!</span>
+              <span className="hidden sm:block text-sm text-secondary-300">Welcome back!</span>
             </div>
             
             <div className="flex items-center space-x-4">
@@ -181,7 +185,7 @@ export default function AdminLayout({
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 text-sm hidden sm:block"
+                className="text-secondary-200 hover:text-white text-sm hidden sm:block"
               >
                 View Portfolio
               </a>
@@ -237,7 +241,7 @@ export default function AdminLayout({
 
               <button
                 onClick={handleLogout}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                className="flex items-center space-x-2 text-secondary-200 hover:text-white"
               >
                 <LogOut size={16} />
                 <span className="text-sm hidden sm:block">Logout</span>
@@ -262,8 +266,8 @@ export default function AdminLayout({
                   onMouseEnter={() => { try { router.prefetch?.(item.path as any); } catch(e){} }}
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all ${
                     isActive
-                      ? 'bg-primary-600 text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-gray-50 shadow-sm'
+                      ? 'bg-primary-800 text-white shadow-lg border border-primary-700'
+                      : 'bg-white text-primary-800 hover:bg-primary-50 shadow-sm border border-primary-100'
                   }`}
                 >
                   <Icon size={20} />
@@ -283,15 +287,15 @@ export default function AdminLayout({
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <div 
-                className="bg-white w-64 h-full shadow-xl"
+                className="bg-primary-900 w-64 h-full shadow-xl"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="p-4 border-b border-gray-200">
+                <div className="p-4 border-b border-primary-800">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-gray-900">Navigation</h2>
+                    <h2 className="text-lg font-semibold text-white">Navigation</h2>
                     <button
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-gray-600 hover:text-gray-900"
+                      className="text-secondary-200 hover:text-white"
                     >
                       <X size={20} />
                     </button>
@@ -310,8 +314,8 @@ export default function AdminLayout({
                         onMouseEnter={() => { try { router.prefetch?.(item.path as any); } catch(e){} }}
                         className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all ${
                           isActive
-                            ? 'bg-primary-600 text-white shadow-lg'
-                            : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                            ? 'bg-primary-800 text-white shadow-lg border border-primary-700'
+                            : 'bg-primary-700 text-secondary-100 hover:bg-primary-600'
                         }`}
                       >
                         <Icon size={20} />
@@ -344,6 +348,9 @@ export default function AdminLayout({
             </motion.div>
           </main>
         </div>
+        
+        {/* Floating AI Assistant Button */}
+        <FloatingAIButton />
       </div>
     </div>
   );
