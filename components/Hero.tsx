@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Download, Mail, Github, Linkedin, MapPin, Code2, Briefcase } from 'lucide-react';
+import { Download, Mail, MapPin, Code2, Briefcase } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { getSocialIcon, SocialLink } from '../lib/socialIcons';
@@ -14,8 +14,6 @@ interface ProfileData {
   description: string;
   location: string;
   email: string;
-  github: string;
-  linkedin: string;
   profileImage: string;
   cvUrl: string;
   socialLinks?: SocialLink[];
@@ -367,76 +365,28 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               transition={{ delay: 0.9 }}
               className="flex items-center justify-center lg:justify-start space-x-4"
             >
-              {/* Legacy GitHub and LinkedIn links (if no custom social links) */}
-              {(!profile?.socialLinks || profile.socialLinks.length === 0) && (
-                <>
-                  <a
-                    href={profile?.github || "https://github.com/"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110"
-                  >
-                    <Github size={20} />
-                  </a>
-                  <a
-                    href={profile?.linkedin || "https://linkedin.com"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110"
-                  >
-                    <Linkedin size={20} />
-                  </a>
-                </>
-              )}
-              
-              {/* Custom social links */}
+              {/* Only show social links added through admin dashboard */}
               {profile?.socialLinks && profile.socialLinks.length > 0 && (
-                <>
-                  {profile.socialLinks.map((link, index) => {
-                    const iconConfig = getSocialIcon(link.icon);
-                    const IconComponent = iconConfig?.icon || Github;
-                    
-                    return (
-                      <motion.a
-                        key={link.id}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110 ${iconConfig?.color || ''}`}
-                        title={link.name}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.9 + (index * 0.1), type: "spring" }}
-                      >
-                        <IconComponent size={20} />
-                      </motion.a>
-                    );
-                  })}
+                profile.socialLinks.map((link, index) => {
+                  const iconConfig = getSocialIcon(link.icon);
+                  const IconComponent = iconConfig?.icon || Mail;
                   
-                  {/* Add legacy links if not already included */}
-                  {profile.github && !profile.socialLinks.some(link => link.url.includes('github.com')) && (
-                    <a
-                      href={profile.github}
+                  return (
+                    <motion.a
+                      key={link.id}
+                      href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110"
-                      title="GitHub"
+                      className={`p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110 ${iconConfig?.color || ''}`}
+                      title={link.name}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.9 + (index * 0.1), type: "spring" }}
                     >
-                      <Github size={20} />
-                    </a>
-                  )}
-                  {profile.linkedin && !profile.socialLinks.some(link => link.url.includes('linkedin.com')) && (
-                    <a
-                      href={profile.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-3 rounded-full bg-clover-100 text-clover-700 hover:bg-clover-300 hover:text-clover-900 transition-all duration-200 hover:scale-110"
-                      title="LinkedIn"
-                    >
-                      <Linkedin size={20} />
-                    </a>
-                  )}
-                </>
+                      <IconComponent size={20} />
+                    </motion.a>
+                  );
+                })
               )}
             </motion.div>
           </motion.div>

@@ -1,15 +1,13 @@
  'use client';
 
 import { motion } from 'framer-motion';
-import { Heart, Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
+import { Heart, Mail, ArrowUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { getSocialIcon, SocialLink } from '../lib/socialIcons';
 
 interface ProfileData {
   email: string;
-  github: string;
-  linkedin: string;
   name?: string;
   nickname?: string;
   description?: string;
@@ -30,12 +28,10 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
   const router = useRouter();
   const pathname = usePathname();
   const [profile, setProfile] = useState<ProfileData>({
-  email: 'you@example.com',
-  github: 'https://github.com/your-username',
-  linkedin: 'https://linkedin.com/in/your-profile',
-  name: 'Your Name',
-  nickname: 'Your Nickname',
-  description: 'A brief description about you, your skills, and what you build.'
+    email: 'you@example.com',
+    name: 'Your Name',
+    nickname: 'Your Nickname',
+    description: 'A brief description about you, your skills, and what you build.'
   });
   // Allow server-provided siteSettings to be passed in (avoids extra fetch when available)
   const [siteSettings, setSiteSettings] = useState<any | null>(serverSettings || null);
@@ -45,8 +41,6 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
     if (serverProfile) {
       setProfile({
         email: serverProfile.email || 'you@example.com',
-        github: serverProfile.github || 'https://github.com/your-username',
-        linkedin: serverProfile.linkedin || 'https://linkedin.com/in/your-profile',
         socialLinks: serverProfile.socialLinks || [],
         name: serverProfile.name || 'Your Name',
         nickname: serverProfile.nickname || 'Your Nickname',
@@ -63,8 +57,6 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
         if (result.success) {
           setProfile({
             email: result.data.email || 'you@example.com',
-            github: result.data.github || 'https://github.com/your-username',
-            linkedin: result.data.linkedin || 'https://linkedin.com/in/your-profile',
             socialLinks: result.data.socialLinks || [],
             name: result.data.name || 'Your Name',
             nickname: result.data.nickname || 'Your Nickname',
@@ -95,45 +87,24 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
   const getSocialLinks = () => {
     const links = [];
     
-    // Add custom social links
+    // Add custom social links only
     if (profile.socialLinks && profile.socialLinks.length > 0) {
       profile.socialLinks.forEach(link => {
         const iconConfig = getSocialIcon(link.icon);
         links.push({
           name: link.name,
           url: link.url,
-          icon: iconConfig?.icon || Github
+          icon: iconConfig?.icon || Mail
         });
       });
     }
     
-    // Add email link
+    // Always add email link
     links.push({
       name: 'Email',
       url: `mailto:${profile.email}`,
       icon: Mail
     });
-    
-    // Add legacy links if not already included in custom links
-    if (!profile.socialLinks || !profile.socialLinks.some(link => link.url.includes('github.com'))) {
-      if (profile.github) {
-        links.push({
-          name: 'GitHub',
-          url: profile.github,
-          icon: Github
-        });
-      }
-    }
-    
-    if (!profile.socialLinks || !profile.socialLinks.some(link => link.url.includes('linkedin.com'))) {
-      if (profile.linkedin) {
-        links.push({
-          name: 'LinkedIn',
-          url: profile.linkedin,
-          icon: Linkedin
-        });
-      }
-    }
     
     return links;
   };
