@@ -112,6 +112,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const prompt = body?.prompt;
+    const chatHistory = body?.chatHistory || [];
     if (!prompt || typeof prompt !== "string") {
       return NextResponse.json({ error: "missing prompt" }, { status: 400 });
     }
@@ -172,10 +173,32 @@ export async function POST(req: Request) {
 
     const userSummary = await getUserSummary();
 
-    const promptContents = userSummary ? [`User summary: ${userSummary}`, SYSTEM_PROMPT, prompt] : [SYSTEM_PROMPT, prompt];
+    // Build conversation context with history
+    const conversationContext = [];
+    
+    // Add system prompt and user summary
+    const systemMessage = userSummary ? `${SYSTEM_PROMPT}\n\nUser Context: ${userSummary}` : SYSTEM_PROMPT;
+    conversationContext.push({ role: "user", parts: [{ text: systemMessage }] });
+    conversationContext.push({ role: "model", parts: [{ text: "I understand. I'm AP's Clover, your portfolio assistant. I'm here to help you with your admin tasks using the exact UI steps and page names you'll see in the interface. How can I assist you today?" }] });
+    
+    // Add chat history for context (convert to Gemini format)
+    chatHistory.forEach((msg: any) => {
+      if (msg.role && msg.text && !msg.loading) {
+        conversationContext.push({
+          role: msg.role === "user" ? "user" : "model",
+          parts: [{ text: msg.text }]
+        });
+      }
+    });
+    
+    // Add current user message
+    conversationContext.push({ role: "user", parts: [{ text: prompt }] });
 
-  // Prepend the system prompt so the model receives the instructions first.
-  const resp: any = await ai.models.generateContent({ model: "gemini-2.5-flash", contents: promptContents });
+    // Send to Gemini with full conversation context
+    const resp: any = await ai.models.generateContent({ 
+      model: "gemini-2.5-flash", 
+      contents: conversationContext 
+    });
     let text = "";
     if (typeof resp === "string") text = resp;
     text = text || resp?.text || resp?.output?.[0]?.content || resp?.candidates?.[0]?.content || resp?.candidates?.[0]?.text || "";

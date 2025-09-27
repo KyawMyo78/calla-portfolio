@@ -93,10 +93,20 @@ export default function ChatUI({
     setMessages((m) => [...m, loadingMsg]);
 
     try {
+      // Send chat history for context (last 10 messages to avoid token limits)
+      const recentHistory = messages.slice(-10).map(m => ({
+        role: m.role,
+        text: m.text
+      }));
+      
       const res = await fetch("/api/admin/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, userSummary: initialUserSummary }),
+        body: JSON.stringify({ 
+          prompt, 
+          userSummary: initialUserSummary,
+          chatHistory: recentHistory
+        }),
       });
       const textBody = await res.text();
       if (!res.ok) {
