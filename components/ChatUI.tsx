@@ -1,17 +1,30 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 type Message = { role: "user" | "assistant"; text: string; loading?: boolean };
+
+// Quick action suggestions for new users
+const QUICK_ACTIONS = [
+  "How do I add a blog post?",
+  "How can I update my profile?", 
+  "How do I upload images?",
+  "How do I add a new project?",
+  "How can I manage my skills?"
+];
 
 export default function ChatUI({
   initialPrompt = "",
   initialAiReply = "",
   mascot = "/apclover.jpg",
+  initialUserSummary = "",
 }: {
   initialPrompt?: string;
   initialAiReply?: string;
   mascot?: string;
+  initialUserSummary?: string;
 }) {
   // simple inline styles for the loading dots (keeps this component self-contained)
   const dotsStyle = (
@@ -29,9 +42,24 @@ export default function ChatUI({
     if (initialAiReply) msgs.push({ role: "assistant", text: initialAiReply });
     return msgs;
   });
-  const [text, setText] = useState(initialPrompt || "");
+  // Start with an empty input; use placeholder text instead of prefilled content
+  const [text, setText] = useState("");
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(true);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Auto-resize textarea based on content
+  const autoResize = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 120) + 'px';
+    }
+  };
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -68,7 +96,7 @@ export default function ChatUI({
       const res = await fetch("/api/admin/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, userSummary: initialUserSummary }),
       });
       const textBody = await res.text();
       if (!res.ok) {
@@ -118,54 +146,116 @@ export default function ChatUI({
   const [loading, setLoading] = React.useState(false);
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200">
       {dotsStyle}
-      <div>
-        <div className="w-full p-6">
-          <div className="flex items-center gap-4">
-            <img src={mascot} alt="AP Clover" className="w-16 h-16 rounded-full shadow-md object-cover" />
-            <div>
-              <h2 className="text-xl font-bold">AP 's Clover</h2>
-              <p className="text-sm text-gray-500">Your friendly portfolio assistant</p>
+      
+      {/* Enhanced Header with Gradient */}
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
+        <div className="flex items-center space-x-4">
+          <div className="relative">
+            <img src={mascot} alt="AP Clover" className="w-16 h-16 rounded-full border-4 border-white/20 object-cover" />
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">AP's Clover</h2>
+            <p className="text-blue-100">Online • Portfolio Assistant</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Messages Container */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-4 max-h-96 min-h-[300px]">
+        {/* Quick Actions for new users */}
+        {messages.length === 0 && (
+          <div className="space-y-4">
+            <div className="text-center py-8">
+              <div className="text-gray-400 mb-4">
+                <svg className="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <p className="text-gray-500 text-lg mb-6">Start a conversation with AP's Clover</p>
+            </div>
+            
+            <div className="space-y-2">
+              <p className="text-gray-600 font-medium text-sm">Try asking:</p>
+              <div className="grid gap-2">
+                {QUICK_ACTIONS.map((action, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setText(action)}
+                    className="text-left p-3 bg-gray-50 hover:bg-blue-50 hover:border-blue-200 border border-gray-200 rounded-xl text-sm transition-all duration-200 hover:shadow-sm"
+                  >
+                    <span className="text-blue-600 mr-2">💬</span>
+                    {action}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
+        )}
 
-          <div className="mt-6 space-y-4">
-            {messages.length === 0 && (
-              <div className="text-gray-500">No messages yet. Try asking something!</div>
-            )}
-
-            {messages.map((m, i) => (
-              <div key={i} className="flex" style={{ justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                <div
-                  className={`p-4 rounded-lg max-w-[80%] ${
-                    m.role === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  <div className="text-sm whitespace-pre-wrap">
-                    {m.loading ? (
-                      <span className="loading-dots inline-block align-middle">
-                        <span className="dot">.</span>
-                        <span className="dot">.</span>
-                        <span className="dot">.</span>
-                      </span>
+        {/* Messages */}
+        {messages.map((m, i) => (
+          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} mb-4`}>
+            <div className={`flex items-end space-x-2 max-w-[80%] ${m.role === "user" ? "flex-row-reverse space-x-reverse" : ""}`}>
+              {/* Avatar for assistant */}
+              {m.role === "assistant" && (
+                <img src={mascot} alt="AP Clover" className="w-8 h-8 rounded-full flex-shrink-0 border-2 border-gray-200" />
+              )}
+              
+              {/* Message bubble */}
+              <div className={`px-4 py-3 rounded-2xl ${
+                m.role === "user" 
+                  ? "bg-blue-500 text-white rounded-br-md shadow-lg" 
+                  : "bg-gray-100 text-gray-800 rounded-bl-md shadow-sm border"
+              }`}>
+                <div className="text-sm">
+                  {m.loading ? (
+                    <div className="flex items-center space-x-2 py-1">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                      </div>
+                      <span className="text-gray-500 text-xs">AP's Clover is thinking...</span>
+                    </div>
+                  ) : (
+                    // Render assistant replies as Markdown for richer formatting
+                    m.role === 'assistant' ? (
+                      <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-700 prose-strong:text-gray-800">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text}</ReactMarkdown>
+                      </div>
                     ) : (
-                      m.text
-                    )}
-                  </div>
+                      <div className="whitespace-pre-wrap">{m.text}</div>
+                    )
+                  )}
                 </div>
               </div>
-            ))}
+            </div>
           </div>
+        ))}
+        
+        {/* Auto-scroll anchor */}
+        <div ref={messagesEndRef} />
+      </div>
 
-          <div className="mt-6 flex gap-3 items-end">
+      {/* Enhanced Input Area */}
+      <div className="border-t bg-gray-50 p-4">
+        <div className="flex items-end space-x-3">
+          <div className="flex-1 relative">
             <textarea
               ref={textareaRef}
               value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Ask AP 's Clover..."
-              className="flex-1 border rounded-lg p-3 resize-none min-h-[48px] max-h-48"
+              onChange={(e) => {
+                setText(e.target.value);
+                autoResize();
+              }}
+              placeholder="Message AP's Clover..."
+              className="w-full resize-none border-2 border-gray-200 rounded-2xl px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors bg-white shadow-sm"
               disabled={loading}
+              rows={1}
+              onInput={autoResize}
               onKeyDown={(e) => {
                 // Large screens: Enter sends (unless Shift held). Shift+Enter => newline.
                 // Small screens: Enter inserts newline; sending must be done via Send button.
@@ -181,13 +271,38 @@ export default function ChatUI({
                 }
               }}
             />
-            <button onClick={send} className="bg-blue-600 text-white px-4 py-2 rounded-lg disabled:opacity-50" disabled={loading || !text.trim()}>
-              {loading ? "Thinking..." : "Send"}
-            </button>
           </div>
-          {loading && <div className="text-sm text-gray-500 mt-2">AP Clover is thinking...</div>}
+          <button 
+            onClick={send} 
+            className={`p-3 rounded-full transition-all duration-200 shadow-lg ${
+              loading || !text.trim() 
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed" 
+                : "bg-blue-500 hover:bg-blue-600 text-white hover:shadow-xl transform hover:-translate-y-0.5"
+            }`}
+            disabled={loading || !text.trim()}
+          >
+            {loading ? (
+              <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            )}
+          </button>
         </div>
-
+        
+        {/* Status indicator */}
+        {loading && (
+          <div className="flex items-center mt-2 text-sm text-gray-500">
+            <div className="flex items-center space-x-2">
+              <img src={mascot} className="w-4 h-4 rounded-full" />
+              <span>AP's Clover is crafting a response...</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
