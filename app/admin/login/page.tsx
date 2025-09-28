@@ -172,7 +172,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 ${
+              className={`w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 ${
                 isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg'
               }`}
             >
@@ -194,7 +194,7 @@ export default function AdminLogin() {
           <div className="text-center mt-4">
             <Link
               href="/admin/forgot-password"
-              className="inline-block text-blue-600 hover:text-blue-800 underline hover:no-underline transition-colors text-sm font-medium py-2 px-4 hover:bg-blue-50 rounded-md"
+              className="inline-block text-primary-600 hover:text-primary-800 underline hover:no-underline transition-colors text-sm font-medium py-2 px-4 hover:bg-primary-50 rounded-md"
             >
               Forgot your password?
             </Link>

@@ -48,7 +48,7 @@ const categories = [
 const statuses = [
   { id: 'completed', name: 'Completed', color: 'bg-green-100 text-green-700' },
   { id: 'in-progress', name: 'In Progress', color: 'bg-yellow-100 text-yellow-700' },
-  { id: 'planned', name: 'Planned', color: 'bg-blue-100 text-blue-700' }
+  { id: 'planned', name: 'Planned', color: 'bg-primary-100 text-primary-700' }
 ];
 
 export default function ProjectsManagement() {
@@ -269,33 +269,35 @@ export default function ProjectsManagement() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Projects Management</h2>
-          <p className="text-gray-600">Manage your portfolio projects and showcase your work</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex-1">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Projects Management</h2>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your portfolio projects and showcase your work</p>
         </div>
         <button
           onClick={() => openModal()}
-          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 sm:px-4 text-sm rounded-lg transition-colors w-full sm:w-auto"
         >
-          <Plus size={20} />
-          Add Project
+          <Plus size={16} className="sm:w-5 sm:h-5" />
+          <span className="whitespace-nowrap">Add Project</span>
         </button>
       </div>
 
       {/* Category Filter Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-4">
+      <div className="flex flex-wrap gap-1 sm:gap-2 border-b border-gray-200 pb-2 sm:pb-4 overflow-x-auto">
         <button
           onClick={() => setActiveCategory('all')}
-          className={`px-4 py-2 rounded-lg transition-colors ${
+          className={`px-3 py-2 sm:px-4 text-sm rounded-lg transition-colors whitespace-nowrap ${
             activeCategory === 'all'
               ? 'bg-primary-100 text-primary-700 border border-primary-200'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          All Projects ({projects.length})
+          <span className="hidden sm:inline">All Projects</span>
+          <span className="sm:hidden">All</span>
+          <span className="ml-1">({projects.length})</span>
         </button>
         {categories.map(category => {
           const count = projects.filter(p => p.category === category.id).length;
@@ -303,7 +305,7 @@ export default function ProjectsManagement() {
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-3 py-2 sm:px-4 text-sm rounded-lg transition-colors whitespace-nowrap ${
                 activeCategory === category.id
                   ? 'bg-primary-100 text-primary-700 border border-primary-200'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -319,7 +321,7 @@ export default function ProjectsManagement() {
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-3 py-2 sm:px-4 text-sm rounded-lg transition-colors whitespace-nowrap ${
                 activeCategory === category
                   ? 'bg-primary-100 text-primary-700 border border-primary-200'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -420,7 +422,7 @@ export default function ProjectsManagement() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => openModal(project)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-primary-600 hover:text-primary-800"
                     >
                       <Edit3 size={16} />
                     </button>
@@ -465,6 +467,40 @@ export default function ProjectsManagement() {
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <X size={20} />
+                </button>
+              </div>
+
+              {/* Save Reminder Notice */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start space-x-3">
+                  <Save className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="text-sm font-medium text-blue-800">Don't Forget to Save</h4>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Remember to click "{editingProject.id ? 'Update' : 'Create'} Project" at the bottom to save your changes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Save Button */}
+              <div className="flex justify-center mb-6">
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {isSaving ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save size={16} />
+                      {editingProject.id ? 'Update' : 'Create'} Project
+                    </>
+                  )}
                 </button>
               </div>
 

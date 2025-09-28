@@ -240,17 +240,17 @@ export default function ProfileManager() {
   }
 
   return (
-    <div className="space-y-8 px-2 sm:px-4">
+    <div className="space-y-6 px-2 sm:px-4 pb-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2 sm:gap-3">
-          <User className="h-6 w-6 text-royal-600" />
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Profile Management</h1>
+          <User className="h-5 w-5 sm:h-6 sm:w-6 text-primary-600" />
+          <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Profile Management</h1>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:gap-3 w-full sm:w-auto">
           <button
             onClick={handlePreview}
-            className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors w-full sm:w-auto"
+            className="flex items-center justify-center gap-2 px-3 py-2 sm:px-4 text-sm border border-gray-300 rounded-md hover:bg-gray-50 transition-colors w-full sm:w-auto order-2 sm:order-1"
           >
             <Eye size={16} />
             <span>Preview</span>
@@ -258,10 +258,10 @@ export default function ProfileManager() {
           <button
             onClick={handleSave}
             disabled={loading}
-            className="flex items-center justify-center gap-2 bg-royal-600 text-white px-4 py-2 rounded-md hover:bg-royal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors w-full sm:w-auto"
+            className="flex items-center justify-center gap-2 bg-primary-900 text-white px-3 py-2 sm:px-4 text-sm rounded-md hover:bg-primary-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors w-full sm:w-auto order-1 sm:order-2"
           >
             <Save size={16} />
-            <span>{loading ? 'Saving...' : 'Save Changes'}</span>
+            <span className="whitespace-nowrap">{loading ? 'Saving...' : 'Save Changes'}</span>
           </button>
         </div>
       </div>
@@ -278,7 +278,22 @@ export default function ProfileManager() {
         </div>
       )}
 
-  <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-2">
+      {/* Save Reminder Notice */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+        <div className="flex items-start">
+          <Save className="h-5 w-5 text-yellow-600 mt-0.5" />
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-yellow-800">
+              Remember to Save Your Changes
+            </h3>
+            <p className="text-sm text-yellow-700 mt-1">
+              Don't forget to click "Save Changes" after making any modifications to ensure your updates are preserved.
+            </p>
+          </div>
+        </div>
+      </div>
+
+  <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
         {/* Profile Image Upload */}
   <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
           <div className="flex items-center space-x-2 mb-4">
@@ -459,7 +474,7 @@ export default function ProfileManager() {
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2 mt-2">
                     <input value={newSkill.name} onChange={(e) => setNewSkill(prev => ({ ...prev, name: e.target.value }))} placeholder="Skill name" className="p-2 border rounded flex-1" />
                     <input type="number" value={newSkill.level} onChange={(e) => setNewSkill(prev => ({ ...prev, level: Number(e.target.value) }))} className="p-2 border rounded w-24" />
-                    <button onClick={handleAddSkill} className="bg-royal-600 text-white px-3 py-1 rounded">Add</button>
+                    <button onClick={handleAddSkill} className="bg-primary-900 text-white px-3 py-1 rounded hover:bg-primary-800 transition-colors">Add</button>
                   </div>
                 </div>
               </div>
@@ -521,7 +536,7 @@ export default function ProfileManager() {
                       </div>
                       <button 
                         onClick={handleAddInterest} 
-                        className="bg-royal-600 text-white px-3 py-2 rounded hover:bg-royal-700 transition-colors whitespace-nowrap"
+                        className="bg-primary-900 text-white px-3 py-2 rounded hover:bg-primary-800 transition-colors whitespace-nowrap"
                       >
                         Add
                       </button>
@@ -618,7 +633,7 @@ export default function ProfileManager() {
                   type="button"
                   onClick={handleAddSocialLink}
                   disabled={!newSocialLink.name || !newSocialLink.url}
-                  className="px-6 py-3 bg-royal-600 text-white rounded-md hover:bg-royal-700 focus:ring-2 focus:ring-royal-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center w-full sm:w-auto"
+                  className="px-6 py-3 bg-primary-900 text-white rounded-md hover:bg-primary-800 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center w-full sm:w-auto"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Add Link
@@ -649,7 +664,7 @@ export default function ProfileManager() {
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 text-royal-600 hover:bg-royal-50 rounded-lg transition-colors"
+                          className="p-2 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                           title="Open link"
                         >
                           <ExternalLink className="h-4 w-4" />
@@ -697,7 +712,7 @@ export default function ProfileManager() {
               <div className="p-4 bg-gray-50 rounded-lg">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2 sm:gap-3">
-                    <FileText className="h-8 w-8 text-royal-600" />
+                    <FileText className="h-8 w-8 text-primary-600" />
                     <div>
                       <p className="text-sm font-medium text-gray-900">Current CV Link</p>
                       <p className="text-xs text-gray-500 truncate max-w-md">{profile.cvUrl}</p>
@@ -708,7 +723,7 @@ export default function ProfileManager() {
                       href={profile.cvUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center space-x-1 px-3 py-1 text-sm bg-royal-100 text-royal-700 rounded-md hover:bg-royal-200 transition-colors"
+                      className="flex items-center space-x-1 px-3 py-1 text-sm bg-primary-100 text-primary-700 rounded-md hover:bg-primary-200 transition-colors"
                     >
                       <Eye size={14} />
                       <span>Test Link</span>
@@ -785,7 +800,7 @@ export default function ProfileManager() {
             </div>
 
             <div className="flex items-end">
-              <button onClick={handleAddScrollerItem} className="w-full bg-royal-600 text-white px-4 py-3 rounded">Add to Scroller</button>
+              <button onClick={handleAddScrollerItem} className="w-full bg-primary-900 text-white px-4 py-3 rounded hover:bg-primary-800 transition-colors">Add to Scroller</button>
             </div>
           </div>
 
@@ -807,6 +822,27 @@ export default function ProfileManager() {
               </div>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Bottom Save Button */}
+      <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 -mx-2 sm:-mx-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end sm:gap-4">
+          <button
+            onClick={handlePreview}
+            className="flex items-center justify-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50 transition-colors w-full sm:w-auto order-2 sm:order-1"
+          >
+            <Eye size={16} />
+            <span>Preview Changes</span>
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={loading}
+            className="flex items-center justify-center gap-2 bg-primary-900 text-white px-4 py-2 text-sm rounded-md hover:bg-primary-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors w-full sm:w-auto order-1 sm:order-2"
+          >
+            <Save size={16} />
+            <span className="whitespace-nowrap">{loading ? 'Saving...' : 'Save All Changes'}</span>
+          </button>
         </div>
       </div>
     </div>

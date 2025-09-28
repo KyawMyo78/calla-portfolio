@@ -36,7 +36,7 @@ export default function IconPicker({ value, onChange }: { value?: string; onChan
             <button
               key={icon.key}
               onClick={() => onChange(icon.key)}
-              className={`p-2 rounded border ${isSelected ? 'border-royal-600 bg-royal-50' : 'bg-white border-gray-200'} flex flex-col items-center justify-center text-xs`}
+              className={`p-2 rounded border ${isSelected ? 'border-primary-600 bg-primary-50' : 'bg-white border-gray-200'} flex flex-col items-center justify-center text-xs`}
               title={icon.label || icon.key}
             >
               <div className="w-6 h-6 mb-1">

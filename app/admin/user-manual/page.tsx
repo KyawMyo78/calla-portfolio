@@ -270,7 +270,7 @@ export default function UserManualPage() {
                       const element = document.getElementById(section.id);
                       element?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="flex items-center w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                    className="flex items-center w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-colors"
                   >
                     <section.icon className="w-4 h-4 mr-3" />
                     {section.title}
@@ -294,7 +294,7 @@ export default function UserManualPage() {
                     className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex items-center">
-                      <section.icon className="w-6 h-6 text-blue-600 mr-4" />
+                      <section.icon className="w-6 h-6 text-primary-600 mr-4" />
                       <h2 className="text-xl font-semibold text-gray-900">
                         {section.title}
                       </h2>
@@ -327,11 +327,11 @@ export default function UserManualPage() {
             </div>
 
             {/* Quick Tips Section */}
-            <div className="mt-8 bg-blue-50 rounded-lg border border-blue-200 p-6">
-              <h2 className="text-lg font-semibold text-blue-900 mb-4">
+            <div className="mt-8 bg-primary-50 rounded-lg border border-primary-200 p-6">
+              <h2 className="text-lg font-semibold text-primary-900 mb-4">
                 💡 Quick Tips for Success
               </h2>
-              <ul className="space-y-2 text-blue-800">
+              <ul className="space-y-2 text-primary-800">
                 <li>• Keep your content updated regularly to maintain visitor engagement</li>
                 <li>• Use high-quality images for better visual appeal</li>
                 <li>• Write clear, concise descriptions for better user experience</li>

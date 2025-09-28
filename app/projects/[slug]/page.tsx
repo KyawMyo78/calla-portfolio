@@ -95,7 +95,7 @@ export default function ProjectPage({ params }: PageProps) {
   const statusColors = {
     completed: 'bg-green-100 text-green-700',
     'in-progress': 'bg-yellow-100 text-yellow-700',
-    planned: 'bg-royal-100 text-royal-700'
+    planned: 'bg-primary-100 text-primary-700'
   };
 
   return (

@@ -267,34 +267,34 @@ export default function ContactMessagesManagement() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Contact Messages</h2>
-          <p className="text-gray-600">Manage and respond to contact form submissions</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex-1">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Contact Messages</h2>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Manage and respond to contact form submissions</p>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-        <div className="flex flex-col lg:flex-row gap-4">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-3 sm:p-4 lg:p-6">
+        <div className="flex flex-col gap-3 sm:gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
               <input
                 type="text"
                 placeholder="Search messages..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
 
           {/* Filters */}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-1 sm:gap-2 overflow-x-auto">
             {[
               { key: 'all', label: 'All', count: filterCounts.all },
               { key: 'unread', label: 'Unread', count: filterCounts.unread },
@@ -304,7 +304,7 @@ export default function ContactMessagesManagement() {
               <button
                 key={filter.key}
                 onClick={() => setActiveFilter(filter.key as FilterType)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-2 py-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                   activeFilter === filter.key
                     ? 'bg-primary-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -312,7 +312,7 @@ export default function ContactMessagesManagement() {
               >
                 {filter.label}
                 {filter.count > 0 && (
-                  <span className={`ml-1 px-1.5 py-0.5 rounded text-xs ${
+                  <span className={`ml-1 px-1 py-0.5 sm:px-1.5 rounded text-xs ${
                     activeFilter === filter.key
                       ? 'bg-primary-500 text-white'
                       : 'bg-gray-200 text-gray-600'

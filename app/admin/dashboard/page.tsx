@@ -70,15 +70,13 @@ export default function AdminDashboard() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -5 }}
-      className="bg-white rounded-xl shadow-lg p-6 border border-gray-100"
+      className="bg-white rounded-xl shadow-lg p-5 border border-gray-100 flex flex-col justify-between h-full"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-2 mb-2">
+        <Icon className="w-6 h-6 text-primary-700" />
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
-        </div>
-        <div className={`p-3 rounded-lg ${color}`}>
-          <Icon className="w-6 h-6 text-white" />
+          <p className="text-sm font-semibold text-primary-700 leading-tight">{title}</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1 leading-tight">{value}</p>
         </div>
       </div>
     </motion.div>
@@ -89,15 +87,13 @@ export default function AdminDashboard() {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 text-left w-full hover:shadow-xl transition-all"
+      className="bg-white rounded-xl shadow-lg p-5 border border-gray-100 text-left w-full hover:shadow-xl transition-all flex items-center gap-4"
     >
-      <div className="flex items-start space-x-4">
-        <div className="p-2 bg-clover-100 rounded-lg">
-          <Icon className="w-6 h-6 text-clover-700" />
-        </div>
+      <div className="flex flex-col gap-2">
+        <Icon className="w-6 h-6 text-primary-700" />
         <div>
-          <h3 className="font-semibold text-gray-900">{title}</h3>
-          <p className="text-gray-600 text-sm mt-1">{description}</p>
+          <h3 className="font-semibold text-gray-900 text-base mb-1 leading-tight">{title}</h3>
+          <p className="text-gray-600 text-sm leading-tight">{description}</p>
         </div>
       </div>
     </motion.button>

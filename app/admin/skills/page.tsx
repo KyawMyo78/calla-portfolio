@@ -89,7 +89,7 @@ const skillLevels = [
   { value: 1, label: 'Beginner', color: 'bg-red-100 text-red-700' },
   { value: 2, label: 'Novice', color: 'bg-orange-100 text-orange-700' },
   { value: 3, label: 'Intermediate', color: 'bg-yellow-100 text-yellow-700' },
-  { value: 4, label: 'Advanced', color: 'bg-royal-100 text-royal-700' },
+  { value: 4, label: 'Advanced', color: 'bg-primary-100 text-primary-700' },
   { value: 5, label: 'Expert', color: 'bg-green-100 text-green-700' }
 ];
 
@@ -275,46 +275,50 @@ export default function SkillsManagement() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Skills Management</h2>
-          <p className="text-gray-600">Manage your technical skills and expertise levels</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex-1">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Skills Management</h2>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your technical skills and expertise levels</p>
         </div>
         <button
           onClick={() => openModal()}
-          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 sm:px-4 text-sm rounded-lg transition-colors w-full sm:w-auto"
         >
-          <Plus size={20} />
-          Add Skill
+          <Plus size={16} className="sm:w-5 sm:h-5" />
+          <span className="whitespace-nowrap">Add Skill</span>
         </button>
       </div>
 
       {/* Category Filters */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1 sm:gap-2 overflow-x-auto">
         <button
           onClick={() => setActiveCategory('all')}
-          className={`px-4 py-2 rounded-lg transition-colors ${
+          className={`px-3 py-2 sm:px-4 text-sm rounded-lg transition-colors whitespace-nowrap ${
             activeCategory === 'all'
               ? 'bg-primary-600 text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          All Skills ({skills.length})
+          <span className="hidden sm:inline">All Skills</span>
+          <span className="sm:hidden">All</span>
+          <span className="ml-1">({skills.length})</span>
         </button>
         {categories.map(category => (
           <button
             key={category.id}
             onClick={() => setActiveCategory(category.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+            className={`flex items-center gap-1 sm:gap-2 px-3 py-2 sm:px-4 text-sm rounded-lg transition-colors whitespace-nowrap ${
               activeCategory === category.id
                 ? 'bg-primary-600 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            <category.icon size={16} />
-            {category.name} ({groupedSkills[category.id]?.length || 0})
+            <category.icon size={14} className="sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">{category.name}</span>
+            <span className="sm:hidden">{category.name.split(' ')[0]}</span>
+            <span>({groupedSkills[category.id]?.length || 0})</span>
           </button>
         ))}
         {/* Custom Category Filters */}
@@ -362,7 +366,7 @@ export default function SkillsManagement() {
                   <div className="flex gap-1">
                     <button
                       onClick={() => openModal(skill)}
-                      className="text-royal-600 hover:text-royal-800"
+                      className="text-primary-600 hover:text-primary-800"
                     >
                       <Edit3 size={16} />
                     </button>
@@ -447,6 +451,40 @@ export default function SkillsManagement() {
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <X size={20} />
+                </button>
+              </div>
+
+              {/* Save Reminder Notice */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start space-x-3">
+                  <Save className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="text-sm font-medium text-green-800">Don't Forget to Save</h4>
+                    <p className="text-sm text-green-700 mt-1">
+                      Make sure to click "{editingSkill.id ? 'Update' : 'Create'} Skill" at the bottom to save your changes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Save Button */}
+              <div className="flex justify-center mb-6">
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {isSaving ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save size={16} />
+                      {editingSkill.id ? 'Update' : 'Create'} Skill
+                    </>
+                  )}
                 </button>
               </div>
 

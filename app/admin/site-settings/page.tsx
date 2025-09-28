@@ -78,6 +78,8 @@ interface SiteSettings {
   footer: {
     copyrightText?: string;
     madeWithText?: string;
+    copyrightYear?: string;
+    copyrightName?: string;
   };
   blog: {
     visible?: boolean;
@@ -162,8 +164,10 @@ const defaultSettings: SiteSettings = {
     readyToStartCallText: 'Call Now',
   },
   footer: {
-    copyrightText: '© 2024 Portfolio. All rights reserved.',
+    copyrightText: 'All rights reserved.',
     madeWithText: 'Made with ❤️ using Next.js',
+    copyrightYear: '2025',
+    copyrightName: 'Portfolio',
   },
   blog: { visible: true },
 };
@@ -267,27 +271,27 @@ export default function SiteSettings() {
     <div className="space-y-8">
       {/* Header */}
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center space-x-3">
-            <Settings className="h-6 w-6 text-pink-600" />
+            <Settings className="h-5 w-5 sm:h-6 sm:w-6 text-pink-600" />
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Site Settings</h1>
-              <p className="text-gray-600">Customize all text content across your portfolio</p>
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Site Settings</h1>
+              <p className="text-sm sm:text-base text-gray-600">Customize all text content across your portfolio</p>
             </div>
           </div>
           <button
             onClick={handleSave}
             disabled={loading}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`flex items-center justify-center space-x-2 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg font-medium transition-all w-full sm:w-auto ${
               loading
                 ? 'bg-gray-400 cursor-not-allowed'
                 : success
                 ? 'bg-green-600 hover:bg-green-700'
-                : 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-primary-600 hover:bg-primary-700'
             } text-white`}
           >
-            <Save size={20} />
-            <span>{loading ? 'Saving...' : success ? 'Saved!' : 'Save Changes'}</span>
+            <Save size={16} className="sm:w-5 sm:h-5" />
+            <span className="whitespace-nowrap">{loading ? 'Saving...' : success ? 'Saved!' : 'Save Changes'}</span>
           </button>
         </div>
       </div>
@@ -300,6 +304,19 @@ export default function SiteSettings() {
             <h3 className="text-sm font-medium text-amber-800">Important Note</h3>
             <p className="text-sm text-amber-700 mt-1">
               Changes made here will immediately reflect on your live website. Make sure to preview your changes before saving.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Save Reminder Notice */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-start space-x-3">
+          <Save className="h-5 w-5 text-blue-600 mt-0.5" />
+          <div>
+            <h3 className="text-sm font-medium text-blue-800">Remember to Save Your Changes</h3>
+            <p className="text-sm text-blue-700 mt-1">
+              Don't forget to click "Save Changes" after making any modifications. Your changes won't be preserved until saved.
             </p>
           </div>
         </div>
@@ -862,7 +879,43 @@ export default function SiteSettings() {
   </div>
       </div>
 
-  {/* Footer Section removed per user request */}
+
+  {/* Footer Settings */}
+  <div className="mt-10 border-t pt-8">
+    <h2 className="text-xl font-bold mb-4">Footer Settings</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Copyright Year</label>
+        <input
+          type="text"
+          value={settings.footer.copyrightYear || ''}
+          onChange={e => handleSectionChange('footer', 'copyrightYear', e.target.value)}
+          placeholder="2025"
+          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Copyright Name</label>
+        <input
+          type="text"
+          value={settings.footer.copyrightName || ''}
+          onChange={e => handleSectionChange('footer', 'copyrightName', e.target.value)}
+          placeholder="Portfolio"
+          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Copyright Text</label>
+        <input
+          type="text"
+          value={settings.footer.copyrightText || ''}
+          onChange={e => handleSectionChange('footer', 'copyrightText', e.target.value)}
+          placeholder="All rights reserved."
+          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+    </div>
+  </div>
 
       {/* Save Button (Bottom) */}
       <div className="flex justify-end">
@@ -874,12 +927,31 @@ export default function SiteSettings() {
               ? 'bg-gray-400 cursor-not-allowed'
               : success
               ? 'bg-green-600 hover:bg-green-700'
-              : 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-primary-600 hover:bg-primary-700'
           } text-white`}
         >
           <Save size={20} />
           <span>{loading ? 'Saving...' : success ? 'Saved!' : 'Save All Changes'}</span>
         </button>
+      </div>
+
+      {/* Bottom Save Button */}
+      <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 rounded-t-lg shadow-lg">
+        <div className="flex justify-center">
+          <button
+            onClick={handleSave}
+            disabled={loading}
+            className={`flex items-center space-x-2 px-8 py-3 rounded-lg font-medium transition-all w-full sm:w-auto ${loading
+                ? 'bg-gray-400 cursor-not-allowed'
+                : success
+                ? 'bg-green-600 hover:bg-green-700'
+                : 'bg-primary-600 hover:bg-primary-700'
+              } text-white`}
+          >
+            <Save size={20} />
+            <span>{loading ? 'Saving All Changes...' : success ? 'All Changes Saved!' : 'Save All Changes'}</span>
+          </button>
+        </div>
       </div>
     </div>
       );

@@ -247,19 +247,19 @@ export default function ExperienceManagement() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Experience Management</h2>
-          <p className="text-gray-600">Manage your work experience and career history</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex-1">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Experience Management</h2>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your work experience and career history</p>
         </div>
         <button
           onClick={() => openModal()}
-          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 sm:px-4 text-sm rounded-lg transition-colors w-full sm:w-auto"
         >
-          <Plus size={20} />
-          Add Experience
+          <Plus size={16} className="sm:w-5 sm:h-5" />
+          <span className="whitespace-nowrap">Add Experience</span>
         </button>
       </div>
 
@@ -324,7 +324,7 @@ export default function ExperienceManagement() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => openModal(experience)}
-                    className="text-blue-600 hover:text-blue-800"
+                    className="text-primary-600 hover:text-primary-800"
                   >
                     <Edit3 size={16} />
                   </button>
@@ -417,6 +417,40 @@ export default function ExperienceManagement() {
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <X size={20} />
+                </button>
+              </div>
+
+              {/* Save Reminder Notice */}
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start space-x-3">
+                  <Save className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="text-sm font-medium text-purple-800">Don't Forget to Save</h4>
+                    <p className="text-sm text-purple-700 mt-1">
+                      Remember to click "{editingExperience.id ? 'Update' : 'Create'} Experience" at the bottom to save your changes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Save Button */}
+              <div className="flex justify-center mb-6">
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {isSaving ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save size={16} />
+                      {editingExperience.id ? 'Update' : 'Create'} Experience
+                    </>
+                  )}
                 </button>
               </div>
 

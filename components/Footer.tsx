@@ -284,7 +284,11 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
                 transition={{ duration: 0.6 }}
                 className="flex items-center space-x-2 text-clover-300"
               >
-                <span>{(siteSettings?.footer?.copyrightText) || `© 2025 ${profile.name || 'Your Name'}  All Rights Reserved`}</span>
+                <span>{
+                  siteSettings?.footer?.copyrightYear && siteSettings?.footer?.copyrightName
+                    ? `© ${siteSettings.footer.copyrightYear} ${siteSettings.footer.copyrightName} ${siteSettings.footer.copyrightText || 'All Rights Reserved'}`
+                    : (siteSettings?.footer?.copyrightText || `© 2025 ${profile.name || 'Your Name'}  All Rights Reserved`)
+                }</span>
               </motion.div>
               
               <motion.div
