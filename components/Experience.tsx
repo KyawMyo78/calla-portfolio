@@ -25,17 +25,25 @@ interface Experience {
 export default function Experience() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
 
   useEffect(() => {
-    const fetchExperiences = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/portfolio/experience');
-        const data = await response.json();
         
-        if (data.success) {
+        // Fetch both experiences and site settings
+        const [experiencesRes, settingsRes] = await Promise.all([
+          fetch('/api/portfolio/experience'),
+          fetch('/api/site-settings')
+        ]);
+        
+        const experiencesData = await experiencesRes.json();
+        const settingsData = await settingsRes.json();
+        
+        if (experiencesData.success) {
           // Sort by order and start date (most recent first)
-          const sortedExperiences = (data.data || []).sort((a: Experience, b: Experience) => {
+          const sortedExperiences = (experiencesData.data || []).sort((a: Experience, b: Experience) => {
             if (a.order !== b.order) {
               return a.order - b.order;
             }
@@ -43,16 +51,20 @@ export default function Experience() {
           });
           setExperiences(sortedExperiences);
         } else {
-          console.error('Failed to fetch experiences:', data.error);
+          console.error('Failed to fetch experiences:', experiencesData.error);
+        }
+        
+        if (settingsData.success) {
+          setSiteSettings(settingsData.data);
         }
       } catch (error) {
-        console.error('Error fetching experiences:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchExperiences();
+    fetchData();
   }, []);
 
   const formatDate = (dateString: string) => {
@@ -211,11 +223,11 @@ export default function Experience() {
             className="text-center"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Work <span className="text-gradient">Experience</span>
+              {siteSettings?.experience?.sectionTitle || 'Work'} <span className="text-gradient">Experience</span>
             </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
             <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-justify">
-              Building expertise through hands-on experience and continuous learning.
+              {siteSettings?.experience?.sectionSubtitle || 'Building expertise through hands-on experience and continuous learning.'}
             </p>
             <div className="text-center py-12">
               <div className="text-6xl mb-4">💼</div>
@@ -244,11 +256,11 @@ export default function Experience() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Work <span className="text-gradient">Experience</span>
+            {siteSettings?.experience?.sectionTitle || 'Work'} <span className="text-gradient">Experience</span>
           </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
           <p className="text-xl text-clover-700 max-w-3xl mx-auto">
-            My professional journey showcasing growth, achievements, and the impact I've made across different roles.
+            {siteSettings?.experience?.sectionSubtitle || 'My professional journey showcasing growth, achievements, and the impact I\'ve made across different roles.'}
           </p>
         </motion.div>
 

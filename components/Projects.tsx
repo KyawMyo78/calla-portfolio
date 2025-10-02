@@ -32,6 +32,7 @@ export default function Projects() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [siteSettings, setSiteSettings] = useState<any>(null);
   const router = useRouter();
 
   const handleProjectNavigation = (project: Project) => {
@@ -41,25 +42,36 @@ export default function Projects() {
   };
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/portfolio/projects');
-        const data = await response.json();
         
-        if (data.success) {
-          setProjects(data.data || []);
+        // Fetch both projects and site settings
+        const [projectsRes, settingsRes] = await Promise.all([
+          fetch('/api/portfolio/projects'),
+          fetch('/api/site-settings')
+        ]);
+        
+        const projectsData = await projectsRes.json();
+        const settingsData = await settingsRes.json();
+        
+        if (projectsData.success) {
+          setProjects(projectsData.data || []);
         } else {
-          console.error('Failed to fetch projects:', data.error);
+          console.error('Failed to fetch projects:', projectsData.error);
+        }
+        
+        if (settingsData.success) {
+          setSiteSettings(settingsData.data);
         }
       } catch (error) {
-        console.error('Error fetching projects:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchProjects();
+    fetchData();
   }, []);
 
   const categories = [
@@ -106,11 +118,11 @@ export default function Projects() {
             className="text-center"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              My <span className="text-gradient">Projects</span>
+              {siteSettings?.projects?.sectionTitle || 'My'} <span className="text-gradient">Projects</span>
             </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
             <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-center">
-              Exploring innovative solutions across web development, mobile apps, embedded systems, and AI technologies.
+              {siteSettings?.projects?.sectionSubtitle || 'Exploring innovative solutions across web development, mobile apps, embedded systems, and AI technologies.'}
             </p>
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🚀</div>
@@ -135,11 +147,11 @@ export default function Projects() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            My <span className="text-gradient">Projects</span>
+            {siteSettings?.projects?.sectionTitle || 'My'} <span className="text-gradient">Projects</span>
           </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
           <p className="text-xl text-clover-700 max-w-3xl mx-auto text-center">
-            Exploring innovative solutions across web development, mobile apps, embedded systems, and AI technologies.
+            {siteSettings?.projects?.sectionSubtitle || 'Exploring innovative solutions across web development, mobile apps, embedded systems, and AI technologies.'}
           </p>
         </motion.div>
 

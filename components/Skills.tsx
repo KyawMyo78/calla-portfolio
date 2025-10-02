@@ -137,27 +137,39 @@ const getYearsOfExperience = (skill: Skill): number => {
 export default function Skills() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
 
   useEffect(() => {
-    const fetchSkills = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/portfolio/skills');
-        const data = await response.json();
         
-        if (data.success) {
-          setSkills(data.data || []);
+        // Fetch both skills and site settings
+        const [skillsRes, settingsRes] = await Promise.all([
+          fetch('/api/portfolio/skills'),
+          fetch('/api/site-settings')
+        ]);
+        
+        const skillsData = await skillsRes.json();
+        const settingsData = await settingsRes.json();
+        
+        if (skillsData.success) {
+          setSkills(skillsData.data || []);
         } else {
-          console.error('Failed to fetch skills:', data.error);
+          console.error('Failed to fetch skills:', skillsData.error);
+        }
+        
+        if (settingsData.success) {
+          setSiteSettings(settingsData.data);
         }
       } catch (error) {
-        console.error('Error fetching skills:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchSkills();
+    fetchData();
   }, []);
 
   // Group skills by category
@@ -199,11 +211,11 @@ export default function Skills() {
             className="text-center"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              My <span className="text-gradient">Skills</span>
+              {siteSettings?.skills?.sectionTitle || 'My'} <span className="text-gradient">Skills</span>
             </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
             <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-center">
-              Constantly learning and evolving.
+              {siteSettings?.skills?.sectionSubtitle || 'Constantly learning and evolving.'}
             </p>
             <div className="text-center py-24">
               <div className="text-6xl mb-4">🛠️</div>
@@ -228,11 +240,11 @@ export default function Skills() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            My <span className="text-gradient">Skills</span>
+            {siteSettings?.skills?.sectionTitle || 'My'} <span className="text-gradient">Skills</span>
           </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
           <p className="text-xl text-clover-700 max-w-3xl mx-auto">
-            A comprehensive toolkit built through years of hands-on experience and continuous learning.
+            {siteSettings?.skills?.sectionSubtitle || 'A comprehensive toolkit built through years of hands-on experience and continuous learning.'}
           </p>
         </motion.div>
 
