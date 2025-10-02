@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
-import Navigation from '@/components/Navigation'
+import NavigationWithChat from '@/components/NavigationWithChat'
 import Hero from '@/components/Hero'
 import IconScroller from '@/components/IconScroller'
 import Footer from '@/components/Footer'
@@ -67,7 +67,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen">
-      <Navigation siteSettings={siteSettings} />
+      <NavigationWithChat siteSettings={siteSettings} />
       <Hero profile={profile} siteSettings={siteSettings} />
       <IconScroller profile={profile} siteSettings={siteSettings} />
       <Footer profile={profile} siteSettings={siteSettings} />

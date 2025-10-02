@@ -1,6 +1,6 @@
 'use client';
 
-import Navigation from '@/components/Navigation'
+import NavigationWithChat from '@/components/NavigationWithChat'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 import { useScrollTracking } from '@/hooks/useAnalytics'
@@ -10,7 +10,7 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen">
-      <Navigation />
+      <NavigationWithChat />
       <div className="pt-20">
         <Contact />
       </div>

@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
-import Navigation from '@/components/Navigation'
+import NavigationWithChat from '@/components/NavigationWithChat'
 import About from '@/components/About'
 import Footer from '@/components/Footer'
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
@@ -77,7 +77,7 @@ export default async function AboutPage() {
 
   return (
     <main className="min-h-screen">
-      <Navigation siteSettings={siteSettings} />
+      <NavigationWithChat siteSettings={siteSettings} />
       <div className="pt-20">
         <About profile={profile} />
       </div>

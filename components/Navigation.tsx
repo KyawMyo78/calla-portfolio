@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Home, User, Code, Briefcase, FolderOpen, Mail, BookOpen } from 'lucide-react';
+import { Menu, X, Home, User, Code, Briefcase, FolderOpen, Mail, BookOpen, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function Navigation({ siteSettings: serverSettings }: { siteSettings?: any }) {
+export default function Navigation({ siteSettings: serverSettings, showChatIcon = false, onChatClick }: { siteSettings?: any; showChatIcon?: boolean; onChatClick?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [siteSettings, setSiteSettings] = useState<any>(serverSettings || null);
@@ -102,18 +102,56 @@ export default function Navigation({ siteSettings: serverSettings }: { siteSetti
                 </Link>
               </motion.div>
             ))}
+            
+            {/* Chat Icon (when bubble is minimized) */}
+            {showChatIcon && onChatClick && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                onClick={onChatClick}
+                className="relative rounded-full overflow-hidden border-2 border-clover-600 hover:border-clover-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110"
+                title="Open chat with AP's Clover"
+                style={{ width: 40, height: 40 }}
+              >
+                <img
+                  src="/apclover.jpg"
+                  alt="AP's Clover"
+                  className="w-full h-full object-cover"
+                />
+              </motion.button>
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-clover-700 hover:text-clover-900 hover:bg-clover-100 transition-colors"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </motion.button>
+          {/* Mobile Menu Button & Chat Icon */}
+          <div className="md:hidden flex items-center space-x-2">
+            {/* Chat Icon (mobile) */}
+            {showChatIcon && onChatClick && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                onClick={onChatClick}
+                className="relative rounded-full overflow-hidden border-2 border-clover-600 hover:border-clover-700 transition-all duration-200 shadow-lg active:scale-95"
+                title="Open chat with AP's Clover"
+                style={{ width: 40, height: 40 }}
+              >
+                <img
+                  src="/apclover.jpg"
+                  alt="AP's Clover"
+                  className="w-full h-full object-cover"
+                />
+              </motion.button>
+            )}
+            
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-lg text-clover-700 hover:text-clover-900 hover:bg-clover-100 transition-colors"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </motion.button>
+          </div>
         </div>
       </div>
 

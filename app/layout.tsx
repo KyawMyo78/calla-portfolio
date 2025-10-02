@@ -91,6 +91,8 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+import { ChatProvider } from '../components/PublicChatWrapper';
+
 export default function RootLayout({
   children,
 }: {
@@ -99,7 +101,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
-        {children}
+        <ChatProvider>
+          {children}
+        </ChatProvider>
         <Toaster 
           position="top-right"
           toastOptions={{

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Calendar, Clock, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
-import Navigation from '@/components/Navigation'
+import NavigationWithChat from '@/components/NavigationWithChat'
 import Footer from '@/components/Footer'
 
 interface BlogPost {
@@ -73,7 +73,7 @@ export default function BlogPage() {
 
   return (
     <main className="min-h-screen">
-      <Navigation />
+      <NavigationWithChat />
       
       <section id="blog" className="section-padding bg-primary-50">
         <div className="container-width">
