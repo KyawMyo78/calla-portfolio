@@ -36,22 +36,26 @@ export async function POST(request: NextRequest) {
     let maxSize: number = 5 * 1024 * 1024; // Default 5MB
 
     if (uploadType === 'general') {
-      // For CV/documents
+      // For CV/documents AND images (achievements, etc.)
       allowedTypes = [
         'application/pdf', 
         'application/msword', 
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/jpeg', 
+        'image/png', 
+        'image/webp', 
+        'image/gif'
       ];
-      maxSize = 10 * 1024 * 1024; // 10MB for documents
+      maxSize = 10 * 1024 * 1024; // 10MB for general uploads
     } else {
-      // For images
+      // For images only (profile, projects)
       allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
       maxSize = 5 * 1024 * 1024; // 5MB for images
     }
 
     if (!allowedTypes.includes(file.type)) {
       const typeMessage = uploadType === 'general' 
-        ? 'Invalid file type. Only PDF, DOC, and DOCX are allowed for documents.'
+        ? 'Invalid file type. Only PDF, DOC, DOCX, JPEG, PNG, WebP, and GIF are allowed.'
         : 'Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed for images.';
       return NextResponse.json({ 
         success: false, 
@@ -86,8 +90,14 @@ export async function POST(request: NextRequest) {
         finalFileName = fileName || `project-${Date.now()}.${fileExtension}`;
         break;
       case 'general':
-        storagePath = 'documents';
-        finalFileName = fileName || `cv-${Date.now()}.${fileExtension}`;
+        // Determine if it's an image or document
+        if (file.type.startsWith('image/')) {
+          storagePath = 'images/general';
+          finalFileName = fileName || `image-${Date.now()}.${fileExtension}`;
+        } else {
+          storagePath = 'documents';
+          finalFileName = fileName || `cv-${Date.now()}.${fileExtension}`;
+        }
         break;
       default:
         return NextResponse.json({ 

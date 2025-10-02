@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, createContext, useContext, ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 import PublicChatBubble from './PublicChatBubble';
 
 // Create context for chat state
@@ -22,6 +23,7 @@ export const useChatContext = () => useContext(ChatContext);
 export function ChatProvider({ children }: { children: ReactNode }) {
   const [showInNav, setShowInNav] = useState(false);
   const [forceReopen, setForceReopen] = useState(0);
+  const pathname = usePathname();
 
   const reopenChat = () => {
     // Simply reset state and force re-render
@@ -30,13 +32,20 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     setForceReopen(prev => prev + 1);
   };
 
+  // Hide chat bubble on admin login and password reset pages
+  const shouldHideChat = pathname?.startsWith('/admin/login') || 
+                         pathname?.startsWith('/admin/reset-password') ||
+                         pathname?.startsWith('/admin/forgot-password');
+
   return (
     <ChatContext.Provider value={{ showInNav, setShowInNav, reopenChat }}>
       {children}
-      <PublicChatBubble 
-        key={forceReopen} 
-        onMinimizedChange={setShowInNav} 
-      />
+      {!shouldHideChat && (
+        <PublicChatBubble 
+          key={forceReopen} 
+          onMinimizedChange={setShowInNav} 
+        />
+      )}
     </ChatContext.Provider>
   );
 }

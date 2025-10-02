@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
       issuer: body.issuer || null,
       credentialId: body.credentialId || null,
       credentialUrl: body.credentialUrl || null,
+      image: body.image || null,
       featured: body.featured || false,
       order: body.order || 0,
       createdAt: new Date().toISOString(),

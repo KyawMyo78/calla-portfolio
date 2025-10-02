@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import ConfirmDialog from '../../../components/ConfirmDialog';
+import FileUpload from '../../../components/FileUpload';
 
 interface Achievement {
   id?: string;
@@ -27,6 +28,7 @@ interface Achievement {
   issuer?: string;
   credentialId?: string;
   credentialUrl?: string;
+  image?: string;
   featured: boolean;
   order: number;
 }
@@ -119,11 +121,8 @@ export default function AchievementsManagement() {
         
         const result = await response.json();
         if (result.success) {
-          setAchievements(prev => 
-            prev.map(achievement => 
-              achievement.id === editingAchievement.id ? editingAchievement : achievement
-            )
-          );
+          // Reload achievements from server to ensure we have the latest data
+          await loadAchievements();
           toast.success('Achievement updated successfully');
         } else {
           toast.error('Error updating achievement');
@@ -197,6 +196,23 @@ export default function AchievementsManagement() {
       ...editingAchievement,
       [field]: value
     });
+  };
+
+  const handleRemoveImage = async () => {
+    if (!editingAchievement?.image) return;
+
+    try {
+      await fetch('/api/delete-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileUrl: editingAchievement.image }),
+      });
+      updateEditingAchievement('image', undefined);
+      toast.success('Image removed');
+    } catch (error) {
+      console.error('Error removing image:', error);
+      toast.error('Error removing image');
+    }
   };
 
   const getCategoryInfo = (categoryId: string) => {
@@ -278,11 +294,27 @@ export default function AchievementsManagement() {
                     </div>
                   </div>
 
+                  {/* Image Preview */}
+                  {achievement.image && (
+                    <div className="mb-3 -mx-6 -mt-6">
+                      <img 
+                        src={achievement.image} 
+                        alt={achievement.title}
+                        className="w-full h-32 object-cover"
+                      />
+                    </div>
+                  )}
+
                   <h3 className="font-semibold text-gray-900 mb-2">{achievement.title}</h3>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">{achievement.description}</p>
                   
                   {/* Achievement Details */}
                   <div className="space-y-2 text-sm">
+                    {achievement.image && (
+                      <div className="text-green-600 flex items-center">
+                        <span className="text-xs">📸 Image attached</span>
+                      </div>
+                    )}
                     <div className="flex items-center text-gray-500">
                       <Calendar size={14} className="mr-2" />
                       {new Date(achievement.date).toLocaleDateString()}
@@ -411,6 +443,29 @@ export default function AchievementsManagement() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     placeholder="Describe the achievement"
                   />
+                </div>
+
+                {/* Image Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Achievement Image or Certificate
+                  </label>
+                  <FileUpload
+                    uploadType="general"
+                    currentImage={editingAchievement.image}
+                    onUploadComplete={(url) => updateEditingAchievement('image', url)}
+                    acceptedTypes="image/*,.pdf"
+                    maxSize={10}
+                  />
+                  {editingAchievement.image && (
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="mt-2 text-sm text-red-600 hover:text-red-700"
+                    >
+                      Remove File
+                    </button>
+                  )}
                 </div>
 
                 {/* Category and Date */}
