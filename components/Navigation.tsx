@@ -93,8 +93,8 @@ export default function Navigation({ siteSettings: serverSettings, showChatIcon 
                   onClick={handleNavClick}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
                     pathname === item.href
-                      ? 'text-clover-900 bg-clover-100'
-                      : 'text-clover-700 hover:text-clover-900'
+                      ? 'text-white bg-clover-700 font-semibold shadow-lg'
+                      : 'text-clover-700 hover:text-clover-900 hover:bg-clover-50'
                   }`}
                 >
                   <item.icon size={18} />
@@ -173,8 +173,8 @@ export default function Navigation({ siteSettings: serverSettings, showChatIcon 
                     onClick={handleNavClick}
                     className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
                       pathname === item.href
-                        ? 'text-clover-900 bg-clover-100'
-                        : 'text-clover-700 hover:text-clover-900'
+                        ? 'text-white bg-clover-700 font-semibold shadow-lg'
+                        : 'text-clover-700 hover:text-clover-900 hover:bg-clover-50'
                     }`}
                   >
                     <item.icon size={20} />

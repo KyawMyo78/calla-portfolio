@@ -299,7 +299,7 @@ export default function Contact() {
                   </>
                 ) : (
                   <>
-                    <Send className="w-5 h-5" />
+                    <Send className="w-5 h-5 text-white" />
                     Send Message
                   </>
                 )}
@@ -332,10 +332,10 @@ export default function Contact() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: 0.1 * index }}
-                  className="flex items-center p-4 bg-clover-100 rounded-xl hover:bg-clover-100 transition-colors"
+                  className="flex items-center p-4 bg-clover-50 rounded-xl hover:bg-clover-100 transition-colors"
                 >
-                    <div className="w-12 h-12 bg-gradient-clover rounded-lg flex items-center justify-center mr-4">
-                    <info.icon className="w-6 h-6 text-white" />
+                    <div className="w-12 h-12 bg-clover-100 rounded-lg flex items-center justify-center mr-4 shadow-md border-2 border-clover-300">
+                    <info.icon className="w-6 h-6 text-clover-700" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">{info.title}</h4>
@@ -413,8 +413,8 @@ export default function Contact() {
                         whileHover={{ scale: 1.05 }}
                         className="flex flex-col items-center p-4 bg-white rounded-xl border border-clover-300 hover:border-clover-500 hover:shadow-lg transition-all duration-300 group"
                       >
-                                <div className="w-10 h-10 bg-gradient-clover rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                          <iconConfig.icon className="w-5 h-5 text-white" />
+                                <div className="w-10 h-10 bg-clover-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-clover-700 group-hover:scale-110 transition-all">
+                          <iconConfig.icon className="w-5 h-5 text-clover-700 group-hover:text-white transition-colors" />
                         </div>
                         <span className="text-sm font-medium text-gray-700 group-hover:text-clover-700 transition-colors">
                           {socialLink.name}

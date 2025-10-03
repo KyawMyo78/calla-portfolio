@@ -19,7 +19,7 @@ const db = getFirestore();
 // Default site settings
 const defaultSettings = {
   hero: {
-    greetingText: 'Hello, I\'m',
+    greetingText: '',
     contactButtonText: 'Get In Touch',
     cvButtonText: 'Download CV',
     cvNotAvailableText: 'CV Not Available',

@@ -32,10 +32,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     setForceReopen(prev => prev + 1);
   };
 
-  // Hide chat bubble on admin login and password reset pages
-  const shouldHideChat = pathname?.startsWith('/admin/login') || 
-                         pathname?.startsWith('/admin/reset-password') ||
-                         pathname?.startsWith('/admin/forgot-password');
+  // Hide chat bubble on ALL admin pages (only show on public pages)
+  const shouldHideChat = pathname?.startsWith('/admin');
 
   return (
     <ChatContext.Provider value={{ showInNav, setShowInNav, reopenChat }}>

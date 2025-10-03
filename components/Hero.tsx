@@ -263,7 +263,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
             >
               
               <span className="text-clover-700 font-medium">
-                {siteSettings?.hero?.greetingText || profile?.greetingText || 'Hello, I\'m'}
+                {siteSettings?.hero?.greetingText ?? profile?.greetingText ?? ''}
               </span>
             </motion.div>
 

@@ -40,9 +40,7 @@ interface Project {
 }
 
 const categories = [
-  { id: 'web', name: 'Web Development' },
   { id: 'uiux', name: 'UI/UX Design' },
-  { id: 'data', name: 'Data Science' }
 ];
 
 const statuses = [
@@ -578,7 +576,7 @@ export default function ProjectsManagement() {
                             {customCategories.map(cat => (
                               <option key={cat} value={cat}>{cat}</option>
                             ))}
-                            <option value="custom">+ Add Custom Category</option>
+                            <option value="custom">+ Add New Category</option>
                           </select>
                         </div>
                       ) : (

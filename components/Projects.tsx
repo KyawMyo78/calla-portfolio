@@ -118,7 +118,7 @@ export default function Projects() {
             className="text-center"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {siteSettings?.projects?.sectionTitle || 'My'} <span className="text-gradient">Projects</span>
+              <span className="text-gradient">{siteSettings?.projects?.sectionTitle || 'My Projects'}</span>
             </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
             <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-center">
@@ -127,7 +127,7 @@ export default function Projects() {
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🚀</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">Projects Coming Soon</h3>
-              <p className="text-gray-600">Check back later to see my latest work and innovations.</p>
+              <p className="text-gray-600">Check back later to see my work and accomplishments.</p>
             </div>
           </motion.div>
         </div>
@@ -147,7 +147,7 @@ export default function Projects() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            {siteSettings?.projects?.sectionTitle || 'My'} <span className="text-gradient">Projects</span>
+            <span className="text-gradient">{siteSettings?.projects?.sectionTitle || 'My Projects'}</span>
           </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
           <p className="text-xl text-clover-700 max-w-3xl mx-auto text-center">

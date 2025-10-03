@@ -33,7 +33,7 @@ const defaultProfile = {
   cvUrl: '',
   socialLinks: [],
   // New editable fields for home page
-  greetingText: 'Hello, I\'m',
+  greetingText: '',
   contactButtonText: 'Get In Touch',
   cvButtonText: 'Download CV',
   cvNotAvailableText: 'CV Not Available'

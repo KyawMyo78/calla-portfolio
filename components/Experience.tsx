@@ -223,16 +223,16 @@ export default function Experience() {
             className="text-center"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {siteSettings?.experience?.sectionTitle || 'Work'} <span className="text-gradient">Experience</span>
+              <span className="text-gradient">{siteSettings?.experience?.sectionTitle || 'Experience'}</span>
             </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
-            <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-justify">
+            <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-center">
               {siteSettings?.experience?.sectionSubtitle || 'Building expertise through hands-on experience and continuous learning.'}
             </p>
             <div className="text-center py-12">
               <div className="text-6xl mb-4">💼</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Experience Coming Soon</h3>
-              <p className="text-gray-600">Check back to see my professional journey and career milestones.</p>
+              <p className="text-gray-600">Check back later to see my journey and achievements.</p>
             </div>
           </motion.div>
         </div>
@@ -256,10 +256,10 @@ export default function Experience() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            {siteSettings?.experience?.sectionTitle || 'Work'} <span className="text-gradient">Experience</span>
+            <span className="text-gradient">{siteSettings?.experience?.sectionTitle || 'Work Experience'}</span>
           </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
-          <p className="text-xl text-clover-700 max-w-3xl mx-auto">
+          <p className="text-xl text-clover-700 max-w-3xl mx-auto text-center">
             {siteSettings?.experience?.sectionSubtitle || 'My professional journey showcasing growth, achievements, and the impact I\'ve made across different roles.'}
           </p>
         </motion.div>

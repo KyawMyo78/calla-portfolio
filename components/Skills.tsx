@@ -9,22 +9,9 @@ import {
   Cpu, 
   Wrench, 
   BookOpen, 
-  Star,
-  Monitor,
-  Server,
-  Layers,
-  Terminal,
-  Zap,
-  Settings,
-  Palette,
-  Shield,
-  Cloud,
-  GitBranch,
-  Package,
-  Brain,
-  Lightbulb,
-  Smartphone
+  Star
 } from 'lucide-react';
+import IconPreview from './IconPreview';
 
 interface Skill {
   id: string;
@@ -49,32 +36,7 @@ const categoryIcons: { [key: string]: any } = {
   'default': Code
 };
 
-const skillIcons: { [key: string]: any } = {
-  'code': Code,
-  'database': Database,
-  'globe': Globe,
-  'smartphone': Smartphone,
-  'cpu': Cpu,
-  'monitor': Monitor,
-  'server': Server,
-  'layers': Layers,
-  'terminal': Terminal,
-  'zap': Zap,
-  'settings': Settings,
-  'palette': Palette,
-  'shield': Shield,
-  'cloud': Cloud,
-  'book': BookOpen,
-  'wrench': Wrench,
-  'git': GitBranch,
-  'package': Package,
-  'brain': Brain,
-  'lightbulb': Lightbulb
-};
 
-const getSkillIcon = (iconKey: string) => {
-  return skillIcons[iconKey] || Code;
-};
 
 const categoryColors: { [key: string]: string } = {
   'programming': 'from-royal-500 to-royal-600',
@@ -211,7 +173,7 @@ export default function Skills() {
             className="text-center"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {siteSettings?.skills?.sectionTitle || 'My'} <span className="text-gradient">Skills</span>
+              <span className="text-gradient">{siteSettings?.skills?.sectionTitle || 'My Skills'}</span>
             </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
             <p className="text-xl text-clover-700 max-w-3xl mx-auto mb-8 text-center">
@@ -220,7 +182,7 @@ export default function Skills() {
             <div className="text-center py-24">
               <div className="text-6xl mb-4">🛠️</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Skills Coming Soon</h3>
-              <p className="text-gray-600">Check back to see my technical expertise and capabilities.</p>
+              <p className="text-gray-600">Check back later to see my expertise and capabilities.</p>
             </div>
           </motion.div>
         </div>
@@ -240,10 +202,10 @@ export default function Skills() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            {siteSettings?.skills?.sectionTitle || 'My'} <span className="text-gradient">Skills</span>
+            <span className="text-gradient">{siteSettings?.skills?.sectionTitle || 'My Skills'}</span>
           </h2>
             <div className="w-24 h-1 bg-gradient-clover mx-auto mb-6"></div>
-          <p className="text-xl text-clover-700 max-w-3xl mx-auto">
+          <p className="text-xl text-clover-700 max-w-3xl mx-auto text-center">
             {siteSettings?.skills?.sectionSubtitle || 'A comprehensive toolkit built through years of hands-on experience and continuous learning.'}
           </p>
         </motion.div>
@@ -290,14 +252,11 @@ export default function Skills() {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center">
-                          {skill.icon && (
+                          {skill.icon ? (
                             <span className="mr-2">
-                              {(() => {
-                                const SkillIconComponent = getSkillIcon(skill.icon);
-                                return <SkillIconComponent className="w-4 h-4 text-clover-700" />;
-                              })()}
+                              <IconPreview name={skill.icon} className="w-4 h-4 text-clover-700" />
                             </span>
-                          )}
+                          ) : null}
                           <span className="font-medium text-gray-900">{skill.name}</span>
                           {skill.featured && (
                             <Star className="w-4 h-4 text-yellow-500 ml-2 fill-current" />

@@ -13,25 +13,12 @@ import {
   Database,
   Globe,
   Smartphone,
-  Cpu,
-  Monitor,
-  Server,
-  Layers,
-  Terminal,
-  Zap,
-  Settings,
-  Palette,
-  Shield,
-  Cloud,
-  BookOpen,
-  Wrench,
-  GitBranch,
-  Package,
-  Brain,
-  Lightbulb
+  Cpu
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import ConfirmDialog from '../../../components/ConfirmDialog';
+import IconPicker from '../../../components/IconPicker';
+import IconPreview from '../../../components/IconPreview';
 
 interface Skill {
   id?: string;
@@ -44,45 +31,10 @@ interface Skill {
   yearsOfExperience?: number;
 }
 
-interface SkillIconConfig {
-  key: string;
-  icon: any;
-  label: string;
-}
 
-const skillIcons: SkillIconConfig[] = [
-  { key: 'code', icon: Code, label: 'Code' },
-  { key: 'database', icon: Database, label: 'Database' },
-  { key: 'globe', icon: Globe, label: 'Web' },
-  { key: 'smartphone', icon: Smartphone, label: 'Mobile' },
-  { key: 'cpu', icon: Cpu, label: 'Hardware' },
-  { key: 'monitor', icon: Monitor, label: 'Frontend' },
-  { key: 'server', icon: Server, label: 'Backend' },
-  { key: 'layers', icon: Layers, label: 'Framework' },
-  { key: 'terminal', icon: Terminal, label: 'Terminal' },
-  { key: 'zap', icon: Zap, label: 'Performance' },
-  { key: 'settings', icon: Settings, label: 'Tools' },
-  { key: 'palette', icon: Palette, label: 'Design' },
-  { key: 'shield', icon: Shield, label: 'Security' },
-  { key: 'cloud', icon: Cloud, label: 'Cloud' },
-  { key: 'book', icon: BookOpen, label: 'Learning' },
-  { key: 'wrench', icon: Wrench, label: 'DevOps' },
-  { key: 'git', icon: GitBranch, label: 'Version Control' },
-  { key: 'package', icon: Package, label: 'Library' },
-  { key: 'brain', icon: Brain, label: 'AI/ML' },
-  { key: 'lightbulb', icon: Lightbulb, label: 'Innovation' }
-];
-
-const getSkillIcon = (iconKey: string) => {
-  return skillIcons.find(icon => icon.key === iconKey) || skillIcons.find(icon => icon.key === 'code');
-};
 
 const categories = [
-  { id: 'frontend', name: 'Frontend Development', icon: Globe },
-  { id: 'backend', name: 'Backend Development', icon: Database },
-  { id: 'mobile', name: 'Mobile Development', icon: Smartphone },
-  { id: 'embedded', name: 'Embedded Systems', icon: Cpu },
-  { id: 'tools', name: 'Tools & Others', icon: Code }
+    { id: 'tools', name: 'Tools & Others', icon: Code }
 ];
 
 const skillLevels = [
@@ -346,10 +298,6 @@ export default function SkillsManagement() {
             const levelInfo = skillLevels.find(l => l.value === skill.level);
             const isCustomCategory = !categoryInfo;
             
-            // Get skill icon - use custom icon if available, otherwise fallback to category icon
-            const skillIconConfig = skill.icon ? getSkillIcon(skill.icon) : null;
-            const IconComponent = skillIconConfig?.icon || categoryInfo?.icon || Code;
-            
             return (
               <motion.div
                 key={skill.id}
@@ -360,7 +308,11 @@ export default function SkillsManagement() {
               >
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex items-center gap-2">
-                    <IconComponent size={20} className="text-primary-600" />
+                    {skill.icon ? (
+                      <IconPreview name={skill.icon} className="w-5 h-5 text-primary-600" />
+                    ) : (
+                      <Code size={20} className="text-primary-600" />
+                    )}
                     <h3 className="font-semibold text-gray-900">{skill.name}</h3>
                   </div>
                   <div className="flex gap-1">
@@ -569,27 +521,10 @@ export default function SkillsManagement() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Icon
                   </label>
-                  <div className="grid grid-cols-6 sm:grid-cols-8 gap-2">
-                    {skillIcons.map((iconConfig) => {
-                      const IconComponent = iconConfig.icon;
-                      const isSelected = editingSkill.icon === iconConfig.key;
-                      return (
-                        <button
-                          key={iconConfig.key}
-                          type="button"
-                          onClick={() => updateEditingSkill('icon', iconConfig.key)}
-                          className={`p-2 rounded-lg border-2 transition-colors ${
-                            isSelected
-                              ? 'border-primary-500 bg-primary-50 text-primary-600'
-                              : 'border-gray-200 hover:border-gray-300 text-gray-600'
-                          }`}
-                          title={iconConfig.label}
-                        >
-                          <IconComponent size={20} />
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <IconPicker
+                    value={editingSkill.icon}
+                    onChange={(iconKey) => updateEditingSkill('icon', iconKey)}
+                  />
                   <p className="text-xs text-gray-500 mt-1">
                     Choose an icon that represents this skill
                   </p>
