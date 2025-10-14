@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import NavigationWithChat from '@/components/NavigationWithChat'
 import Footer from '@/components/Footer'
 import ClientSectionCTA from '@/components/ClientSectionCTA'
+import { getCachedData, CACHE_KEYS } from '@/hooks/useDataPrefetch'
 
 interface BlogPost {
   id: string
@@ -31,36 +32,69 @@ export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [siteSettings, setSiteSettings] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
 
   useEffect(() => {
     fetchPosts()
+    
+    // Fetch settings and profile from cache or API
+    const cachedSettings = getCachedData(CACHE_KEYS.SITE_SETTINGS);
+    const cachedProfile = getCachedData(CACHE_KEYS.PROFILE);
+    
+    if (cachedSettings) setSiteSettings(cachedSettings);
+    if (cachedProfile) setProfile(cachedProfile);
+
+    if (!cachedSettings) {
+      fetch('/api/site-settings')
+        .then(res => res.json())
+        .then(result => {
+          if (result.success) setSiteSettings(result.data);
+        })
+        .catch(err => console.error('Error fetching site settings:', err));
+    }
+
+    if (!cachedProfile) {
+      fetch('/api/profile')
+        .then(res => res.json())
+        .then(result => {
+          if (result.success) setProfile(result.data);
+        })
+        .catch(err => console.error('Error fetching profile:', err));
+    }
   }, [])
 
   const fetchPosts = async () => {
     try {
       const response = await fetch('/api/blog')
       const result = await response.json()
-      if (result.success) {
-        setPosts(result.data || [])
+      if (result.success && Array.isArray(result.data)) {
+        setPosts(result.data)
+      } else {
+        setPosts([])
       }
     } catch (error) {
       console.error('Error fetching blog posts:', error)
+      setPosts([])
     } finally {
       setLoading(false)
     }
   }
 
-  const filteredPosts = posts.filter(post => {
+  // Ensure posts is always an array before filtering
+  const safePostsArray = Array.isArray(posts) ? posts : [];
+
+  const filteredPosts = safePostsArray.filter(post => {
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory
     return matchesCategory
   })
 
   const categories = [
-    { id: 'all', name: 'All Articles', count: posts.length },
-    ...Array.from(new Set(posts.map(post => post.category))).map(category => ({
+    { id: 'all', name: 'All Articles', count: safePostsArray.length },
+    ...Array.from(new Set(safePostsArray.map(post => post.category))).map(category => ({
       id: category,
       name: category.charAt(0).toUpperCase() + category.slice(1),
-      count: posts.filter(post => post.category === category).length
+      count: safePostsArray.filter(post => post.category === category).length
     }))
   ]
 
@@ -74,7 +108,7 @@ export default function BlogPage() {
 
   return (
     <main className="min-h-screen">
-      <NavigationWithChat />
+      <NavigationWithChat siteSettings={siteSettings} />
       
       <section id="blog" className="section-padding bg-primary-50">
         <div className="container-width">
@@ -227,7 +261,7 @@ export default function BlogPage() {
 
       <ClientSectionCTA currentSection="blog" />
 
-      <Footer />
+      <Footer profile={profile} siteSettings={siteSettings} />
     </main>
   )
 }

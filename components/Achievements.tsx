@@ -55,17 +55,19 @@ export default function Achievements({ excludeFeatured = false }: { excludeFeatu
     try {
       const res = await fetch('/api/portfolio/achievements');
       const json = await res.json();
-      if (json.success) {
-        const freshAchievements = json.data || [];
+      if (json.success && Array.isArray(json.data)) {
+        const freshAchievements = json.data;
         setItems(freshAchievements);
         setCachedData(CACHE_KEYS.ACHIEVEMENTS, freshAchievements);
       } else {
+        setItems([]); // Ensure it's always an array
         if (!getCachedData(CACHE_KEYS.ACHIEVEMENTS)) {
           setError('Failed to load achievements. Please try again.');
         }
       }
     } catch (e) {
       console.error('Failed to load achievements', e);
+      setItems([]); // Ensure it's always an array
       if (!getCachedData(CACHE_KEYS.ACHIEVEMENTS)) {
         setError('Unable to load achievements. Please check your connection and try again.');
       }

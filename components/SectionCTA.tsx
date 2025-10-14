@@ -58,6 +58,8 @@ export default function SectionCTA({ currentSection, siteSettings, className = '
 
   // Generate contextual button text based on the section
   const getButtonText = () => {
+    if (!nextSection) return 'Continue';
+    
     switch (nextSection.key) {
       case 'about':
         return `Learn More About Me`;

@@ -152,35 +152,35 @@ export default function useDataPrefetch() {
 
       if (skillsRes?.ok) {
         const skillsData = await skillsRes.json();
-        if (skillsData.success) {
+        if (skillsData.success && Array.isArray(skillsData.data)) {
           setCachedData(CACHE_KEYS.SKILLS, skillsData.data);
         }
       }
 
       if (experienceRes?.ok) {
         const experienceData = await experienceRes.json();
-        if (experienceData.success) {
+        if (experienceData.success && Array.isArray(experienceData.data)) {
           setCachedData(CACHE_KEYS.EXPERIENCE, experienceData.data);
         }
       }
 
       if (projectsRes?.ok) {
         const projectsData = await projectsRes.json();
-        if (projectsData.success) {
+        if (projectsData.success && Array.isArray(projectsData.data)) {
           setCachedData(CACHE_KEYS.PROJECTS, projectsData.data);
         }
       }
 
       if (blogRes?.ok) {
         const blogData = await blogRes.json();
-        if (blogData.success) {
+        if (blogData.success && Array.isArray(blogData.data)) {
           setCachedData(CACHE_KEYS.BLOG, blogData.data);
         }
       }
 
       if (achievementsRes?.ok) {
         const achievementsData = await achievementsRes.json();
-        if (achievementsData.success) {
+        if (achievementsData.success && Array.isArray(achievementsData.data)) {
           setCachedData(CACHE_KEYS.ACHIEVEMENTS, achievementsData.data);
         }
       }

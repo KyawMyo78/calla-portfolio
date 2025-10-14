@@ -94,12 +94,13 @@ export default function Projects() {
       const projectsData = await projectsRes.json();
       const settingsData = await settingsRes.json();
       
-      if (projectsData.success) {
-        const freshProjects = projectsData.data || [];
+      if (projectsData.success && Array.isArray(projectsData.data)) {
+        const freshProjects = projectsData.data;
         setProjects(freshProjects);
         setCachedData(CACHE_KEYS.PROJECTS, freshProjects);
       } else {
         console.error('Failed to fetch projects:', projectsData.error);
+        setProjects([]); // Ensure it's always an array
         if (!getCachedData(CACHE_KEYS.PROJECTS)) {
           setError('Failed to load projects. Please try again.');
         }

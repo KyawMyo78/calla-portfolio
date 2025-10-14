@@ -80,9 +80,9 @@ export default function Experience() {
       const experiencesData = await experiencesRes.json();
       const settingsData = await settingsRes.json();
       
-      if (experiencesData.success) {
+      if (experiencesData.success && Array.isArray(experiencesData.data)) {
         // Sort by order and start date (most recent first)
-        const sortedExperiences = (experiencesData.data || []).sort((a: Experience, b: Experience) => {
+        const sortedExperiences = experiencesData.data.sort((a: Experience, b: Experience) => {
           if (a.order !== b.order) {
             return a.order - b.order;
           }
@@ -92,6 +92,7 @@ export default function Experience() {
         setCachedData(CACHE_KEYS.EXPERIENCE, sortedExperiences);
       } else {
         console.error('Failed to fetch experiences:', experiencesData.error);
+        setExperiences([]); // Ensure it's always an array
         if (!getCachedData(CACHE_KEYS.EXPERIENCE)) {
           setError('Failed to load experience data. Please try again.');
         }

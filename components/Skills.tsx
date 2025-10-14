@@ -162,13 +162,14 @@ export default function Skills() {
       const skillsData = await skillsRes.json();
       const settingsData = await settingsRes.json();
       
-      if (skillsData.success) {
-        const freshSkills = skillsData.data || [];
+      if (skillsData.success && Array.isArray(skillsData.data)) {
+        const freshSkills = skillsData.data;
         setSkills(freshSkills);
         // Update cache with fresh data
         setCachedData(CACHE_KEYS.SKILLS, freshSkills);
       } else {
         console.error('Failed to fetch skills:', skillsData.error);
+        setSkills([]); // Ensure it's always an array
         if (!getCachedData(CACHE_KEYS.SKILLS)) {
           setError('Failed to load skills. Please try again.');
         }
