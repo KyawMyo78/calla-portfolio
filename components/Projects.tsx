@@ -6,6 +6,9 @@ import { ExternalLink, Github, Play, Filter, Search, Calendar, Star, ArrowRight 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { analytics } from '@/lib/analytics';
+import { ProjectCardSkeleton } from './SkeletonLoader';
+import ErrorState from './ErrorState';
+import { getCachedData, setCachedData, CACHE_KEYS } from '@/hooks/useDataPrefetch';
 
 interface Project {
   id: string;
@@ -30,6 +33,7 @@ interface Project {
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [siteSettings, setSiteSettings] = useState<any>(null);
@@ -42,37 +46,83 @@ export default function Projects() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Fetch both projects and site settings
-        const [projectsRes, settingsRes] = await Promise.all([
-          fetch('/api/portfolio/projects'),
-          fetch('/api/site-settings')
-        ]);
-        
-        const projectsData = await projectsRes.json();
-        const settingsData = await settingsRes.json();
-        
-        if (projectsData.success) {
-          setProjects(projectsData.data || []);
-        } else {
-          console.error('Failed to fetch projects:', projectsData.error);
-        }
-        
-        if (settingsData.success) {
-          setSiteSettings(settingsData.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      // Try to get cached data first
+      const cachedProjects = getCachedData<Project[]>(CACHE_KEYS.PROJECTS);
+      const cachedSettings = getCachedData<any>(CACHE_KEYS.SITE_SETTINGS);
+      
+      if (cachedProjects) {
+        console.log('✅ Using cached projects data');
+        setProjects(cachedProjects);
+        setIsLoading(false);
+      }
+      
+      if (cachedSettings) {
+        setSiteSettings(cachedSettings);
+      }
+      
+      // If we have cached data, fetch fresh data in background
+      if (cachedProjects && cachedSettings) {
+        setTimeout(() => fetchFreshData(), 100);
+        return;
+      }
+      
+      // No cache, fetch immediately
+      await fetchFreshData();
+    } catch (error) {
+      console.error('Error in fetchData:', error);
+      setError('Unable to load projects. Please check your connection and try again.');
+      setIsLoading(false);
+    }
+  };
+
+  const fetchFreshData = async () => {
+    try {
+      // Fetch both projects and site settings
+      const [projectsRes, settingsRes] = await Promise.all([
+        fetch('/api/portfolio/projects'),
+        fetch('/api/site-settings')
+      ]);
+      
+      const projectsData = await projectsRes.json();
+      const settingsData = await settingsRes.json();
+      
+      if (projectsData.success) {
+        const freshProjects = projectsData.data || [];
+        setProjects(freshProjects);
+        setCachedData(CACHE_KEYS.PROJECTS, freshProjects);
+      } else {
+        console.error('Failed to fetch projects:', projectsData.error);
+        if (!getCachedData(CACHE_KEYS.PROJECTS)) {
+          setError('Failed to load projects. Please try again.');
+        }
+      }
+      
+      if (settingsData.success) {
+        setSiteSettings(settingsData.data);
+        setCachedData(CACHE_KEYS.SITE_SETTINGS, settingsData.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      if (!getCachedData(CACHE_KEYS.PROJECTS)) {
+        setError('Unable to load projects. Please check your connection and try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    fetchData();
+  };
 
   const categories = [
     { id: 'all', name: 'All Projects', count: projects.length },
@@ -94,13 +144,40 @@ export default function Projects() {
   const featuredProjects = filteredProjects.filter(p => p.featured);
   const otherProjects = filteredProjects.filter(p => !p.featured);
 
-    if (isLoading) {
+  if (isLoading) {
     return (
-    <section id="projects" className="section-padding bg-clover-100">
+      <section id="projects" className="section-padding bg-clover-100">
         <div className="container-width">
-          <div className="flex items-center justify-center py-12">
-                <div className="w-8 h-8 border-2 border-clover-700 border-t-transparent rounded-full animate-spin"></div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="h-12 w-64 mx-auto mb-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+            <div className="w-24 h-1 bg-gray-300 mx-auto mb-6 animate-pulse" />
+            <div className="h-6 w-96 max-w-full mx-auto bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+          </motion.div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <ProjectCardSkeleton key={i} />
+            ))}
           </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="projects" className="section-padding bg-clover-100">
+        <div className="container-width">
+          <ErrorState
+            title="Failed to Load Projects"
+            message={error}
+            onRetry={handleRetry}
+          />
         </div>
       </section>
     );

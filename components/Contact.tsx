@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { analytics } from '@/lib/analytics';
 import { getSocialIcon, SocialLink } from '../lib/socialIcons';
+import { ContactInfoSkeleton } from './SkeletonLoader';
+import ErrorState from './ErrorState';
 
 interface ContactForm {
   name: string;
@@ -25,6 +27,8 @@ interface ProfileData {
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const fallbackEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'contact@example.com';
   const fallbackPhone = process.env.NEXT_PUBLIC_ADMIN_PHONE || '+0000000000';
   const [profile, setProfile] = useState<ProfileData>({
@@ -36,51 +40,61 @@ export default function Contact() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactForm>();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        // Add cache busting parameter
-        const timestamp = new Date().getTime();
-        const response = await fetch(`/api/profile?t=${timestamp}`);
-        const result = await response.json();
-        if (result.success) {
-          setProfile({
-            email: result.data.email || 'example@example.com',
-            phone: result.data.phone || '+123456789',
-            location: result.data.location || 'Thailand',
-            socialLinks: result.data.socialLinks || []
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    };
-
-    fetchProfile();
-    const fetchSettings = async () => {
-      try {
-        const response = await fetch('/api/site-settings');
-        const result = await response.json();
-        if (result.success && result.data) {
-          const incoming = { ...result.data } as any;
-          if (incoming.contact && incoming.contact.whyWorkWithMe) {
-            if (typeof incoming.contact.whyWorkWithMe === 'string') {
-              incoming.contact.whyWorkWithMe = incoming.contact.whyWorkWithMe
-                .split(/\r?\n|\n|\r/)
-                .map((s: string) => s.trim())
-                .filter((s: string) => s.length > 0);
-            } else if (!Array.isArray(incoming.contact.whyWorkWithMe)) {
-              incoming.contact.whyWorkWithMe = [String(incoming.contact.whyWorkWithMe)];
-            }
-          }
-          setSiteSettings(incoming);
-        }
-      } catch (err) {
-        console.error('Failed to load site settings', err);
-      }
-    };
-
-    fetchSettings();
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Fetch profile data
+      const timestamp = new Date().getTime();
+      const [profileRes, settingsRes] = await Promise.all([
+        fetch(`/api/profile?t=${timestamp}`),
+        fetch('/api/site-settings')
+      ]);
+
+      const profileResult = await profileRes.json();
+      const settingsResult = await settingsRes.json();
+
+      if (profileResult.success) {
+        setProfile({
+          email: profileResult.data.email || 'example@example.com',
+          phone: profileResult.data.phone || '+123456789',
+          location: profileResult.data.location || 'Thailand',
+          socialLinks: profileResult.data.socialLinks || []
+        });
+      } else {
+        setError('Failed to load contact information. Please try again.');
+      }
+
+      if (settingsResult.success && settingsResult.data) {
+        const incoming = { ...settingsResult.data } as any;
+        if (incoming.contact && incoming.contact.whyWorkWithMe) {
+          if (typeof incoming.contact.whyWorkWithMe === 'string') {
+            incoming.contact.whyWorkWithMe = incoming.contact.whyWorkWithMe
+              .split(/\r?\n|\n|\r/)
+              .map((s: string) => s.trim())
+              .filter((s: string) => s.length > 0);
+          } else if (!Array.isArray(incoming.contact.whyWorkWithMe)) {
+            incoming.contact.whyWorkWithMe = [String(incoming.contact.whyWorkWithMe)];
+          }
+        }
+        setSiteSettings(incoming);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('Unable to load contact information. Please check your connection and try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    fetchData();
+  };
 
   const getContactInfo = () => {
     const baseInfo = [
@@ -146,6 +160,49 @@ export default function Contact() {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <section id="contact" className="section-padding bg-white">
+        <div className="container-width">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="h-12 w-64 mx-auto mb-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+            <div className="w-24 h-1 bg-gray-300 mx-auto mb-6 animate-pulse" />
+            <div className="h-6 w-96 max-w-full mx-auto bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+          </motion.div>
+          
+          <div className="grid lg:grid-cols-2 gap-12">
+            <ContactInfoSkeleton />
+            <div className="space-y-6">
+              <div className="h-12 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+              <div className="h-12 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+              <div className="h-32 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+              <div className="h-12 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="contact" className="section-padding bg-white">
+        <div className="container-width">
+          <ErrorState
+            title="Failed to Load Contact Information"
+            message={error}
+            onRetry={handleRetry}
+          />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="contact" className="section-padding bg-white">

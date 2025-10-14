@@ -6,6 +6,7 @@ import { Calendar, Clock, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import NavigationWithChat from '@/components/NavigationWithChat'
 import Footer from '@/components/Footer'
+import ClientSectionCTA from '@/components/ClientSectionCTA'
 
 interface BlogPost {
   id: string
@@ -223,6 +224,8 @@ export default function BlogPage() {
           )}
         </div>
       </section>
+
+      <ClientSectionCTA currentSection="blog" />
 
       <Footer />
     </main>

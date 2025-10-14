@@ -12,6 +12,10 @@ import {
   Star
 } from 'lucide-react';
 import IconPreview from './IconPreview';
+import { SkillCardSkeleton } from './SkeletonLoader';
+import ErrorState from './ErrorState';
+import { usePortfolioData } from './PortfolioDataProvider';
+import { getCachedData, setCachedData, CACHE_KEYS } from '@/hooks/useDataPrefetch';
 
 interface Skill {
   id: string;
@@ -99,40 +103,96 @@ const getYearsOfExperience = (skill: Skill): number => {
 export default function Skills() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [siteSettings, setSiteSettings] = useState<any>(null);
+  
+  const portfolioData = usePortfolioData();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Fetch both skills and site settings
-        const [skillsRes, settingsRes] = await Promise.all([
-          fetch('/api/portfolio/skills'),
-          fetch('/api/site-settings')
-        ]);
-        
-        const skillsData = await skillsRes.json();
-        const settingsData = await settingsRes.json();
-        
-        if (skillsData.success) {
-          setSkills(skillsData.data || []);
-        } else {
-          console.error('Failed to fetch skills:', skillsData.error);
-        }
-        
-        if (settingsData.success) {
-          setSiteSettings(settingsData.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      // Try to get cached data first
+      const cachedSkills = getCachedData<Skill[]>(CACHE_KEYS.SKILLS);
+      const cachedSettings = getCachedData<any>(CACHE_KEYS.SITE_SETTINGS);
+      
+      if (cachedSkills) {
+        console.log('✅ Using cached skills data');
+        setSkills(cachedSkills);
+        setIsLoading(false);
+      }
+      
+      if (cachedSettings) {
+        console.log('✅ Using cached site settings');
+        setSiteSettings(cachedSettings);
+      }
+      
+      // If we have both cached data, we can show it immediately
+      // but still fetch fresh data in the background
+      const shouldFetchFresh = !cachedSkills || !cachedSettings;
+      
+      if (!shouldFetchFresh) {
+        // Data is cached, but fetch in background for freshness
+        setTimeout(() => fetchFreshData(), 100);
+        return;
+      }
+      
+      // No cache, fetch immediately
+      await fetchFreshData();
+    } catch (error) {
+      console.error('Error in fetchData:', error);
+      setError('Unable to load skills. Please check your connection and try again.');
+      setIsLoading(false);
+    }
+  };
+
+  const fetchFreshData = async () => {
+    try {
+      // Fetch both skills and site settings
+      const [skillsRes, settingsRes] = await Promise.all([
+        fetch('/api/portfolio/skills'),
+        fetch('/api/site-settings')
+      ]);
+      
+      const skillsData = await skillsRes.json();
+      const settingsData = await settingsRes.json();
+      
+      if (skillsData.success) {
+        const freshSkills = skillsData.data || [];
+        setSkills(freshSkills);
+        // Update cache with fresh data
+        setCachedData(CACHE_KEYS.SKILLS, freshSkills);
+      } else {
+        console.error('Failed to fetch skills:', skillsData.error);
+        if (!getCachedData(CACHE_KEYS.SKILLS)) {
+          setError('Failed to load skills. Please try again.');
+        }
+      }
+      
+      if (settingsData.success) {
+        setSiteSettings(settingsData.data);
+        // Update cache with fresh data
+        setCachedData(CACHE_KEYS.SITE_SETTINGS, settingsData.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      if (!getCachedData(CACHE_KEYS.SKILLS)) {
+        setError('Unable to load skills. Please check your connection and try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    fetchData();
+  };
 
   // Group skills by category
   const skillsByCategory = skills.reduce((acc, skill) => {
@@ -153,9 +213,36 @@ export default function Skills() {
     return (
       <section id="skills" className="section-padding">
         <div className="container-width">
-            <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-2 border-clover-500 border-t-transparent rounded-full animate-spin"></div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="h-12 w-48 mx-auto mb-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+            <div className="w-24 h-1 bg-gray-300 mx-auto mb-6 animate-pulse" />
+            <div className="h-6 w-96 max-w-full mx-auto bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+          </motion.div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <SkillCardSkeleton key={i} />
+            ))}
           </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="skills" className="section-padding">
+        <div className="container-width">
+          <ErrorState
+            title="Failed to Load Skills"
+            message={error}
+            onRetry={handleRetry}
+          />
         </div>
       </section>
     );

@@ -234,5 +234,19 @@
   .rich-text-content > *:last-child {
     margin-bottom: 0;
   }
+
+  /* Skeleton loader shimmer animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite linear;
+  }
 }
 

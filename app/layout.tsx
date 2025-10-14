@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { adminDb } from '../lib/firebase-admin';
 import { getCached, setCached } from '../lib/server-cache';
+import { PortfolioDataProvider } from '@/components/PortfolioDataProvider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -101,9 +102,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
-        <ChatProvider>
-          {children}
-        </ChatProvider>
+        <PortfolioDataProvider>
+          <ChatProvider>
+            {children}
+          </ChatProvider>
+        </PortfolioDataProvider>
         <Toaster 
           position="top-right"
           toastOptions={{

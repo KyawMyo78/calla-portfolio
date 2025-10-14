@@ -5,6 +5,9 @@ import Achievements from './Achievements';
 import FeaturedAchievements from './FeaturedAchievements';
 import { useState, useEffect } from 'react';
 import { Calendar, MapPin, Building, ExternalLink, Briefcase } from 'lucide-react';
+import { ExperienceCardSkeleton } from './SkeletonLoader';
+import ErrorState from './ErrorState';
+import { getCachedData, setCachedData, CACHE_KEYS } from '@/hooks/useDataPrefetch';
 
 interface Experience {
   id: string;
@@ -25,47 +28,93 @@ interface Experience {
 export default function Experience() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [siteSettings, setSiteSettings] = useState<any>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Fetch both experiences and site settings
-        const [experiencesRes, settingsRes] = await Promise.all([
-          fetch('/api/portfolio/experience'),
-          fetch('/api/site-settings')
-        ]);
-        
-        const experiencesData = await experiencesRes.json();
-        const settingsData = await settingsRes.json();
-        
-        if (experiencesData.success) {
-          // Sort by order and start date (most recent first)
-          const sortedExperiences = (experiencesData.data || []).sort((a: Experience, b: Experience) => {
-            if (a.order !== b.order) {
-              return a.order - b.order;
-            }
-            return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
-          });
-          setExperiences(sortedExperiences);
-        } else {
-          console.error('Failed to fetch experiences:', experiencesData.error);
-        }
-        
-        if (settingsData.success) {
-          setSiteSettings(settingsData.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      // Try to get cached data first
+      const cachedExperience = getCachedData<Experience[]>(CACHE_KEYS.EXPERIENCE);
+      const cachedSettings = getCachedData<any>(CACHE_KEYS.SITE_SETTINGS);
+      
+      if (cachedExperience) {
+        console.log('✅ Using cached experience data');
+        setExperiences(cachedExperience);
+        setIsLoading(false);
+      }
+      
+      if (cachedSettings) {
+        setSiteSettings(cachedSettings);
+      }
+      
+      // If we have cached data, fetch fresh data in background
+      if (cachedExperience && cachedSettings) {
+        setTimeout(() => fetchFreshData(), 100);
+        return;
+      }
+      
+      // No cache, fetch immediately
+      await fetchFreshData();
+    } catch (error) {
+      console.error('Error in fetchData:', error);
+      setError('Unable to load experience data. Please check your connection and try again.');
+      setIsLoading(false);
+    }
+  };
+
+  const fetchFreshData = async () => {
+    try {
+      // Fetch both experiences and site settings
+      const [experiencesRes, settingsRes] = await Promise.all([
+        fetch('/api/portfolio/experience'),
+        fetch('/api/site-settings')
+      ]);
+      
+      const experiencesData = await experiencesRes.json();
+      const settingsData = await settingsRes.json();
+      
+      if (experiencesData.success) {
+        // Sort by order and start date (most recent first)
+        const sortedExperiences = (experiencesData.data || []).sort((a: Experience, b: Experience) => {
+          if (a.order !== b.order) {
+            return a.order - b.order;
+          }
+          return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+        });
+        setExperiences(sortedExperiences);
+        setCachedData(CACHE_KEYS.EXPERIENCE, sortedExperiences);
+      } else {
+        console.error('Failed to fetch experiences:', experiencesData.error);
+        if (!getCachedData(CACHE_KEYS.EXPERIENCE)) {
+          setError('Failed to load experience data. Please try again.');
+        }
+      }
+      
+      if (settingsData.success) {
+        setSiteSettings(settingsData.data);
+        setCachedData(CACHE_KEYS.SITE_SETTINGS, settingsData.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      if (!getCachedData(CACHE_KEYS.EXPERIENCE)) {
+        setError('Unable to load experience data. Please check your connection and try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    fetchData();
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', { 
@@ -197,14 +246,47 @@ export default function Experience() {
 
   if (isLoading) {
     return (
-  <section id="experience" className="section-padding bg-gray-50">
+      <section id="experience" className="section-padding bg-gray-50">
         <div className="container-width">
-          <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-2 border-clover-700 border-t-transparent rounded-full animate-spin"></div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="h-12 w-56 mx-auto mb-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+            <div className="w-24 h-1 bg-gray-300 mx-auto mb-6 animate-pulse" />
+            <div className="h-6 w-96 max-w-full mx-auto bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+          </motion.div>
+          
+          <div className="space-y-8">
+            {[1, 2, 3].map((i) => (
+              <ExperienceCardSkeleton key={i} />
+            ))}
           </div>
         </div>
+        
         {/* Always show global achievements below the loading state */}
+        <div className="container-width mt-16">
+          <Achievements />
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="experience" className="section-padding bg-gray-50">
         <div className="container-width">
+          <ErrorState
+            title="Failed to Load Experience"
+            message={error}
+            onRetry={handleRetry}
+          />
+        </div>
+        
+        {/* Always show global achievements even on error */}
+        <div className="container-width mt-16">
           <Achievements />
         </div>
       </section>

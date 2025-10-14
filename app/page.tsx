@@ -5,6 +5,7 @@ export const fetchCache = 'force-no-store';
 import NavigationWithChat from '@/components/NavigationWithChat'
 import Hero from '@/components/Hero'
 import IconScroller from '@/components/IconScroller'
+import SectionCTA from '@/components/SectionCTA'
 import Footer from '@/components/Footer'
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
@@ -70,6 +71,7 @@ export default async function HomePage() {
       <NavigationWithChat siteSettings={siteSettings} />
       <Hero profile={profile} siteSettings={siteSettings} />
       <IconScroller profile={profile} siteSettings={siteSettings} />
+      <SectionCTA currentSection="home" siteSettings={siteSettings} />
       <Footer profile={profile} siteSettings={siteSettings} />
     </main>
   )

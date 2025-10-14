@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import ErrorState from './ErrorState';
 
 interface Achievement {
   id: string;
@@ -17,32 +18,54 @@ interface Achievement {
 export default function FeaturedAchievements({ maxItems = 3 }: { maxItems?: number }) {
   const [items, setItems] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchFeatured = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch('/api/portfolio/achievements');
-        const json = await res.json();
-        if (json.success) {
-          const all: Achievement[] = json.data || [];
-          const featured = all.filter(a => a.featured).sort((a,b) => (a.featuredOrder || 0) - (b.featuredOrder || 0)).slice(0, maxItems);
-          setItems(featured);
-        }
-      } catch (e) {
-        console.error('Failed to load featured achievements', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchFeatured();
   }, [maxItems]);
+
+  const fetchFeatured = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch('/api/portfolio/achievements');
+      const json = await res.json();
+      if (json.success) {
+        const all: Achievement[] = json.data || [];
+        const featured = all.filter(a => a.featured).sort((a,b) => (a.featuredOrder || 0) - (b.featuredOrder || 0)).slice(0, maxItems);
+        setItems(featured);
+      } else {
+        setError('Failed to load featured achievements. Please try again.');
+      }
+    } catch (e) {
+      console.error('Failed to load featured achievements', e);
+      setError('Unable to load featured achievements. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    fetchFeatured();
+  };
 
   if (loading) {
     return (
       <div className="py-6">
-  <div className="w-8 h-8 border-2 border-clover-700 border-t-transparent rounded-full animate-spin mx-auto" />
+        <div className="w-8 h-8 border-2 border-clover-700 border-t-transparent rounded-full animate-spin mx-auto" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="py-6">
+        <ErrorState
+          title="Failed to Load Featured Achievements"
+          message={error}
+          onRetry={handleRetry}
+        />
       </div>
     );
   }

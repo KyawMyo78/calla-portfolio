@@ -3,6 +3,7 @@
 import NavigationWithChat from '@/components/NavigationWithChat'
 import Skills from '@/components/Skills'
 import Footer from '@/components/Footer'
+import ClientSectionCTA from '@/components/ClientSectionCTA'
 import { useScrollTracking } from '@/hooks/useAnalytics'
 
 export default function SkillsPage() {
@@ -13,6 +14,7 @@ export default function SkillsPage() {
       <NavigationWithChat />
       <div className="pt-20">
         <Skills />
+        <ClientSectionCTA currentSection="skills" />
       </div>
       <Footer />
     </main>

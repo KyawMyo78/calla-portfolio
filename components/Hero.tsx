@@ -5,6 +5,8 @@ import { Download, Mail, MapPin, Code2, Briefcase } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { getSocialIcon, SocialLink } from '../lib/socialIcons';
+import ErrorState from './ErrorState';
+import useDataPrefetch from '@/hooks/useDataPrefetch';
 
 interface ProfileData {
   name: string;
@@ -27,29 +29,57 @@ interface ProfileData {
 export default function Hero({ profile: serverProfile, siteSettings: serverSettings }: { profile?: any; siteSettings?: any }) {
   const [profile, setProfile] = useState<ProfileData | null>(serverProfile || null);
   const [siteSettings, setSiteSettings] = useState<any>(serverSettings || null);
+  const [isLoading, setIsLoading] = useState(!serverProfile || !serverSettings);
+  const [error, setError] = useState<string | null>(null);
+
+  // Trigger data prefetching for all pages
+  useDataPrefetch();
 
   useEffect(() => {
     // If server props provided, skip client fetching
-    if (serverProfile && serverSettings) return;
-
-    const fetchData = async () => {
-      try {
-        const timestamp = new Date().getTime();
-
-        const profileResponse = await fetch(`/api/profile?t=${timestamp}`);
-        const profileResult = await profileResponse.json();
-        if (profileResult.success) setProfile(profileResult.data);
-
-        const settingsResponse = await fetch(`/api/site-settings?t=${timestamp}`);
-        const settingsResult = await settingsResponse.json();
-        if (settingsResult.success) setSiteSettings(settingsResult.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+    if (serverProfile && serverSettings) {
+      setIsLoading(false);
+      return;
+    }
 
     fetchData();
   }, [serverProfile, serverSettings]);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const timestamp = new Date().getTime();
+
+      const [profileResponse, settingsResponse] = await Promise.all([
+        fetch(`/api/profile?t=${timestamp}`),
+        fetch(`/api/site-settings?t=${timestamp}`)
+      ]);
+
+      const profileResult = await profileResponse.json();
+      const settingsResult = await settingsResponse.json();
+
+      if (profileResult.success) {
+        setProfile(profileResult.data);
+      } else {
+        setError('Failed to load profile data. Please try again.');
+      }
+
+      if (settingsResult.success) {
+        setSiteSettings(settingsResult.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('Unable to load profile data. Please check your connection and try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    fetchData();
+  };
 
   // Cursor-reactive motion: track normalized pointer and apply gentle offsets to firefly wrappers
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -134,6 +164,35 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
       alert('Resume not available yet. Please contact me directly for my CV!');
     }
   };
+
+  if (isLoading) {
+    return (
+      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-clover-100">
+        <div className="container-width text-center">
+          <div className="space-y-6">
+            <div className="h-48 w-48 mx-auto bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-full animate-pulse" />
+            <div className="h-12 w-96 max-w-full mx-auto bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+            <div className="h-6 w-80 max-w-full mx-auto bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+            <div className="h-16 w-full max-w-2xl mx-auto bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-clover-100">
+        <div className="container-width">
+          <ErrorState
+            title="Failed to Load Profile"
+            message={error}
+            onRetry={handleRetry}
+          />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-clover-100">
@@ -400,7 +459,6 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
           
         </div>
       </div>
-
     </section>
   );
 }

@@ -3,6 +3,7 @@
 import NavigationWithChat from '@/components/NavigationWithChat'
 import Projects from '@/components/Projects'
 import Footer from '@/components/Footer'
+import ClientSectionCTA from '@/components/ClientSectionCTA'
 import { useScrollTracking } from '@/hooks/useAnalytics'
 
 export default function ProjectsPage() {
@@ -13,6 +14,7 @@ export default function ProjectsPage() {
       <NavigationWithChat />
       <div className="pt-20">
         <Projects />
+        <ClientSectionCTA currentSection="projects" />
       </div>
       <Footer />
     </main>

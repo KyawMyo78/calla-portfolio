@@ -5,6 +5,7 @@ export const fetchCache = 'force-no-store';
 import NavigationWithChat from '@/components/NavigationWithChat'
 import About from '@/components/About'
 import Footer from '@/components/Footer'
+import SectionCTA from '@/components/SectionCTA'
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import { getCached, setCached } from '@/lib/server-cache'
@@ -80,6 +81,7 @@ export default async function AboutPage() {
       <NavigationWithChat siteSettings={siteSettings} />
       <div className="pt-20">
         <About profile={profile} />
+        <SectionCTA currentSection="about" siteSettings={siteSettings} />
       </div>
       <Footer profile={profile} siteSettings={siteSettings} />
     </main>
