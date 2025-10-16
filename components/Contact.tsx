@@ -347,17 +347,17 @@ export default function Contact() {
                 disabled={isSubmitting}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-gradient-clover text-white font-semibold py-4 rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 text-white font-semibold py-4 rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-xl"
               >
                 {isSubmitting ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Sending...
+                    <span className="text-white font-medium">Sending...</span>
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5 text-white" />
-                    Send Message
+                    <span className="text-white font-medium">Send Message</span>
                   </>
                 )}
               </motion.button>

@@ -87,7 +87,7 @@ export default function ForgotPassword() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20"
+          className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md"
         >
           <div className="text-center">
             <motion.div
@@ -96,20 +96,20 @@ export default function ForgotPassword() {
               transition={{ delay: 0.2, duration: 0.5 }}
               className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6"
             >
-              <CheckCircle className="w-8 h-8 text-green-400" />
+              <CheckCircle className="w-8 h-8 text-green-500" />
             </motion.div>
             
-            <h1 className="text-2xl font-bold text-white mb-4">Email Sent!</h1>
-            <p className="text-primary-100 mb-6">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Email Sent!</h1>
+            <p className="text-gray-600 mb-6">
               We've sent password reset instructions to the email address you provided.
               Please check your inbox (and spam folder) and follow the link to reset your password.
             </p>
             <div className="space-y-3 mb-4">
               {submittedEmails?.email && (
-                <div className="text-sm text-primary-200">Sent to: <span className="text-white">{submittedEmails.email}</span></div>
+                <div className="text-sm text-gray-600">Sent to: <span className="text-gray-900 font-medium">{submittedEmails.email}</span></div>
               )}
               {submittedEmails?.secondaryEmail && !submittedEmails?.email && (
-                <div className="text-sm text-primary-200">Sent to: <span className="text-white">{submittedEmails.secondaryEmail}</span></div>
+                <div className="text-sm text-gray-600">Sent to: <span className="text-gray-900 font-medium">{submittedEmails.secondaryEmail}</span></div>
               )}
             </div>
             
@@ -163,7 +163,7 @@ export default function ForgotPassword() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20"
+        className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md"
       >
         <div className="text-center mb-8">
           <motion.div
@@ -172,11 +172,11 @@ export default function ForgotPassword() {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="w-16 h-16 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-6"
           >
-            <Mail className="w-8 h-8 text-primary-300" />
+            <Mail className="w-8 h-8 text-primary-600" />
           </motion.div>
           
-          <h1 className="text-2xl font-bold text-white mb-2">Forgot Password?</h1>
-          <p className="text-primary-100">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Forgot Password?</h1>
+          <p className="text-gray-600">
             Enter your email address and we'll send you a link to reset your password.
           </p>
         </div>
@@ -184,16 +184,16 @@ export default function ForgotPassword() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {!showSecondary && (
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-primary-100 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-300" size={20} />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <input
                   type="email"
                   id="email"
                   placeholder="Enter your email"
-                  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-primary-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400/20 transition-colors"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
                   {...register('email', {
                       validate: (value?: string) => {
                         if (showSecondary) return true // primary not required when using secondary
@@ -205,7 +205,7 @@ export default function ForgotPassword() {
                 />
               </div>
               {errors.email && (
-                <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>
+                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
           )}
@@ -223,23 +223,23 @@ export default function ForgotPassword() {
                 await trigger('secondaryEmail');
                 setTimeout(() => (document.getElementById('secondaryEmail') as HTMLInputElement | null)?.focus(), 60);
               }}
-              className="text-sm text-primary-200 hover:text-white"
+              className="text-sm text-primary-600 hover:text-primary-700 font-medium hover:underline transition-all"
             >
               My email is not accessible
             </button>
 
             {showSecondary && (
               <div className="mt-3">
-                <label htmlFor="secondaryEmail" className="block text-sm font-medium text-primary-100 mb-2">
+                <label htmlFor="secondaryEmail" className="block text-sm font-medium text-gray-700 mb-2">
                   Secondary Email (optional)
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-300" size={20} />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                   <input
                     type="email"
                     id="secondaryEmail"
                     placeholder="Secondary email"
-                    className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-primary-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400/20 transition-colors"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
                     {...register('secondaryEmail', {
                         validate: (value?: string) => {
                           if (!showSecondary) return true // not required when hidden
@@ -252,7 +252,7 @@ export default function ForgotPassword() {
                   />
                 </div>
                 {errors.secondaryEmail && (
-                  <p className="text-red-400 text-sm mt-1">{errors.secondaryEmail.message}</p>
+                  <p className="text-red-500 text-sm mt-1">{errors.secondaryEmail.message}</p>
                 )}
               </div>
             )}
@@ -282,7 +282,7 @@ export default function ForgotPassword() {
         <div className="text-center mt-6">
           <Link
             href="/admin/login"
-            className="inline-flex items-center gap-2 text-primary-200 hover:text-white transition-colors text-sm"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-all text-sm font-medium hover:underline hover:gap-3"
           >
             <ArrowLeft size={16} />
             Back to Login

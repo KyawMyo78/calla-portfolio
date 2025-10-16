@@ -351,20 +351,26 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
             </motion.h2>
 
             {/* Title with typing effect */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mb-6"
-            >
-              <h3 className="text-xl md:text-2xl text-clover-700 font-medium mb-2">
-                {profile?.title || 'Yor Position/Title'}
-              </h3>
-              <div className="flex items-center justify-center lg:justify-start space-x-2 text-clover-500">
-                
-                <span>{profile?.specialization || 'Your Specialization'}</span>
-              </div>
-            </motion.div>
+            {(profile?.title || profile?.specialization) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="mb-6"
+              >
+                {profile?.title && (
+                  <h3 className="text-xl md:text-2xl text-clover-700 font-medium mb-2">
+                    {profile.title}
+                  </h3>
+                )}
+                {profile?.specialization && (
+                  <div className="flex items-center justify-center lg:justify-start space-x-2 text-clover-500">
+                    
+                    <span>{profile.specialization}</span>
+                  </div>
+                )}
+              </motion.div>
+            )}
 
             {/* Description */}
             <motion.p

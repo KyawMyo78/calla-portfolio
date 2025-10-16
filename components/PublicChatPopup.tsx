@@ -199,18 +199,18 @@ export default function PublicChatPopup({ isOpen, onClose, onMinimize, mascot = 
       <div className="fixed inset-0 bg-black/20 z-40 backdrop-blur-sm" onClick={onClose} />
       
       {/* Popup Window */}
-      <div className="fixed bottom-4 right-4 z-50 w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col max-h-[600px] animate-in slide-in-from-bottom-4 duration-300">
+      <div className="fixed bottom-4 right-4 left-4 md:left-auto z-50 max-w-md bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col max-h-[600px] animate-in slide-in-from-bottom-4 duration-300">
         
         {/* Header */}
-        <div className="bg-gradient-to-r from-clover-600 to-clover-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="relative">
               <img src={mascot} alt="AP Clover" className="w-12 h-12 rounded-full border-2 border-white/30 object-cover" />
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
             </div>
             <div>
-              <h3 className="font-bold text-lg">AP's Clover</h3>
-              <p className="text-xs text-clover-100">Portfolio Assistant</p>
+              <h3 className="font-bold text-lg text-white">AP's Clover</h3>
+              <p className="text-xs text-primary-100">Portfolio Assistant</p>
             </div>
           </div>
           
@@ -262,10 +262,10 @@ export default function PublicChatPopup({ isOpen, onClose, onMinimize, mascot = 
                       key={i}
                       onClick={() => setText(action)}
                       disabled={loading}
-                      className="text-left p-3 bg-clover-50 hover:bg-clover-100 border border-clover-200 rounded-xl text-sm transition-all duration-200 hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-left p-3 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-xl text-sm text-gray-900 transition-all duration-200 hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <span className="text-clover-600 mr-2">💬</span>
-                      {action}
+                      <span className="text-primary-600 mr-2">💬</span>
+                      <span className="text-gray-900">{action}</span>
                     </button>
                   ))}
                 </div>
@@ -282,18 +282,18 @@ export default function PublicChatPopup({ isOpen, onClose, onMinimize, mascot = 
                 
                 <div className={`px-4 py-3 rounded-2xl ${
                   m.role === "user" 
-                    ? "bg-clover-600 text-white rounded-br-md shadow-lg" 
+                    ? "bg-primary-600 text-white rounded-br-md shadow-lg" 
                     : "bg-gray-100 text-gray-900 rounded-bl-md shadow-sm border border-gray-200"
                 }`}>
                   <div className="text-sm">
                     {m.loading ? (
                       <div className="flex items-center space-x-2 py-1">
                         <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-clover-400 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-clover-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                          <div className="w-2 h-2 bg-clover-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                          <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                          <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                         </div>
-                        <span className="text-clover-600 text-xs">Thinking...</span>
+                        <span className="text-primary-600 text-xs font-medium">Thinking...</span>
                       </div>
                     ) : (
                       m.role === 'assistant' ? (
@@ -301,7 +301,7 @@ export default function PublicChatPopup({ isOpen, onClose, onMinimize, mascot = 
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text}</ReactMarkdown>
                         </div>
                       ) : (
-                        <div className="whitespace-pre-wrap">{m.text}</div>
+                        <div className="whitespace-pre-wrap text-white">{m.text}</div>
                       )
                     )}
                   </div>
@@ -325,7 +325,7 @@ export default function PublicChatPopup({ isOpen, onClose, onMinimize, mascot = 
                   autoResize();
                 }}
                 placeholder="Type your message..."
-                className="w-full resize-none border-2 border-gray-300 rounded-2xl px-4 py-3 focus:border-clover-500 focus:outline-none transition-colors bg-white shadow-sm text-sm"
+                className="w-full resize-none border-2 border-gray-300 rounded-2xl px-4 py-3 focus:border-primary-500 focus:outline-none transition-colors bg-white shadow-sm text-sm text-gray-900"
                 disabled={loading || remaining === 0}
                 rows={1}
                 onInput={autoResize}
@@ -341,8 +341,8 @@ export default function PublicChatPopup({ isOpen, onClose, onMinimize, mascot = 
               onClick={send} 
               className={`p-3 rounded-full transition-all duration-200 shadow-lg ${
                 loading || !text.trim() || remaining === 0
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed" 
-                  : "bg-clover-600 hover:bg-clover-700 text-white hover:shadow-xl transform hover:-translate-y-0.5"
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed" 
+                  : "bg-primary-600 hover:bg-primary-700 text-white hover:shadow-xl transform hover:-translate-y-0.5"
               }`}
               disabled={loading || !text.trim() || remaining === 0}
             >

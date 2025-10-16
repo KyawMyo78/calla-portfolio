@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 
 // Change this to your desired admin password
-const password = 'your_new_password_here';
+const password = 'YourNewSecurePassword123!';  // ← Change this to your new password
 const hash = bcrypt.hashSync(password, 12);
 
 console.log(`Generated hash for password "${password}":`);

@@ -81,7 +81,7 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
       }
     };
     fetchSettings();
-  }, []);
+  }, [serverProfile, pathname]);
 
   // Build social links array from profile data
   const getSocialLinks = () => {
@@ -172,7 +172,7 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
               className="lg:col-span-2"
             >
               <h3 className="text-2xl font-bold mb-4 text-clover-100">{profile.name || 'Your Name'}{profile.nickname ? ` (${profile.nickname})` : ''}</h3>
-              <p className="text-clover-100 mb-6 leading-relaxed max-w-md text-justify">
+              <p className="text-secondary-300 mb-6 leading-relaxed max-w-md text-justify">
                 {profile.description || 'A brief description about you, your skills, and what you build.'}
               </p>
               <div className="flex space-x-4">
@@ -239,7 +239,7 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
                             e.preventDefault();
                             router.push(link.path);
                           }}
-                          className="text-clover-300 hover:text-white transition-colors"
+                          className="text-secondary-300 hover:text-white transition-colors"
                         >
                           {label}
                         </a>
@@ -257,7 +257,7 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <h4 className="text-lg font-semibold mb-6 text-clover-100">Get In Touch</h4>
-              <div className="space-y-3 text-clover-300">
+              <div className="space-y-3 text-secondary-300">
                 <p>Thailand</p>
                 <a 
                   href={`mailto:${profile.email || 'you@example.com'}`}

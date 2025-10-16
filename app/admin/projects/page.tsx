@@ -651,40 +651,40 @@ export default function ProjectsManagement() {
                 <div className="space-y-3">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      GitHub URL
+                      Project Link (Optional)
                     </label>
                     <input
                       type="url"
                       value={editingProject.githubUrl || ''}
                       onChange={(e) => updateEditingProject('githubUrl', e.target.value || undefined)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      placeholder="https://github.com/..."
+                      placeholder="Enter project website or related link"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Live Demo URL
+                      Live Website URL (Optional)
                     </label>
                     <input
                       type="url"
                       value={editingProject.liveUrl || ''}
                       onChange={(e) => updateEditingProject('liveUrl', e.target.value || undefined)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      placeholder="https://your-demo.com"
+                      placeholder="Enter live website or demo link"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Download URL
+                      Download Link (Optional)
                     </label>
                     <input
                       type="url"
                       value={editingProject.downloadUrl || ''}
                       onChange={(e) => updateEditingProject('downloadUrl', e.target.value || undefined)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      placeholder="App store or download link"
+                      placeholder="Enter download or app store link"
                     />
                   </div>
                 </div>
