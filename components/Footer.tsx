@@ -171,8 +171,8 @@ export default function Footer({ profile: serverProfile, siteSettings: serverSet
               transition={{ duration: 0.6 }}
               className="lg:col-span-2"
             >
-              <h3 className="text-2xl font-bold mb-4 text-clover-100">{profile.name || 'Your Name'}{profile.nickname ? ` (${profile.nickname})` : ''}</h3>
-              <p className="text-secondary-300 mb-6 leading-relaxed max-w-md text-justify">
+              <h3 className="text-2xl font-bold mb-4 text-secondary-400">{profile.name || 'Your Name'}{profile.nickname ? ` (${profile.nickname})` : ''}</h3>
+              <p className="text-clover-200 mb-6 leading-relaxed max-w-md text-justify">
                 {profile.description || 'A brief description about you, your skills, and what you build.'}
               </p>
               <div className="flex space-x-4">
