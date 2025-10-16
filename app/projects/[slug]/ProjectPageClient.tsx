@@ -144,7 +144,7 @@ export default function ProjectPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <Link 
-              href="/#projects"
+              href="/projects"
                     className="flex items-center gap-2 text-clover-700 hover:text-clover-900 transition-colors"
             >
               <ArrowLeft size={20} />
@@ -222,10 +222,10 @@ export default function ProjectPage({ params }: PageProps) {
 
           {/* Project Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-clover-900 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-clover-900 mb-4 break-words">
               {project.title}
             </h1>
-            <p className="text-xl text-clover-700 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-clover-700 max-w-3xl mx-auto leading-relaxed break-words">
               {project.description}
             </p>
             
@@ -247,172 +247,189 @@ export default function ProjectPage({ params }: PageProps) {
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* About Section */}
-            <motion.section
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-12"
-            >
-                <h2 className="text-2xl font-bold text-clover-900 mb-6">About This Project</h2>
-              <div className="prose prose-lg max-w-none">
-                <p className="text-gray-700 leading-relaxed">
-                  {project.longDescription || project.description}
-                </p>
-              </div>
-            </motion.section>
-
-            {/* Key Highlights */}
-            {project.highlights && project.highlights.length > 0 && (
-              <motion.section
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="mb-12"
-              >
-                <h2 className="text-2xl font-bold text-clover-900 mb-6">Key Highlights</h2>
-                <div className="grid gap-4">
-                  {project.highlights.map((highlight, index) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-white/60 backdrop-blur-sm rounded-lg border border-clover-100">
-                      <Star size={20} className="text-clover-500 mt-1 flex-shrink-0" />
-                      <p className="text-gray-700">{highlight}</p>
-                    </div>
-                  ))}
-                </div>
-              </motion.section>
-            )}
-
-            {/* Project Gallery */}
-            {project.images && project.images.length > 1 && (
-              <motion.section
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="mb-12"
-              >
-                <h2 className="text-2xl font-bold text-clover-900 mb-6">Project Gallery</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {project.images.slice(1).map((image, index) => (
-                    <div key={index} className="aspect-video rounded-lg overflow-hidden">
-                      <Image
-                        src={image}
-                        alt={`${project.title} - Image ${index + 2}`}
-                        width={500}
-                        height={300}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </motion.section>
-            )}
+        {/* About Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-12"
+        >
+          <h2 className="text-3xl font-bold text-clover-900 mb-6">About This Project</h2>
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-clover-100 shadow-lg">
+            <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap break-words overflow-hidden">
+              {project.longDescription || project.description}
+            </p>
           </div>
+        </motion.section>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            {/* Technologies */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-clover-100 mb-8"
-            >
-              <h3 className="text-xl font-bold text-clover-900 mb-4">Technologies Used</h3>
-              <div className="flex flex-wrap gap-2">
+        {/* Technologies Section */}
+        {project.technologies && project.technologies.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-clover-900 mb-6">Technologies Used</h2>
+            <div className="bg-gradient-to-br from-clover-50 to-white rounded-2xl p-6 md:p-8 border border-clover-100 shadow-lg">
+              <div className="flex flex-wrap gap-3">
                 {project.technologies.map((tech, index) => (
-                  <span
+                  <motion.span
                     key={index}
-                    className="px-3 py-1 bg-clover-100 text-clover-700 rounded-full text-sm font-medium"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.05 * index }}
+                    className="px-4 py-2.5 bg-white text-clover-800 rounded-xl text-sm md:text-base font-semibold border-2 border-clover-200 hover:border-clover-400 hover:shadow-md transition-all cursor-default"
                   >
                     {tech}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
-            </motion.div>
+            </div>
+          </motion.section>
+        )}
 
+        {/* Key Highlights */}
+        {project.highlights && project.highlights.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-clover-900 mb-6">Key Highlights</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              {project.highlights.map((highlight, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.05 * index }}
+                  className="flex items-start gap-3 p-5 bg-white rounded-xl border border-clover-100 shadow-md hover:shadow-lg transition-shadow"
+                >
+                  <Star size={20} className="text-clover-600 mt-1 flex-shrink-0" />
+                  <p className="text-gray-700 break-words">{highlight}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        {/* Project Gallery */}
+        {project.images && project.images.length > 1 && (
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-clover-900 mb-6">Project Gallery</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {project.images.slice(1).map((image, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.05 * index }}
+                  className="aspect-video rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <Image
+                    src={image}
+                    alt={`${project.title} - Image ${index + 2}`}
+                    width={500}
+                    height={300}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        {/* Bottom Action Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mb-12"
+        >
+          <div className="grid md:grid-cols-2 gap-6">
             {/* Project Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-clover-100 mb-8"
-            >
-              <h3 className="text-xl font-bold text-clover-900 mb-4">Project Links</h3>
-              <div className="space-y-3">
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => analytics.projectLinkClick(project.title, 'github')}
-                    className="flex items-center gap-3 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <Github size={20} className="text-gray-700" />
-                    <div>
-                      <div className="font-medium text-gray-900">Source Code</div>
-                      <div className="text-sm text-gray-600">View on GitHub</div>
-                    </div>
-                  </a>
-                )}
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => analytics.projectLinkClick(project.title, 'live')}
-                    className="flex items-center gap-3 p-3 bg-clover-100 hover:bg-clover-100 rounded-lg transition-colors"
+            {(project.githubUrl || project.liveUrl || project.downloadUrl) && (
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-clover-100 shadow-lg">
+                <h3 className="text-2xl font-bold text-clover-900 mb-4 flex items-center gap-2">
+                  <ExternalLink size={24} className="text-clover-600" />
+                  Project Links
+                </h3>
+                <div className="space-y-3">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => analytics.projectLinkClick(project.title, 'github')}
+                      className="flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all hover:shadow-md border border-gray-200"
                     >
-                    <ExternalLink size={20} className="text-clover-700" />
-                    <div>
-                      <div className="font-medium text-clover-900">Live Demo</div>
-                      <div className="text-sm text-clover-700">Try it online</div>
-                    </div>
-                  </a>
-                )}
-                {project.downloadUrl && (
-                  <a
-                    href={project.downloadUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => analytics.projectLinkClick(project.title, 'demo')}
-                    className="flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
-                  >
-                    <Play size={20} className="text-green-600" />
-                    <div>
-                      <div className="font-medium text-green-900">Demo</div>
-                      <div className="text-sm text-green-600">Download or view</div>
-                    </div>
-                  </a>
-                )}
+                      <Github size={24} className="text-gray-700" />
+                      <div>
+                        <div className="font-semibold text-gray-900">Source Code</div>
+                        <div className="text-sm text-gray-600">View on GitHub</div>
+                      </div>
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => analytics.projectLinkClick(project.title, 'live')}
+                      className="flex items-center gap-3 p-4 bg-clover-50 hover:bg-clover-100 rounded-xl transition-all hover:shadow-md border border-clover-200"
+                    >
+                      <ExternalLink size={24} className="text-clover-700" />
+                      <div>
+                        <div className="font-semibold text-clover-900">Live Demo</div>
+                        <div className="text-sm text-clover-700">Try it online</div>
+                      </div>
+                    </a>
+                  )}
+                  {project.downloadUrl && (
+                    <a
+                      href={project.downloadUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => analytics.projectLinkClick(project.title, 'demo')}
+                      className="flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-all hover:shadow-md border border-green-200"
+                    >
+                      <Play size={24} className="text-green-600" />
+                      <div>
+                        <div className="font-semibold text-green-900">Download</div>
+                        <div className="text-sm text-green-600">Get the app</div>
+                      </div>
+                    </a>
+                  )}
+                </div>
               </div>
-            </motion.div>
+            )}
 
             {/* Share Project */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-clover-100"
-            >
-              <h3 className="text-xl font-bold text-clover-900 mb-4">Share This Project</h3>
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    // You could add a toast notification here
-                  }}
-                  className="w-full p-3 bg-clover-100 hover:bg-clover-100 rounded-lg transition-colors text-left"
-                >
-                  <div className="font-medium text-clover-900">Copy Link</div>
-                  <div className="text-sm text-clover-700">Share this project</div>
-                </button>
-              </div>
-            </motion.div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-clover-100 shadow-lg">
+              <h3 className="text-2xl font-bold text-clover-900 mb-4">Share This Project</h3>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('Link copied to clipboard!');
+                }}
+                className="w-full p-4 bg-gradient-to-r from-clover-500 to-clover-600 hover:from-clover-600 hover:to-clover-700 text-white rounded-xl transition-all hover:shadow-lg font-semibold flex items-center justify-center gap-2"
+              >
+                <ExternalLink size={20} />
+                Copy Project Link
+              </button>
+              <p className="text-sm text-gray-600 mt-4 text-center">
+                Share this project with others
+              </p>
+            </div>
           </div>
-        </div>
+        </motion.section>
       </main>
     </div>
   );

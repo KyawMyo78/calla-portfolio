@@ -261,8 +261,8 @@ export default function Projects() {
                 onClick={() => setActiveCategory(category.id)}
                 className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
                   activeCategory === category.id
-          ? 'bg-gradient-clover text-white shadow-lg'
-  : 'bg-white/60 backdrop-blur-sm text-clover-500 hover:bg-white hover:shadow-md'
+                    ? 'bg-clover-700 text-white shadow-lg'
+                    : 'bg-white/60 backdrop-blur-sm text-clover-700 hover:bg-white hover:shadow-md'
                 }`}
               >
                 {category.name} ({category.count})
@@ -449,8 +449,8 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
 
       {/* Project Content */}
           <div className="p-6">
-        <h3 className="text-xl font-bold text-clover-900 mb-2">{project.title}</h3>
-        <p className="text-clover-700 mb-4 leading-relaxed">
+        <h3 className="text-xl font-bold text-clover-900 mb-2 line-clamp-2">{project.title}</h3>
+        <p className={`text-clover-700 mb-4 leading-relaxed ${isExpanded ? '' : 'line-clamp-3'}`}>
           {isExpanded ? project.longDescription || project.description : project.description}
         </p>
 
@@ -459,7 +459,8 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
           {project.technologies.slice(0, featured ? 6 : 4).map((tech: string, i: number) => (
             <span
               key={i}
-              className="px-3 py-1 bg-clover-100 text-clover-700 rounded-full text-sm font-medium"
+              className="px-3 py-1 bg-clover-100 text-clover-700 rounded-full text-sm font-medium truncate max-w-[150px]"
+              title={tech}
             >
               {tech}
             </span>
@@ -478,8 +479,8 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
             <ul className="space-y-1">
               {project.highlights.slice(0, 3).map((highlight: string, i: number) => (
                 <li key={i} className="text-sm text-clover-700 flex items-start">
-                  <span className="text-clover-300 mr-2">•</span>
-                  {highlight}
+                  <span className="text-clover-300 mr-2 flex-shrink-0">•</span>
+                  <span className="line-clamp-2">{highlight}</span>
                 </li>
               ))}
             </ul>

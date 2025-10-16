@@ -289,8 +289,8 @@ export default function AdminBlogPage() {
                   <tr key={post.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{post.title}</div>
-                        <div className="text-sm text-gray-500">{post.excerpt.substring(0, 100)}...</div>
+                        <div className="text-sm font-medium text-gray-900 line-clamp-2">{post.title}</div>
+                        <div className="text-sm text-gray-500 line-clamp-2">{post.excerpt}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -305,7 +305,9 @@ export default function AdminBlogPage() {
                       </select>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {post.category}
+                      <span className="truncate max-w-[100px] inline-block" title={post.category}>
+                        {post.category}
+                      </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       <div className="flex items-center">

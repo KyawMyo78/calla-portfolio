@@ -18,7 +18,7 @@ export default function NotFound() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/#projects"
+              href="/projects"
               className="flex items-center justify-center gap-2 px-6 py-3 bg-clover-700 text-white rounded-lg hover:bg-clover-900 transition-colors"
             >
               <ArrowLeft size={20} />

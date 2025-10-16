@@ -221,7 +221,7 @@ export default function BlogPage() {
                       </div>
 
                       {/* Title */}
-                      <h2 className="text-xl font-bold text-primary-800 mb-3 group-hover:text-primary-600 transition-colors">
+                      <h2 className="text-xl font-bold text-primary-800 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
                         <Link href={`/blog/${post.slug}`}>
                           {post.title}
                         </Link>
@@ -239,7 +239,7 @@ export default function BlogPage() {
                             <Clock size={14} />
                             <span>{post.readTime} min read</span>
                           </div>
-                          <span>By {post.author}</span>
+                          <span className="truncate max-w-[150px]" title={post.author}>By {post.author}</span>
                         </div>
                         
                         <Link

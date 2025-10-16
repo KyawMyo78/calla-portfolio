@@ -187,17 +187,17 @@ export default function BlogPostPage() {
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 break-words">
               {post.title}
             </h1>
 
-            <p className="text-xl text-gray-600 mb-6">
+            <p className="text-xl text-gray-600 mb-6 break-words">
               {post.excerpt}
             </p>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
-                <p className="text-gray-600">
+                <p className="text-gray-600 truncate max-w-[200px]" title={post.author}>
                   By <span className="font-medium">{post.author}</span>
                 </p>
                 <p className="text-sm text-gray-500">
@@ -242,8 +242,11 @@ export default function BlogPostPage() {
           )}
 
           {/* Article Content */}
-          <div className="rich-text-content mb-8 max-w-none">
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div className="rich-text-content mb-8 max-w-none break-words overflow-wrap-anywhere">
+            <div 
+              className="prose prose-lg max-w-none break-words"
+              dangerouslySetInnerHTML={{ __html: post.content }} 
+            />
           </div>
 
           {/* Tags */}
@@ -257,7 +260,8 @@ export default function BlogPostPage() {
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm truncate max-w-[200px]"
+                    title={tag}
                   >
                     {tag}
                   </span>

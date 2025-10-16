@@ -375,13 +375,13 @@ export default function ProjectsManagement() {
 
               {/* Project Content */}
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">{project.title}</h3>
+                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{project.title}</h3>
                 <p className="text-sm text-gray-600 mb-3 line-clamp-2">{project.description}</p>
                 
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-1 mb-3">
                   {project.technologies.slice(0, 3).map((tech, i) => (
-                    <span key={i} className="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs">
+                    <span key={i} className="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs truncate max-w-[120px]" title={tech}>
                       {tech}
                     </span>
                   ))}
