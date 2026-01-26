@@ -91,60 +91,132 @@ export async function POST(req: NextRequest) {
     // Fetch public portfolio data for context
     const getPortfolioContext = async () => {
       try {
-        const [personalSnap, skillsSnap, expSnap, projectsSnap, blogsSnap] = await Promise.all([
-          adminDb.collection('personalInfo').doc('main').get().catch(() => null),
-          adminDb.collection('skills').orderBy('order', 'asc').limit(15).get().catch(() => null),
-          adminDb.collection('experience').orderBy('order', 'asc').limit(10).get().catch(() => null),
-          adminDb.collection('projects').where('status', '==', 'published').orderBy('order', 'asc').limit(10).get().catch(() => null),
-          adminDb.collection('blogPosts').where('status', '==', 'published').orderBy('publishedAt', 'desc').limit(5).get().catch(() => null),
+        const [profileSnap, skillsSnap, expSnap, projectsSnap, blogsSnap] = await Promise.all([
+          adminDb.collection('profile').doc('main').get().catch(err => {
+            console.error('Error fetching profile:', err);
+            return null;
+          }),
+          adminDb.collection('skills').orderBy('order', 'asc').limit(15).get().catch(err => {
+            console.error('Error fetching skills:', err);
+            return null;
+          }),
+          adminDb.collection('experience').orderBy('order', 'asc').limit(10).get().catch(err => {
+            console.error('Error fetching experience:', err);
+            return null;
+          }),
+          adminDb.collection('projects').where('status', '==', 'published').orderBy('order', 'asc').limit(10).get().catch(err => {
+            console.error('Error fetching projects:', err);
+            return null;
+          }),
+          adminDb.collection('blogPosts').where('status', '==', 'published').orderBy('publishedAt', 'desc').limit(5).get().catch(err => {
+            console.error('Error fetching blog posts:', err);
+            return null;
+          }),
         ]);
 
         let contextParts: string[] = [];
 
-        // Personal info
-        if (personalSnap && personalSnap.exists) {
-          const p = personalSnap.data();
-          if (p?.fullName || p?.name) contextParts.push(`Name: ${p.fullName || p.name}`);
+        // Profile info
+        if (profileSnap && profileSnap.exists) {
+          const p = profileSnap.data();
+          if (p?.name) contextParts.push(`Name: ${p.name}`);
+          if (p?.nickname) contextParts.push(`Nickname: ${p.nickname}`);
           if (p?.title) contextParts.push(`Title: ${p.title}`);
-          if (p?.bio || p?.description) contextParts.push(`Bio: ${p.bio || p.description}`);
+          if (p?.specialization) contextParts.push(`Specialization: ${p.specialization}`);
+          if (p?.description) contextParts.push(`Bio: ${p.description}`);
           if (p?.email) contextParts.push(`Email: ${p.email}`);
           if (p?.location) contextParts.push(`Location: ${p.location}`);
+        } else {
+          console.log('No profile data found');
         }
 
         // Skills
         if (skillsSnap && skillsSnap.docs?.length) {
           const skills = skillsSnap.docs.map(d => {
             const data = d.data();
-            return `${data.name}${data.level ? ` (${data.level})` : ''}`;
+            let skillStr = data.name;
+            if (data.level || data.proficiency) {
+              skillStr += ` (${data.level || data.proficiency})`;
+            }
+            if (data.category) {
+              skillStr += ` [${data.category}]`;
+            }
+            return skillStr;
           }).filter(Boolean);
-          if (skills.length) contextParts.push(`Skills: ${skills.join(', ')}`);
+          if (skills.length) contextParts.push(`Skills:\n${skills.join(', ')}`);
         }
 
         // Projects
         if (projectsSnap && projectsSnap.docs?.length) {
           const projects = projectsSnap.docs.map(d => {
             const data = d.data();
-            return `"${data.title}"${data.description ? `: ${data.description}` : ''}`;
+            let proj = `"${data.title}"`;
+            if (data.description) {
+              proj += `: ${data.description}`;
+            }
+            if (data.longDescription) {
+              proj += `. Details: ${data.longDescription.substring(0, 150)}`;
+            }
+            if (Array.isArray(data.technologies) && data.technologies.length > 0) {
+              proj += `. Technologies: ${data.technologies.join(', ')}`;
+            }
+            if (data.category) {
+              proj += ` (Category: ${data.category})`;
+            }
+            return proj;
           }).filter(Boolean);
-          if (projects.length) contextParts.push(`Projects: ${projects.join(' | ')}`);
+          if (projects.length) contextParts.push(`Projects:\n${projects.join('\n')}`);
         }
 
         // Experience
         if (expSnap && expSnap.docs?.length) {
           const experiences = expSnap.docs.map(d => {
             const data = d.data();
-            return `${data.title} at ${data.company}${data.period ? ` (${data.period})` : ''}`;
+            let exp = `${data.title || data.position || 'Position'} at ${data.company}`;
+            
+            // Add date range
+            if (data.startDate) {
+              const start = data.startDate;
+              const end = data.current ? 'Present' : (data.endDate || 'Present');
+              exp += ` (${start} - ${end})`;
+            } else if (data.period) {
+              exp += ` (${data.period})`;
+            }
+            
+            // Add description if available
+            if (data.description) {
+              exp += `: ${data.description}`;
+            }
+            
+            // Add responsibilities if available
+            if (Array.isArray(data.responsibilities) && data.responsibilities.length > 0) {
+              exp += `. Responsibilities: ${data.responsibilities.slice(0, 3).join('; ')}`;
+            }
+            
+            return exp;
           }).filter(Boolean);
-          if (experiences.length) contextParts.push(`Experience: ${experiences.join(' | ')}`);
+          if (experiences.length) contextParts.push(`Experience:\n${experiences.join('\n')}`);
         }
 
         // Blog posts
         if (blogsSnap && blogsSnap.docs?.length) {
-          const blogs = blogsSnap.docs.map(d => d.data()?.title).filter(Boolean);
-          if (blogs.length) contextParts.push(`Recent blog posts: ${blogs.join(', ')}`);
+          const blogs = blogsSnap.docs.map(d => {
+            const data = d.data();
+            let blogStr = data.title;
+            if (data.excerpt) {
+              blogStr += `: ${data.excerpt}`;
+            }
+            if (data.category) {
+              blogStr += ` [${data.category}]`;
+            }
+            return blogStr;
+          }).filter(Boolean);
+          if (blogs.length) contextParts.push(`Recent blog posts:\n${blogs.join('\n')}`);
         }
 
-        const context = contextParts.join('\n');
+        const context = contextParts.join('\n\n');
+        console.log('Portfolio context constructed:', context ? `${context.substring(0, 200)}...` : 'EMPTY');
+        console.log('Context parts count:', contextParts.length);
         return context || 'No portfolio data available yet.';
       } catch (e) {
         console.error('Error fetching portfolio context:', e);
@@ -153,12 +225,14 @@ export async function POST(req: NextRequest) {
     };
 
     const portfolioContext = await getPortfolioContext();
+    console.log('Final portfolio context length:', portfolioContext.length);
 
     // Build conversation context
     const conversationContext = [];
     
     // Add system prompt with portfolio context
     const systemMessage = `${PUBLIC_SYSTEM_PROMPT}\n\n**Portfolio Context:**\n${portfolioContext}`;
+    console.log('System message with context length:', systemMessage.length);
     conversationContext.push({ role: "user", parts: [{ text: systemMessage }] });
     conversationContext.push({ 
       role: "model", 

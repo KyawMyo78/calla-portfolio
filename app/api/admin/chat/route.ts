@@ -136,9 +136,9 @@ export async function POST(req: Request) {
     // Assemble a short user summary from Firestore (preferred) or local JSON (fallback).
   const getUserSummary = async () => {
       try {
-        // personalInfo/profile stored as 'personalInfo' or 'profile' collection (doc 'main')
-        const [personalSnap, skillsSnap, expSnap, projectsSnap, blogsSnap] = await Promise.all([
-          adminDb.collection('personalInfo').doc('main').get().catch(() => null),
+        // Profile stored as 'profile' collection (doc 'main')
+        const [profileSnap, skillsSnap, expSnap, projectsSnap, blogsSnap] = await Promise.all([
+          adminDb.collection('profile').doc('main').get().catch(() => null),
           adminDb.collection('skills').orderBy('order', 'asc').limit(10).get().catch(() => null),
           adminDb.collection('experience').orderBy('order', 'asc').limit(10).get().catch(() => null),
           adminDb.collection('projects').orderBy('order', 'asc').limit(10).get().catch(() => null),
@@ -147,9 +147,10 @@ export async function POST(req: Request) {
 
         let summaryParts: string[] = [];
 
-        if (personalSnap && personalSnap.exists) {
-          const p = personalSnap.data();
-          if (p?.fullName || p?.name) summaryParts.push(`Name: ${p.fullName || p.name}`);
+        if (profileSnap && profileSnap.exists) {
+          const p = profileSnap.data();
+          if (p?.name) summaryParts.push(`Name: ${p.name}`);
+          if (p?.nickname) summaryParts.push(`Nickname: ${p.nickname}`);
           if (p?.title) summaryParts.push(`Title: ${p.title}`);
           if (p?.description) summaryParts.push(`Bio: ${p.description}`);
         }

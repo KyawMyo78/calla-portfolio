@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { ExternalLink, Github, Play, Filter, Search, Calendar, Star, ArrowRight } from 'lucide-react';
+import { ExternalLink, Github, Play, Filter, Search, Calendar, Star, ArrowRight, Download, Link } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { analytics } from '@/lib/analytics';
@@ -29,6 +29,38 @@ interface Project {
   order: number;
   slug?: string;
 }
+
+// Helper function to safely format dates
+const formatProjectDate = (dateString: string | undefined) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return null; // Invalid date
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+};
+
+// Helper function to generate date range display
+const getDateRangeDisplay = (project: Project) => {
+  const startDate = formatProjectDate(project.startDate);
+  const endDate = formatProjectDate(project.endDate);
+
+  if (!startDate && !endDate) return null; // No valid dates
+
+  if (startDate && !endDate) {
+    // Only start date, check if in-progress
+    if (project.status === 'in-progress') {
+      return `${startDate} - Present`;
+    }
+    return startDate;
+  }
+
+  if (!startDate && endDate) {
+    // Only end date
+    return endDate;
+  }
+
+  // Both dates are valid
+  return `${startDate} - ${endDate}`;
+};
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -125,13 +157,16 @@ export default function Projects() {
     fetchData();
   };
 
+  // Generate categories dynamically from projects in database
   const categories = [
     { id: 'all', name: 'All Projects', count: projects.length },
-    { id: 'web', name: 'Web Development', count: projects.filter(p => p.category === 'web').length },
-    { id: 'mobile', name: 'Mobile Apps', count: projects.filter(p => p.category === 'mobile').length },
-    { id: 'embedded', name: 'Embedded Systems', count: projects.filter(p => p.category === 'embedded').length },
-    { id: 'ai', name: 'AI & Robotics', count: projects.filter(p => p.category === 'ai').length },
-    { id: 'other', name: 'Other', count: projects.filter(p => p.category === 'other').length }
+    ...Array.from(new Set(projects.map(p => p.category)))
+      .filter(category => category) // Filter out undefined/null
+      .map(category => ({
+        id: category,
+        name: category.charAt(0).toUpperCase() + category.slice(1),
+        count: projects.filter(p => p.category === category).length
+      }))
   ];
 
   const filteredProjects = projects.filter(project => {
@@ -147,7 +182,7 @@ export default function Projects() {
 
   if (isLoading) {
     return (
-      <section id="projects" className="section-padding bg-clover-100">
+      <section id="projects" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
         <div className="container-width">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -172,7 +207,7 @@ export default function Projects() {
 
   if (error) {
     return (
-      <section id="projects" className="section-padding bg-clover-100">
+      <section id="projects" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
         <div className="container-width">
           <ErrorState
             title="Failed to Load Projects"
@@ -186,7 +221,7 @@ export default function Projects() {
 
   if (projects.length === 0) {
     return (
-  <section id="projects" className="section-padding bg-clover-100">
+  <section id="projects" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
         <div className="container-width">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -214,7 +249,7 @@ export default function Projects() {
   }
 
   return (
-  <section id="projects" className="section-padding bg-clover-100">
+  <section id="projects" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
       <div className="container-width">
         {/* Section Header */}
         <motion.div
@@ -402,21 +437,21 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
 
         {/* Action Buttons */}
         <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          {project.githubUrl && (
+          {project.githubUrl && project.githubUrl.trim() && (
             <a
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => {
                 e.stopPropagation();
-                analytics.projectLinkClick(project.title, 'github');
+                analytics.projectLinkClick(project.title, 'link');
               }}
               className="action-button w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-clover-700 hover:bg-white transition-colors"
             >
-              <Github size={18} />
+              <Link size={18} />
             </a>
           )}
-          {project.liveUrl && (
+          {project.liveUrl && project.liveUrl.trim() && (
             <a
               href={project.liveUrl}
               target="_blank"
@@ -430,18 +465,18 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
               <ExternalLink size={18} />
             </a>
           )}
-          {project.downloadUrl && (
+          {project.downloadUrl && project.downloadUrl.trim() && (
             <a
               href={project.downloadUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => {
                 e.stopPropagation();
-                analytics.projectLinkClick(project.title, 'demo');
+                analytics.projectLinkClick(project.title, 'download');
               }}
               className="action-button w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-clover-700 hover:bg-white transition-colors"
             >
-              <Play size={18} />
+              <Download size={18} />
             </a>
           )}
         </div>
@@ -488,11 +523,11 @@ function ProjectCard({ project, featured, index, onProjectClick }: ProjectCardPr
         )}
 
         {/* Project Dates */}
-  <div className="text-sm text-clover-500 mb-4">
-          {new Date(project.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
-          {project.endDate && ` - ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
-          {project.status === 'in-progress' && !project.endDate && ' - Present'}
-        </div>
+        {getDateRangeDisplay(project) && (
+          <div className="text-sm text-clover-500 mb-4">
+            {getDateRangeDisplay(project)}
+          </div>
+        )}
 
         {/* Expand Button (for non-featured projects) */}
         {!featured && project.longDescription && project.longDescription !== project.description && (

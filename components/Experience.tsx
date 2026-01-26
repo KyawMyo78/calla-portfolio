@@ -81,11 +81,8 @@ export default function Experience() {
       const settingsData = await settingsRes.json();
       
       if (experiencesData.success && Array.isArray(experiencesData.data)) {
-        // Sort by order and start date (most recent first)
+        // Sort by start date (most recent first)
         const sortedExperiences = experiencesData.data.sort((a: Experience, b: Experience) => {
-          if (a.order !== b.order) {
-            return a.order - b.order;
-          }
           return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
         });
         setExperiences(sortedExperiences);
@@ -128,8 +125,9 @@ export default function Experience() {
     const start = new Date(startDate);
     const end = endDate ? new Date(endDate) : new Date();
     
+    // Add 1 to include both start and end months in the calculation
     const months = (end.getFullYear() - start.getFullYear()) * 12 + 
-                   (end.getMonth() - start.getMonth());
+                   (end.getMonth() - start.getMonth()) + 1;
     
     const years = Math.floor(months / 12);
     const remainingMonths = months % 12;
@@ -181,12 +179,12 @@ export default function Experience() {
             </div>
           )}
           
-                <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
-            <span>
+                <div className="flex items-center gap-2 flex-wrap">
+              <Calendar className="w-4 h-4 flex-shrink-0" />
+            <span className="whitespace-nowrap">
               {formatDate(experience.startDate)} - {experience.current ? 'Present' : (experience.endDate ? formatDate(experience.endDate) : 'Present')}
             </span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 whitespace-nowrap">
               ({calculateDuration(experience.startDate, experience.current ? undefined : experience.endDate)})
             </span>
           </div>
@@ -247,7 +245,7 @@ export default function Experience() {
 
   if (isLoading) {
     return (
-      <section id="experience" className="section-padding bg-gray-50">
+      <section id="experience" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
         <div className="container-width">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -277,7 +275,7 @@ export default function Experience() {
 
   if (error) {
     return (
-      <section id="experience" className="section-padding bg-gray-50">
+      <section id="experience" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
         <div className="container-width">
           <ErrorState
             title="Failed to Load Experience"
@@ -296,7 +294,7 @@ export default function Experience() {
 
   if (experiences.length === 0) {
     return (
-      <section id="experience" className="section-padding bg-gray-50">
+      <section id="experience" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
         <div className="container-width">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -328,7 +326,7 @@ export default function Experience() {
   }
 
   return (
-    <section id="experience" className="section-padding bg-gray-50">
+    <section id="experience" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
       <div className="container-width">
         {/* Section Header */}
         <motion.div
@@ -352,6 +350,9 @@ export default function Experience() {
           {/* Timeline Line - Only show on large screens */}
           <div className="absolute left-1/2 transform -translate-x-1/2 top-8 bottom-8 w-0.5 bg-gradient-to-b from-clover-500 to-clover-300 hidden xl:block"></div>
 
+          {/* Timeline Line for Mobile/Tablet - Left side */}
+          <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-gradient-to-b from-clover-500 to-clover-300 xl:hidden"></div>
+
           {/* Experience Items */}
           <div className="space-y-8">
             {experiences.map((experience, index) => (
@@ -365,7 +366,7 @@ export default function Experience() {
               >
                 {/* Mobile/Tablet Layout (up to xl) - Simple left-aligned */}
                 <div className="xl:hidden flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full border-4 border-clover-500 flex items-center justify-center shadow-lg">
+                  <div className="relative flex-shrink-0 w-12 h-12 bg-white rounded-full border-4 border-clover-500 flex items-center justify-center shadow-lg z-10">
                     <Briefcase className="w-4 h-4 text-clover-700" />
                     {experience.current && (
                       <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>

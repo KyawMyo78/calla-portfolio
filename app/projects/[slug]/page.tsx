@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Github, Play, Calendar, Star, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { useParams, notFound } from 'next/navigation';
 import { analytics } from '@/lib/analytics';
 
 interface Project {
@@ -28,13 +28,9 @@ interface Project {
   slug?: string;
 }
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default function ProjectPage({ params }: PageProps) {
+export default function ProjectPage() {
+  const params = useParams();
+  const slug = params.slug as string;
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,8 +49,8 @@ export default function ProjectPage({ params }: PageProps) {
         if (data.success && data.data) {
           // Find project by slug or title
           const foundProject = data.data.find((p: Project) => 
-            p.slug === params.slug || 
-            p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') === params.slug
+            p.slug === slug || 
+            p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug
           );
           
           if (foundProject) {
@@ -76,7 +72,7 @@ export default function ProjectPage({ params }: PageProps) {
     };
 
     fetchProject();
-  }, [params.slug]);
+  }, [slug]);
 
   if (isLoading) {
     return (

@@ -195,10 +195,10 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
   }
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-clover-100">
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-x-hidden" style={{ backgroundColor: '#fafafa' }}>
       {/* Background Animation - firefly style */}
       <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute -inset-10 opacity-95 pointer-events-none z-0" ref={containerRef}>
+      <div className="absolute -inset-10 opacity-95 pointer-events-none" style={{ zIndex: 1 }} ref={containerRef}>
           {/* Cursor-reactive fireflies */}
           {[...Array(PARTICLE_COUNT)].map((_, i) => {
             // leaf-on-wind / firefly hybrid: smaller vertical range so they stay in the lower hero
@@ -206,8 +206,8 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
             const baseDuration = 18 + Math.random() * 18; // travel duration
             // start across the whole hero section so particles can appear anywhere vertically
             const startTop = 5 + Math.random() * 90; // 5% - 95%
-            // gentle upward drift (px) so they move up but remain in lower area
-            const verticalDrift = -20 - Math.random() * 40; // -20 .. -60 px
+            // increased upward drift so they reach into CTA section
+            const verticalDrift = -150 - Math.random() * 200; // -150 .. -350 px
             const flickerDelay = Math.random() * 2;
             const baseOpacity = 0.45 + Math.random() * 0.45;
             const baseScale = 0.6 + Math.random() * 0.8;
@@ -331,12 +331,8 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 font-playfair whitespace-nowrap"
-              style={{ 
-                display: 'inline-block',
-                maxWidth: '100%',
-                fontSize: 'clamp(1.5rem, 8vw, 4.5rem)'
-              }}
+              className="font-black mb-4 font-playfair whitespace-nowrap"
+              style={{ fontSize: 'clamp(1.5rem, 8vw, 4rem)', lineHeight: '1.2' }}
             >
               <span className="text-gradient text-clover-900">{profile?.name || 'Your Name'}</span>
             </motion.h1>
@@ -345,7 +341,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-2xl md:text-3xl font-semibold text-clover-700 mb-6"
+              className="text-xl sm:text-2xl md:text-3xl font-semibold text-clover-700 mb-6 break-words"
             >
               ({profile?.nickname || 'Your Nickname'})
             </motion.h2>
@@ -377,9 +373,9 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="text-lg text-clover-700 mb-8 max-w-2xl text-justify"
+              className="text-base sm:text-lg text-clover-700 mb-8 max-w-2xl text-justify break-words"
             >
-              {profile?.description || 'A passionate 23-year-old Myanmar student studying IT in Thailand. I love creating innovative solutions through programming, embedded systems, and mobile development while mentoring others in their coding journey.'}
+              {profile?.description || 'A brief description about yourself goes here. Share your passions, skills, and what makes you unique in the world of your profession.'}
             </motion.p>
 
             {/* Location */}
@@ -390,7 +386,7 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               className="flex items-center justify-center lg:justify-start space-x-2 mb-8 text-clover-700"
             >
               <MapPin size={18} />
-              <span>{profile?.location || 'Thailand'}</span>
+              <span>{profile?.location}</span>
             </motion.div>
 
             {/* CTA Buttons */}
@@ -398,33 +394,35 @@ export default function Hero({ profile: serverProfile, siteSettings: serverSetti
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
+              className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start mb-8"
             >
               <button
                 onClick={handleContactClick}
-                className="btn-primary group"
+                className="btn-primary group w-full sm:w-auto"
               >
                 <Mail size={20} className="mr-2 group-hover:rotate-12 transition-transform" />
-                {siteSettings?.hero?.contactButtonText || profile?.contactButtonText || 'Get In Touch'}
+                <span className="truncate">{siteSettings?.hero?.contactButtonText || profile?.contactButtonText || 'Get In Touch'}</span>
               </button>
               <button
                 onClick={handleWorksClick}
-                className="btn-secondary group"
+                className="btn-secondary group w-full sm:w-auto"
               >
                 <Briefcase size={20} className="mr-2 group-hover:scale-110 transition-transform" />
-                View My Projects
+                <span className="truncate">View My Projects</span>
               </button>
               <button
                 onClick={handleResumeDownload}
                 disabled={!profile?.cvUrl}
-                className={`btn-secondary group ${!profile?.cvUrl ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`btn-secondary group w-full sm:w-auto ${!profile?.cvUrl ? 'opacity-50 cursor-not-allowed' : ''}`}
                 title={!profile?.cvUrl ? 'CV not available' : 'Download CV'}
               >
                 <Download size={20} className="mr-2 group-hover:translate-y-1 transition-transform" />
-                {profile?.cvUrl ? 
-                  (siteSettings?.hero?.cvButtonText || profile?.cvButtonText || 'Download CV') : 
-                  (siteSettings?.hero?.cvNotAvailableText || profile?.cvNotAvailableText || 'CV Not Available')
-                }
+                <span className="truncate">
+                  {profile?.cvUrl ? 
+                    (siteSettings?.hero?.cvButtonText || profile?.cvButtonText || 'Download CV') : 
+                    (siteSettings?.hero?.cvNotAvailableText || profile?.cvNotAvailableText || 'CV Not Available')
+                  }
+                </span>
               </button>
             </motion.div>
 

@@ -70,12 +70,9 @@ export default function FeaturedAchievements({ maxItems = 3 }: { maxItems?: numb
     );
   }
 
+  // Hide section if no featured items
   if (!items || items.length === 0) {
-    return (
-      <div className="py-6 text-center text-clover-700">
-        <p>No featured achievements yet.</p>
-      </div>
-    );
+    return null;
   }
 
   return (

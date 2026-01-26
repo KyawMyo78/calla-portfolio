@@ -35,8 +35,9 @@ async function getServerUserSummary() {
   }
 }
 
-export default async function AdminChatPage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
-  const promptParam = Array.isArray(searchParams?.prompt) ? searchParams?.prompt[0] : (searchParams?.prompt as string | undefined);
+export default async function AdminChatPage({ searchParams }: { searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const params = await searchParams;
+  const promptParam = Array.isArray(params?.prompt) ? params?.prompt[0] : (params?.prompt as string | undefined);
   // Mascot image path
   const mascotPath = "/apclover.jpg";
 

@@ -47,8 +47,8 @@ export default function BlogPostPage() {
       
       if (result.success && result.data) {
         setPost(result.data)
-        // Increment view count
-        incrementViews(result.data.id)
+        // Increment view count with the actual current count
+        incrementViews(result.data.id, result.data.views || 0)
       } else {
         setNotFound(true)
       }
@@ -60,15 +60,16 @@ export default function BlogPostPage() {
     }
   }
 
-  const incrementViews = async (postId: string) => {
+  const incrementViews = async (postId: string, currentViews: number) => {
     try {
+      const newViewCount = currentViews + 1
       await fetch(`/api/blog/${postId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ views: (post?.views || 0) + 1 })
+        body: JSON.stringify({ views: newViewCount })
       })
       // Update local state to reflect new view count
-      setPost(prev => prev ? ({ ...prev, views: (prev.views || 0) + 1 }) : prev)
+      setPost(prev => prev ? ({ ...prev, views: newViewCount }) : prev)
     } catch (error) {
       console.error('Error incrementing views:', error)
     }

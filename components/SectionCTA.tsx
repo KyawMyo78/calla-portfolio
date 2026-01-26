@@ -84,7 +84,8 @@ export default function SectionCTA({ currentSection, siteSettings, className = '
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className={`relative text-center py-12 ${className}`}
+      className={`relative text-center py-3 ${className}`}
+      style={{ backgroundColor: '#fafafa' }}
     >
       <div className="relative z-10">
         <Link href={nextSection.path}>

@@ -110,7 +110,7 @@ export default function BlogPage() {
     <main className="min-h-screen">
       <NavigationWithChat siteSettings={siteSettings} />
       
-      <section id="blog" className="section-padding bg-primary-50">
+      <section id="blog" className="section-padding" style={{ backgroundColor: '#fafafa' }}>
         <div className="container-width">
           {/* Section Header */}
           <motion.div
@@ -143,11 +143,12 @@ export default function BlogPage() {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 max-w-xs truncate ${
                     selectedCategory === category.id
                       ? 'bg-gradient-primary text-white shadow-lg'
                       : 'bg-white/60 backdrop-blur-sm text-primary-600 hover:bg-white hover:shadow-md'
                   }`}
+                  title={`${category.name} (${category.count})`}
                 >
                   {category.name} ({category.count})
                 </button>
@@ -210,11 +211,11 @@ export default function BlogPage() {
                     
                     <div className="p-6">
                       {/* Category & Date */}
-                      <div className="flex items-center justify-between text-sm text-primary-500 mb-3">
-                        <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded-full">
+                      <div className="flex items-center justify-between text-sm text-primary-500 mb-3 gap-2">
+                        <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded-full truncate max-w-[150px] flex-shrink-0" title={post.category}>
                           {post.category}
                         </span>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 whitespace-nowrap flex-shrink-0">
                           <Calendar size={14} />
                           <span>{formatDate(post.publishedAt || post.createdAt)}</span>
                         </div>
@@ -233,18 +234,18 @@ export default function BlogPage() {
                       </p>
 
                       {/* Meta & Read More */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center text-sm text-primary-500 gap-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-col text-sm text-primary-500 gap-2 flex-1 min-w-0">
                           <div className="flex items-center gap-1">
                             <Clock size={14} />
                             <span>{post.readTime} min read</span>
                           </div>
-                          <span className="truncate max-w-[150px]" title={post.author}>By {post.author}</span>
+                          <span className="break-words" title={post.author}>By {post.author}</span>
                         </div>
                         
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors"
+                          className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors whitespace-nowrap flex-shrink-0"
                         >
                           Read more
                           <ArrowRight size={16} className="ml-1" />

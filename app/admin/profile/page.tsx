@@ -454,7 +454,7 @@ export default function ProfileManager() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Skills</label>
                 <div className="space-y-2">
                   {(profile.skills || []).map((s: any) => (
-                    <div key={s.name} className="flex items-center space-x-2">
+                    <div key={s.name} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                       <input
                         className="p-2 border rounded flex-1"
                         placeholder="Skill name"
@@ -463,11 +463,11 @@ export default function ProfileManager() {
                       />
                       <input
                         type="number"
-                        className="p-2 border rounded w-24"
+                        className="p-2 border rounded w-full sm:w-24"
                         value={s.level}
                         onChange={(e) => setProfile(prev => ({ ...prev, skills: (prev.skills || []).map((item: any) => item.name === s.name ? { ...item, level: Number(e.target.value) } : item) }))}
                       />
-                      <button onClick={() => handleRemoveSkill(s.name)} className="bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200 transition-colors">Remove</button>
+                      <button onClick={() => handleRemoveSkill(s.name)} className="bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200 transition-colors whitespace-nowrap">Remove</button>
                     </div>
                   ))}
 
@@ -650,13 +650,13 @@ export default function ProfileManager() {
                   const IconComponent = iconConfig?.icon || ExternalLink;
                   return (
                     <div key={link.id} className="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-2 sm:p-4 rounded-lg border border-gray-200 gap-2">
-                      <div className="flex items-center gap-2 sm:gap-4">
-                        <div className="p-2 bg-gray-100 rounded-lg">
+                      <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+                        <div className="p-2 bg-gray-100 rounded-lg flex-shrink-0">
                           <IconComponent className="h-5 w-5 text-gray-600" />
                         </div>
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <p className="font-medium text-gray-900">{link.name}</p>
-                          <p className="text-sm text-gray-600 truncate max-w-md">{link.url}</p>
+                          <p className="text-sm text-gray-600 truncate">{link.url}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -711,11 +711,11 @@ export default function ProfileManager() {
             {profile.cvUrl && (
               <div className="p-4 bg-gray-50 rounded-lg">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                    <FileText className="h-8 w-8 text-primary-600" />
-                    <div>
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                    <FileText className="h-8 w-8 text-primary-600 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-gray-900">Current CV Link</p>
-                      <p className="text-xs text-gray-500 truncate max-w-md">{profile.cvUrl}</p>
+                      <p className="text-xs text-gray-500 truncate">{profile.cvUrl}</p>
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">

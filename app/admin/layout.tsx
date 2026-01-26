@@ -21,9 +21,9 @@ import {
   HelpCircle
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import FloatingAIButton from '../../components/FloatingAIButton';
+import FloatingAIButton, { FloatingButtonProvider, useFloatingButton } from '../../components/FloatingAIButton';
 
-export default function AdminLayout({
+function AdminLayoutContent({
   children,
 }: {
   children: React.ReactNode;
@@ -38,6 +38,7 @@ export default function AdminLayout({
   const router = useRouter();
   const pathname = usePathname();
   const pageCacheRef = useRef<Map<string, React.ReactNode>>(new Map());
+  const { isMinimized, reopenButton } = useFloatingButton();
 
   const navigationItems = [
     { id: 'overview', label: 'Dashboard', icon: Home, path: '/admin/dashboard' },
@@ -160,7 +161,7 @@ export default function AdminLayout({
   const currentPage = navigationItems.find(item => item.path === pathname);
 
   return (
-    <div className="min-h-screen bg-secondary-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
       {/* Header */}
       <header className="bg-primary-900 shadow-lg border-b border-primary-800 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -258,6 +259,7 @@ export default function AdminLayout({
             {navigationItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.path;
+              const isChatItem = item.id === 'chat';
               
               return (
                 <button
@@ -272,6 +274,27 @@ export default function AdminLayout({
                 >
                   <Icon size={20} />
                   <span className="font-medium">{item.label}</span>
+                  {isChatItem && isMinimized && (
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        reopenButton();
+                      }}
+                      className="ml-auto bg-primary-900 hover:bg-primary-800 rounded-full p-1 shadow-lg transition-all duration-200 hover:scale-110 cursor-pointer"
+                      aria-label="Reopen AI Chat Button"
+                      role="button"
+                    >
+                      <img
+                        src="/apclover.jpg"
+                        alt="AP's Clover"
+                        className="object-cover rounded-full"
+                        style={{
+                          width: 24,
+                          height: 24
+                        }}
+                      />
+                    </div>
+                  )}
                 </button>
               );
             })}
@@ -306,6 +329,7 @@ export default function AdminLayout({
                   {navigationItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.path;
+                    const isChatItem = item.id === 'chat';
                     
                     return (
                       <button
@@ -320,6 +344,27 @@ export default function AdminLayout({
                       >
                         <Icon size={20} />
                         <span className="font-medium">{item.label}</span>
+                        {isChatItem && isMinimized && (
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              reopenButton();
+                            }}
+                            className="ml-auto bg-white rounded-full p-1 shadow-lg transition-all duration-200 hover:scale-110 cursor-pointer"
+                            aria-label="Reopen AI Chat Button"
+                            role="button"
+                          >
+                            <img
+                              src="/apclover.jpg"
+                              alt="AP's Clover"
+                              className="object-cover rounded-full"
+                              style={{
+                                width: 24,
+                                height: 24
+                              }}
+                            />
+                          </div>
+                        )}
                       </button>
                     );
                   })}
@@ -353,5 +398,17 @@ export default function AdminLayout({
         <FloatingAIButton />
       </div>
     </div>
+  );
+}
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <FloatingButtonProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </FloatingButtonProvider>
   );
 }
