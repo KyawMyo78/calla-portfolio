@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Github, Play, Calendar, Star, Tag } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Link as LinkIcon, Download, Calendar, Star, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, notFound } from 'next/navigation';
@@ -27,6 +27,38 @@ interface Project {
   order: number;
   slug?: string;
 }
+
+// Helper function to safely format dates
+const formatProjectDate = (dateString: string | undefined) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return null; // Invalid date
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+};
+
+// Helper function to generate date range display
+const getDateRangeDisplay = (project: Project) => {
+  const startDate = formatProjectDate(project.startDate);
+  const endDate = formatProjectDate(project.endDate);
+
+  if (!startDate && !endDate) return null; // No valid dates
+
+  if (startDate && !endDate) {
+    // Only start date, check if in-progress
+    if (project.status === 'in-progress') {
+      return `${startDate} - Present`;
+    }
+    return startDate;
+  }
+
+  if (!startDate && endDate) {
+    // Only end date
+    return endDate;
+  }
+
+  // Both dates are valid
+  return `${startDate} - ${endDate}`;
+};
 
 export default function ProjectPage() {
   const params = useParams();
@@ -109,19 +141,19 @@ export default function ProjectPage() {
             </Link>
             
             <div className="flex gap-3">
-              {project.githubUrl && (
+              {project.githubUrl && project.githubUrl.trim() && (
                 <a
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => analytics.projectLinkClick(project.title, 'github')}
+                  onClick={() => analytics.projectLinkClick(project.title, 'link')}
                   className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors"
                 >
-                  <Github size={18} />
-                  <span className="hidden sm:inline">Code</span>
+                  <LinkIcon size={18} />
+                  <span className="hidden sm:inline">Link</span>
                 </a>
               )}
-              {project.liveUrl && (
+              {project.liveUrl && project.liveUrl.trim() && (
                 <a
                   href={project.liveUrl}
                   target="_blank"
@@ -130,19 +162,19 @@ export default function ProjectPage() {
                   className="flex items-center gap-2 px-4 py-2 bg-clover-700 text-white rounded-lg hover:bg-clover-700 transition-colors"
                 >
                   <ExternalLink size={18} />
-                  <span className="hidden sm:inline">Live Demo</span>
+                  <span className="hidden sm:inline">View</span>
                 </a>
               )}
-              {project.downloadUrl && (
+              {project.downloadUrl && project.downloadUrl.trim() && (
                 <a
                   href={project.downloadUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => analytics.projectLinkClick(project.title, 'demo')}
+                  onClick={() => analytics.projectLinkClick(project.title, 'download')}
                   className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 >
-                  <Play size={18} />
-                  <span className="hidden sm:inline">Demo</span>
+                  <Download size={18} />
+                  <span className="hidden sm:inline">Download</span>
                 </a>
               )}
             </div>
@@ -181,26 +213,24 @@ export default function ProjectPage() {
 
           {/* Project Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-clover-900 mb-4 break-words">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-clover-900 mb-4 break-words">
               {project.title}
             </h1>
-            <p className="text-xl text-clover-700 max-w-3xl mx-auto leading-relaxed break-words">
+            <p className="text-base sm:text-lg md:text-xl text-clover-700 max-w-3xl mx-auto leading-relaxed break-words">
               {project.description}
             </p>
             
             {/* Project Meta */}
-            <div className="flex items-center justify-center gap-6 mt-6 text-clover-700">
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-6 text-clover-700">
+              {getDateRangeDisplay(project) && (
+                <div className="flex items-center gap-2">
+                  <Calendar size={18} className="flex-shrink-0" />
+                  <span className="text-sm sm:text-base">{getDateRangeDisplay(project)}</span>
+                </div>
+              )}
               <div className="flex items-center gap-2">
-                <Calendar size={18} />
-                <span>
-                  {new Date(project.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
-                  {project.endDate && ` - ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
-                  {project.status === 'in-progress' && !project.endDate && ' - Present'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Tag size={18} />
-                <span>{project.category}</span>
+                <Tag size={18} className="flex-shrink-0" />
+                <span className="text-sm sm:text-base">{project.category}</span>
               </div>
             </div>
           </div>
@@ -213,9 +243,9 @@ export default function ProjectPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-12"
         >
-          <h2 className="text-3xl font-bold text-clover-900 mb-6">About This Project</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-clover-900 mb-6">About This Project</h2>
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-clover-100 shadow-lg">
-            <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap break-words overflow-hidden">
+            <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed whitespace-pre-wrap break-words overflow-hidden">
               {project.longDescription || project.description}
             </p>
           </div>
@@ -229,7 +259,7 @@ export default function ProjectPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-clover-900 mb-6">Technologies Used</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-clover-900 mb-6">Technologies Used</h2>
             <div className="bg-gradient-to-br from-clover-50 to-white rounded-2xl p-6 md:p-8 border border-clover-100 shadow-lg">
               <div className="flex flex-wrap gap-3">
                 {project.technologies.map((tech, index) => (
@@ -256,7 +286,7 @@ export default function ProjectPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-clover-900 mb-6">Key Highlights</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-clover-900 mb-6">Key Highlights</h2>
             <div className="grid md:grid-cols-2 gap-4">
               {project.highlights.map((highlight, index) => (
                 <motion.div
@@ -267,7 +297,7 @@ export default function ProjectPage() {
                   className="flex items-start gap-3 p-5 bg-white rounded-xl border border-clover-100 shadow-md hover:shadow-lg transition-shadow"
                 >
                   <Star size={20} className="text-clover-600 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700 break-words">{highlight}</p>
+                  <p className="text-gray-700 text-sm sm:text-base break-words">{highlight}</p>
                 </motion.div>
               ))}
             </div>
@@ -282,7 +312,7 @@ export default function ProjectPage() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-clover-900 mb-6">Project Gallery</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-clover-900 mb-6">Project Gallery</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {project.images.slice(1).map((image, index) => (
                 <motion.div
@@ -312,67 +342,10 @@ export default function ProjectPage() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mb-12"
         >
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Project Links */}
-            {(project.githubUrl || project.liveUrl || project.downloadUrl) && (
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-clover-100 shadow-lg">
-                <h3 className="text-2xl font-bold text-clover-900 mb-4 flex items-center gap-2">
-                  <ExternalLink size={24} className="text-clover-600" />
-                  Project Links
-                </h3>
-                <div className="space-y-3">
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => analytics.projectLinkClick(project.title, 'github')}
-                      className="flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all hover:shadow-md border border-gray-200"
-                    >
-                      <Github size={24} className="text-gray-700" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Source Code</div>
-                        <div className="text-sm text-gray-600">View on GitHub</div>
-                      </div>
-                    </a>
-                  )}
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => analytics.projectLinkClick(project.title, 'live')}
-                      className="flex items-center gap-3 p-4 bg-clover-50 hover:bg-clover-100 rounded-xl transition-all hover:shadow-md border border-clover-200"
-                    >
-                      <ExternalLink size={24} className="text-clover-700" />
-                      <div>
-                        <div className="font-semibold text-clover-900">Live Demo</div>
-                        <div className="text-sm text-clover-700">Try it online</div>
-                      </div>
-                    </a>
-                  )}
-                  {project.downloadUrl && (
-                    <a
-                      href={project.downloadUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => analytics.projectLinkClick(project.title, 'demo')}
-                      className="flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-all hover:shadow-md border border-green-200"
-                    >
-                      <Play size={24} className="text-green-600" />
-                      <div>
-                        <div className="font-semibold text-green-900">Download</div>
-                        <div className="text-sm text-green-600">Get the app</div>
-                      </div>
-                    </a>
-                  )}
-                </div>
-              </div>
-            )}
-
+          <div className="max-w-md mx-auto md:max-w-full">
             {/* Share Project */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-clover-100 shadow-lg">
-              <h3 className="text-2xl font-bold text-clover-900 mb-4">Share This Project</h3>
+            <div className="bg-[#fafafa] rounded-2xl p-6 md:p-8 border border-clover-100 shadow-lg">
+              <h3 className="text-xl sm:text-2xl font-bold text-clover-900 mb-4">Share This Project</h3>
               <button
                 onClick={async () => {
                   try {
@@ -383,10 +356,10 @@ export default function ProjectPage() {
                     console.error('Failed to copy: ', err);
                   }
                 }}
-                className={`w-full p-4 rounded-xl transition-all font-semibold flex items-center justify-center gap-2 ${
+                className={`w-full p-4 rounded-xl transition-all font-semibold flex items-center justify-center gap-2 border-2 ${
                   isCopied 
-                    ? 'bg-green-500 hover:bg-green-600 text-white' 
-                    : 'bg-gradient-to-r from-clover-500 to-clover-600 hover:from-clover-600 hover:to-clover-700 text-white hover:shadow-lg'
+                    ? 'bg-green-600 hover:bg-green-700 text-white border-green-700 shadow-lg' 
+                    : 'bg-clover-700 hover:bg-clover-800 text-white border-clover-800 hover:shadow-lg'
                 }`}
               >
                 <ExternalLink size={20} />
