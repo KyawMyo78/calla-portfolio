@@ -104,11 +104,11 @@ export async function POST(req: NextRequest) {
             console.error('Error fetching experience:', err);
             return null;
           }),
-          adminDb.collection('projects').where('status', '==', 'published').orderBy('order', 'asc').limit(10).get().catch(err => {
+          adminDb.collection('projects').orderBy('order', 'asc').limit(20).get().catch(err => {
             console.error('Error fetching projects:', err);
             return null;
           }),
-          adminDb.collection('blogPosts').where('status', '==', 'published').orderBy('publishedAt', 'desc').limit(5).get().catch(err => {
+          adminDb.collection('blogPosts').orderBy('publishedAt', 'desc').limit(15).get().catch(err => {
             console.error('Error fetching blog posts:', err);
             return null;
           }),
@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
 
         // Projects
         if (projectsSnap && projectsSnap.docs?.length) {
-          const projects = projectsSnap.docs.map(d => {
+          const projects = projectsSnap.docs.filter(d => d.data().status === 'published').slice(0, 10).map(d => {
             const data = d.data();
             let proj = `"${data.title}"`;
             if (data.description) {
@@ -200,7 +200,7 @@ export async function POST(req: NextRequest) {
 
         // Blog posts
         if (blogsSnap && blogsSnap.docs?.length) {
-          const blogs = blogsSnap.docs.map(d => {
+          const blogs = blogsSnap.docs.filter(d => d.data().status === 'published').slice(0, 5).map(d => {
             const data = d.data();
             let blogStr = data.title;
             if (data.excerpt) {
@@ -255,7 +255,7 @@ export async function POST(req: NextRequest) {
 
     // Generate response
     const resp: any = await ai.models.generateContent({ 
-      model: "gemini-2.0-flash-exp", 
+      model: "gemini-2.5-flash",
       contents: conversationContext 
     });
     
