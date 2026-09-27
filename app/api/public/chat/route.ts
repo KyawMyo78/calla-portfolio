@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
 
         // Projects
         if (projectsSnap && projectsSnap.docs?.length) {
-          const projects = projectsSnap.docs.filter(d => d.data().status === 'published').slice(0, 10).map(d => {
+          const projects = projectsSnap.docs.slice(0, 10).map(d => {
             const data = d.data();
             let proj = `"${data.title}"`;
             if (data.description) {
